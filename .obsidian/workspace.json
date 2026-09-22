@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "8aa03c15eb0291ee",
+        "id": "ae21f1ce1c80a778",
         "type": "tabs",
         "children": [
           {
-            "id": "eec7ba9e71dba50c",
+            "id": "3af93499f8b41f63",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -188,9 +188,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "eec7ba9e71dba50c",
+  "active": "3af93499f8b41f63",
   "lastOpenFiles": [
-    "README.md",
-    "CMPT 863 Project ideas 2.md"
+    "image1.md",
+    "CMPT 863 Project ideas 2.md",
+    "Pasted image 20260922152528.png",
+    "README.md"
   ]
 }
