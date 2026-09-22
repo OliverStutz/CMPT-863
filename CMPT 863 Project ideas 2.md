@@ -1,6 +1,6 @@
 
 We have during a meeting brainstormed ideas and came up with an idea graph so that we can effectively generate ideas:
-![[Pasted image 20260922152528.png]]
+![[illustration-excalidraw.png]]
 https://excalidraw.com/\#room=935957a5e12e4a62ce65,rHIScu37UqFN1NNFlFmyBQ
 
 ## 1. AR to check facts, degradation of human vs. human trust
