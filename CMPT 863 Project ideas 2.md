@@ -283,3 +283,9 @@ We would run a two-part mixed-methods study. Part (a) is a computational content
 ### Study description
 
 ### Related academic paper
+
+
+
+### AI Transparency:
+
+We have used AI during the process to refine our text descriptions as well as for researching related papers.
