@@ -83,7 +83,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 208.328125
+    "width": 200.4140625
   },
   "right": {
     "id": "139609b4b43494e3",
@@ -190,8 +190,8 @@
   },
   "active": "57345b8054518ea3",
   "lastOpenFiles": [
-    "CMPT 863 Project ideas 2.md",
     "illustration-excalidraw.png",
+    "CMPT 863 Project ideas 2.md",
     "image1.md",
     "README.md"
   ]

@@ -16,8 +16,6 @@ A speaker's speech and prensentation are transcribed live and sent to an LLM, wh
 ### Related academic papers
 
 - Aamir, T., Psaroulis, G., Grobler, M., & Janicke, H. (2026). From Oversight to Insight: Transforming Cybersecurity Governance in Boardrooms. CHI 2026. https://doi.org/10.1145/3772318.3791142 — Seed paper. Found that board directors often lack the literacy to question cyber-risk reports. That motivates both the boardroom scenario and the question of whether AI fact-checks help directors challenge presenters or instead damage trust between board members and CISOs.
-- Hohenstein, J., & Jung, M. F. (2020). AI as a moral crumple zone: The effects of AI-mediated communication on attribution and trust. Computers in Human Behavior, 106, 106190. https://doi.org/10.1016/j.chb.2019.106190 — Showed that AI in a conversation changes trust and how blame is assigned (the AI absorbs blame when things go wrong). This is the basis for our hypothesis about who gets blamed when an AI-backed challenge is wrong.
-- Hohenstein, J., Kizilcec, R. F., DiFranzo, D., Aghajari, Z., Mieczkowski, H., Levy, K., Naaman, M., Hancock, J. T., & Jung, M. F. (2023). Artificial intelligence in communication impacts language and social relationships. Scientific Reports, 13, 5487. https://doi.org/10.1038/s41598-023-30938-9 — Found that people are judged more negatively when others suspect them of using AI, even when the AI improved the interaction. This directly motivates our comparison of disclosed and covert fact-checking.
 
 ## 2. Checked by the Camera: How Vision-Based Fact-Checking of Slides Shapes Trust Between Presenter and Audience
 
@@ -32,8 +30,6 @@ A camera attached to any device pointed at a projected slide deck runs OCR and c
 ### Related academic papers
 
 - Aamir, T., Psaroulis, G., Grobler, M., & Janicke, H. (2026). From Oversight to Insight: Transforming Cybersecurity Governance in Boardrooms. CHI 2026. https://doi.org/10.1145/3772318.3791142 — Seed paper. Its interviews show board directors lack the confidence to interrogate the risk reports presented to them, which is exactly the kind of setting where an automated slide checker could help audiences but could also erode trust between the board and the presenting CISO.
-- Hancock, J. T., Naaman, M., & Levy, K. (2020). AI-Mediated Communication: Definition, Research Agenda, and Ethical Considerations. Journal of Computer-Mediated Communication, 25(1), 89-100. https://doi.org/10.1093/jcmc/zmz022 — Provides the AI-MC framework and its open questions about how AI intervention in messages affects interpersonal trust and self-presentation; our checker is a case where the AI operates on the receiver's side rather than the sender's.
-- Jakesch, M., French, M., Ma, X., Hancock, J. T., & Naaman, M. (2019). AI-Mediated Communication: How the Perception that Profile Text was Written by AI Affects Trustworthiness. CHI 2019. https://doi.org/10.1145/3290605.3300469 — Shows experimentally that AI involvement in communication can lower perceived trustworthiness of the human source; we borrow its experimental approach to test whether AI flags on a presenter's slides produce a similar trust penalty.
 
 ## 3. When the AI Corrects the Professor: How Live AI Fact-Checking of Lecture Material Shapes Student Trust in Instructors
 
@@ -47,8 +43,6 @@ We would build a lightweight prototype that takes screenshots of lecture slides 
 
 ### Related academic papers
 
-- DeVerna, M. R., Yan, H. Y., Yang, K.-C., & Menczer, F. (2024). Fact-checking information from large language models can decrease headline discernment. Proceedings of the National Academy of Sciences 121(50). https://doi.org/10.1073/pnas.2322823121 — In a preregistered experiment, LLM fact checks that wrongly labeled true headlines as false lowered belief in those true headlines, which is exactly the false-positive risk our study tests when the "headline" is a teacher's slide and the source being doubted is a person with ongoing authority.
-- Buçinca, Z., Malaya, M. B., & Gajos, K. Z. (2021). To Trust or to Think: Cognitive Forcing Functions Can Reduce Overreliance on AI in AI-assisted Decision-making. Proceedings of the ACM on Human-Computer Interaction 5(CSCW1). https://doi.org/10.1145/3449287 — Shows that people over-rely on AI suggestions even when they are wrong and that designs forcing users to think first reduce this, which motivates our measures of whether students adopt the AI's claims over the instructor's and suggests a design variant (e.g., asking students to judge the slide before seeing the flag).
 
 ## 4. Understanding or the Illusion of It: LLM Explanations for Non-Experts Making Technical Decisions
 
@@ -63,8 +57,6 @@ We would build a web-based explainer that uses an LLM to present a cybersecurity
 ### Related academic papers
 
 - Aamir, T., Psaroulis, G., Grobler, M., & Janicke, H. (2026). From Oversight to Insight: Transforming Cybersecurity Governance in Boardrooms. CHI 2026. https://doi.org/10.1145/3772318.3791142 — Seed paper. Interviews with 13 Australian board directors show a large gap in cyber knowledge and confidence that undermines their ability to interrogate risk reports, which is exactly the decision context our explainer targets.
-- Bansal, G., Wu, T., Zhou, J., Fok, R., Nushi, B., Kamar, E., Ribeiro, M. T., & Weld, D. S. (2021). Does the Whole Exceed its Parts? The Effect of AI Explanations on Complementary Team Performance. CHI 2021. https://doi.org/10.1145/3411764.3445717 — Shows that AI explanations increased people's acceptance of AI recommendations whether or not they were correct. This is the overconfidence risk we expect LLM explanations to create for non-experts.
-- Buçinca, Z., Malaya, M. B., & Gajos, K. Z. (2021). To Trust or to Think: Cognitive Forcing Functions Can Reduce Overreliance on AI in AI-assisted Decision-making. Proc. ACM HCI 5(CSCW1). https://doi.org/10.1145/3449287 — Demonstrates that cognitive forcing interventions reduce overreliance on AI, which directly motivates our forcing condition and lets us test whether the same mechanism improves genuine comprehension, not only reliance.
 
 ## 5. Interactive PDF reader/annotation with LLM insights and web search results
 
@@ -101,11 +93,9 @@ The study would use AI-personas specifically for the sensitivity of actual study
 ### Related academic papers
 
 - Ma, R., Alsoubai, A., Park, J. K., & Wisniewski, P. J. (2026). From "Fail Fast" to "Mature Safely": Expert Perspectives as Secondary Stakeholders on Teen-Centered Social Media Risk Detection. CHI 2026. https://doi.org/10.1145/3772318.3791498 — Seed paper: 33 online safety experts reviewed the teen-centered MOSafely dashboard and named tensions such as teen empowerment vs. motivation and informing vs. intervening; our study tests those tensions with the families themselves.
-- Ghosh, A. K., Badillo-Urquiola, K., Guha, S., LaViola Jr., J. J., & Wisniewski, P. J. (2018). Safety vs. Surveillance: What Children Have to Say about Mobile Apps for Parental Control. CHI 2018. https://doi.org/10.1145/3173574.3173698 — In app reviews, children described restrictive parental control apps as invasive and harmful to the parent-child relationship; this is the surveillance baseline our parent-first condition represents.
-- Akter, M., Godfrey, A. J., Kropczynski, J., Lipford, H. R., & Wisniewski, P. J. (2022). From Parental Control to Joint Family Oversight: Can Parents and Teens Manage Mobile Online Safety and Privacy as Equals? PACM HCI 6 (CSCW1). https://doi.org/10.1145/3512904 — A dyadic study of 19 parent-teen pairs using the bidirectional CO-oPS app; it provides our dyad method and a precedent for less hierarchical monitoring designs.
 
 
-### Oliver removed 7. as it has become a duplicate after rework of the sixth idea
+### Oliver removed 7. as it has become a duplicate after rework of the sixth idea, the 6th idea was difficult because of timeline and the REB board
 
 ## 8. Simulating Families Under Surveillance: A Multi-Agent LLM Testbed for How Teen Monitoring Designs Shape Parent-Teen Relationships Over Time
 
@@ -120,10 +110,6 @@ We would adapt the Generative Agents architecture (memory stream, reflection, pl
 ### Related academic papers
 
 - Ma, R., Alsoubai, A., Park, J. K., & Wisniewski, P. J. (2026). From "Fail Fast" to "Mature Safely": Expert Perspectives as Secondary Stakeholders on Teen-Centered Social Media Risk Detection. CHI 2026. https://doi.org/10.1145/3772318.3791498 (also arXiv:2601.13516) — The seed paper: its interview study with 33 experts on a teen-centered risk dashboard found tensions, such as informing about risks vs. intervening meaningfully. Our monitoring conditions put those tensions into practice, and the simulation is one way to "mature safely" before a tool reaches real families.
-- Park, J. S., O'Brien, J., Cai, C. J., Morris, M. R., Liang, P., & Bernstein, M. S. (2023). Generative Agents: Interactive Simulacra of Human Behavior. UIST 2023. https://doi.org/10.1145/3586183.3606763 — Provides the agent architecture (memory, reflection, planning) that we would adapt so agents can build and wear down relationships over simulated weeks.
-- Ghosh, A. K., Badillo-Urquiola, K., Guha, S., LaViola Jr., J. J., & Wisniewski, P. J. (2018). Safety vs. Surveillance: What Children Have to Say about Mobile Apps for Parental Control. CHI 2018. https://doi.org/10.1145/3173574.3173698 — Analyzed 736 reviews of 37 monitoring apps and found that children see restrictive, invasive monitoring as harmful to the parent-child relationship. This is a human benchmark our simulated trajectories should reproduce if the simulation is credible.
-
-## 9. How Well Do LLM Personas Match Real Participants? Replicating a Published HCI Study with Silicon Samples
 
 ### Core contribution
 
@@ -135,8 +121,22 @@ We would pick one published HCI study with a fully reported protocol and results
 
 ### Related academic papers
 
+- Ma, R., Alsoubai, A., Park, J. K., & Wisniewski, P. J. (2026). From "Fail Fast" to "Mature Safely": Expert Perspectives as Secondary Stakeholders on Teen-Centered Social Media Risk Detection. CHI 2026. https://doi.org/10.1145/3772318.3791498 (also arXiv:2601.13516) — The seed paper: its interview study with 33 experts on a teen-centered risk dashboard found tensions, such as informing about risks vs. intervening meaningfully. Our monitoring conditions put those tensions into practice, and the simulation is one way to "mature safely" before a tool reaches real families.
 - Hämäläinen, P., Tavast, M., & Kunnari, A. (2023). Evaluating Large Language Models in Generating Synthetic HCI Research Data: a Case Study. Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems (CHI '23). https://doi.org/10.1145/3544548.3580688 — Showed that GPT-3 can produce believable open-ended answers about experiencing video games as art, and that these answers are less diverse than real ones. We extend this from a single case study to a systematic comparison against a published study's themes and effects.
-- Argyle, L. P., Busby, E. C., Fulda, N., Gubler, J. R., Rytting, C., & Wingate, D. (2023). Out of One, Many: Using Language Models to Simulate Human Samples. Political Analysis, 31(3), 337-351. https://doi.org/10.1017/pan.2023.2 — Introduced "algorithmic fidelity", the idea that demographically conditioned LLMs can reproduce subgroup response distributions from survey data. We test whether this holds for the small-N qualitative and vignette data that is typical of HCI.
+
+## 9. How Well Do LLM Personas Match Real Participants? Replicating a Published HCI Study with Silicon Samples
+
+### Core contribution
+
+HCI researchers are starting to use LLM personas to pilot studies, generate interview data, and simulate users (as in idea 8), but there is little evidence on whether persona results agree with what real participants said in a specific HCI study. We would replicate one published, small-N HCI study with LLM personas and measure agreement with the original human results along four dimensions: effect direction, theme overlap, response distribution, and response diversity. The HCI community would learn when persona data is good enough to pilot a study, when it misleads, and which biases cause the gaps.
+
+### Study description
+
+We would pick one published HCI study with a fully reported protocol and results, ideally a vignette or semi-structured interview study on parental monitoring of teens, so the findings carry over directly to idea 8. We would build personas that match the original sample's reported demographics (for example, 20-30 parent and teen personas) and run the original protocol on 2-3 LLMs under three prompting conditions: bare persona, persona plus demographic backstory, and persona plus a de-biasing instruction that asks for disagreement and variance, with 5 repeated runs per persona to measure stability. For closed-ended items we would compare the direction and size of effects and the response distributions against the human data. For open-ended responses, two coders would apply the original paper's codebook to the synthetic transcripts, and we would report theme recall and precision against the published themes, Cohen's kappa between coders, and themes the LLMs invented. We would measure homogenization as lexical and semantic diversity (embedding dispersion, distinct-n) against the original quotes, and we would measure biases by running reworded versions of the questions that lean toward one answer and checking how far responses shift.
+
+### Related academic papers
+
+- Hämäläinen, P., Tavast, M., & Kunnari, A. (2023). Evaluating Large Language Models in Generating Synthetic HCI Research Data: a Case Study. Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems (CHI '23). [https://doi.org/10.1145/3544548.3580688](https://doi.org/10.1145/3544548.3580688) — Showed that GPT-3 can produce believable open-ended answers about experiencing video games as art, and that these answers are less diverse than real ones. We extend this from a single case study to a systematic comparison against a published study's themes and effects.
 
 ## 10. Auditing AI Discrimination Across User Groups in LLM-Based Family Social-Media Monitoring
 
@@ -151,7 +151,6 @@ We would run a two-part audit built on paired prompts. Part A (persona audit): w
 ### Related academic papers
 
 - Cheng, M., Durmus, E., & Jurafsky, D. (2023). Marked Personas: Using Natural Language Prompts to Measure Stereotypes in Language Models. ACL 2023. https://aclanthology.org/2023.acl-long.84/ — Gives the lexicon-free, prompt-based method we would reuse in Part A to find stereotyped and othering words in LLM-generated personas of marked versus unmarked groups.
-- Sap, M., Card, D., Gabriel, S., Choi, Y., & Smith, N. A. (2019). The Risk of Racial Bias in Hate Speech Detection. ACL 2019. https://aclanthology.org/P19-1163/ — Found that tweets written in AAE were up to twice as likely to be labelled offensive, which motivates our paired-dialect false-positive audit of AI risk detectors in Part B.
 
 ## 11. AI-assisted tool to help moderate think aloud in (human-conducted) usability testing
 
@@ -181,21 +180,7 @@ We’ll recruit N participants to test a mock system with ~5 usability issues. E
 
 - Agentic Audio Moderator vs Human Moderator in Think-Aloud Usability Testing https://doi.org/10.1145/3772318.3791653
 
-## 13. Who Is Responsible When the Moderator Is an Agent? Ethical Concerns with Replacing Human Moderators in Usability Testing
-
-### Core contribution
-
-Recent work shows AI moderators can match human moderators on think-aloud data quality but are perceived as less socially present, yet no work asks what ethical obligations a human moderator quietly fulfills and which of them are lost when an LLM runs the session. This project would map those obligations (informed consent about a non-human moderator, noticing and responding to participant distress, governance of audio sent to third-party APIs, accountability for harmful or leading prompts, and participants feeling respected and heard) from both the practitioner/ethics-board side and the participant side. The HCI community would get empirically grounded ethics guidelines for AI-moderated user research, instead of relying on consent templates written for human-led studies.
-
-### Study description
-
-Part 1 is a set of semi-structured interviews with 10-12 people: UX researchers who have run or considered AI-moderated sessions and 3-4 members of university research ethics boards (TODO team: confirm we can recruit REB members through SFU ORE contacts). Interviews walk through a concrete scenario (an agentic audio moderator that prompts during a think-aloud task and uploads audio to a cloud LLM) and probe consent wording, distress protocols, data flows, deskilling of junior researchers, and who is accountable when the agent says something inappropriate; transcripts are analyzed with reflexive thematic analysis. Part 2 is a between-subjects vignette survey (N≈30-60 via Prolific, TODO team: decide whether to run a live session instead if the course budget allows) where participants read or hear a short session excerpt in one of three conditions: human moderator, AI moderator disclosed up front, and AI moderator where the participant becomes visibly frustrated and the agent does not react. Measures are perceived respect and "being heard" items, comfort, willingness to disclose negative feedback, and acceptability of the consent disclosure, compared with one-way ANOVA or Kruskal-Wallis and post-hoc tests. Both parts feed a short set of design and ethics guidelines (for example, mandatory disclosure wording, a human-on-call escalation path, and local or opt-in audio processing) that we would review with 2-3 interviewees.
-
-### Related academic papers
-
-- Zhu, W., Chen, G., Wang, Y., An, P., Du, J., and Li, C. (2026). Agentic Audio Moderator vs Human Moderator in Think-Aloud Usability Testing: Results from a Randomized Controlled Trial. CHI 2026. https://doi.org/10.1145/3772318.3791653 — The seed paper finds that an AI moderator matches humans on task performance and verbalization but gets lower social perception ratings, which motivates asking what ethical and relational work is lost beyond data quality.
-- Munteanu, C., Molyneaux, H., Moncur, W., Romero, M., O'Donnell, S., and Vines, J. (2015). Situational Ethics: Re-thinking Approaches to Formal Ethics Requirements for Human-Computer Interaction. CHI 2015. https://doi.org/10.1145/2702123.2702481 — Argues that HCI ethics is negotiated in the moment by the researcher during the study, which is exactly the situated judgment an autonomous AI moderator removes and which our guidelines must replace.
-- Lucas, G. M., Gratch, J., King, A., and Morency, L.-P. (2014). It's Only a Computer: Virtual Humans Increase Willingness to Disclose. Computers in Human Behavior 37. https://doi.org/10.1016/j.chb.2014.04.043 — Shows people disclose more when they believe they talk to a computer, which suggests AI moderation may raise disclosure while weakening the safeguards around it, a tension our vignette survey measures directly.
+## 13.  Removed by Huy it has become a duplicate during further development of the project idea
 
 ## 14. Augmented agentic capabilities to support text-to-speech Wizard of Oz studies 
 
@@ -259,4 +244,17 @@ We'll pick a few AI streamers (and related channels/communities) and pull public
 
 ### AI Transparency:
 
-We have used AI during the process to refine our text descriptions as well as for researching related papers.
+We have used AI during the process to refine our text descriptions as well as for researching related papers or papers which have some remote connection to the ideas created.
+
+
+# Identifing three ideas from our list:
+
+## Logical
+
+### 12. How AI moderation affects quality of usability data?
+## Unexpected
+
+### 10. Auditing AI Discrimination Across User Groups in LLM-Based Family Social-Media Monitoring
+## Inspiring
+
+### 9. How Well Do LLM Personas Match Real Participants? Replicating a Published HCI Study with Silicon Samples
