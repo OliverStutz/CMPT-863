@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CMPT 863 Project ideas 2.md",
+                "file": "CMPT 863 Idea 2 - Related papers.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "CMPT 863 Project ideas 2"
+              "title": "CMPT 863 Idea 2 - Related papers"
             }
           }
         ]
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CMPT 863 Project ideas 2.md",
+                "file": "CMPT 863 Idea 2 - Related papers.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "CMPT 863 Project ideas 2.md",
+                "file": "CMPT 863 Idea 2 - Related papers.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "CMPT 863 Project ideas 2.md",
+                "file": "CMPT 863 Idea 2 - Related papers.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,8 +190,9 @@
   },
   "active": "57345b8054518ea3",
   "lastOpenFiles": [
-    "illustration-excalidraw.png",
     "CMPT 863 Project ideas 2.md",
+    "CMPT 863 Idea 2 - Related papers.md",
+    "illustration-excalidraw.png",
     "image1.md",
     "README.md"
   ]
