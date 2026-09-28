@@ -1,0 +1,15 @@
+
+
+
+1. **Chen, C., Sun, Y., Liao, M., & Sundar, S. S. (2026). When AI disagrees: The effect of second opinion on patients' trust in doctors. *International Journal of Human-Computer Studies*, 213, 103824.** https://doi.org/10.1016/j.ijhcs.2026.103824
+	1. This paper seemed to study the trust between patient and doctor when using AI-models, which can be a very good reference for understanding how they did the study.
+	2. Specific thing to note; the power balance "Doctor -> Patient" is very different from what i intend to do; Board Member (stronger decision maker) -> e.g. CISO or other type of expert which presents "facts" to the board
+	3. One thing to mention the doctor was a llm simulated persona which is a very interesting approach which also came up in the other ideas.
+2. . **Prike, T., Baker, J., & Ecker, U. K. H. (2025). Fact-checking election-campaign misinformation: Impacts on noncommitted voters' feelings and behavior. *Political Psychology*, 46(5), 1081–1100.** https://doi.org/10.1111/pops.13059
+	1. This paper is interesting because it was doing this in a similar way, their hypothesis was focusing on seeing if fact checking improves more accurate believes but also their change of bias. This seemed to be a very extensive study with almost 4000 participants and has elements which can be used for this study too. It had focus to see the difference between people who do read fact-checks vs. none. While we want to approach this differently, we will not tell that we do "effective" or "synthetic" fact checking e.g. say its ok when it actually is not.
+3. **Strickland, L. H. (1958). Surveillance and trust. *Journal of Personality*, 26(2), 200–215.** https://onlinelibrary.wiley.com/doi/10.1111/j.1467-6494.1958.tb01580.x
+	1. SFU Library: https://research-ebsco-com.proxy.lib.sfu.ca/c/oudquj/viewer/pdf/5iibbsiwnz
+	2. I found also this rather old paper but it shows that if we do surveillance on people it might decrease trust the more we surveil people. This can be of essence as in actual llm-checked content, the person checking might get an impression that the "monitored/checked" person is not doing a good job and that further deteriorates the trust between them. The monitoring in this study was much more intrusive as what i want to do in the project idea but it can show how a very specific study can present us with good study types as proposed by Xueying in the feedback for distinguishing the impacts from the presenters mistake vs. the AI's intervention during the presentation.
+	3. Side note; i used the audio, the pdf of it was not readable for me.
+4.  **Reif, Larrick & Soll (2025), PNAS.** Four preregistered studies, N = 4,439. Strong evidence of an interpersonal penalty, but for people who *use* AI, not people checked by it. Free at https://www.pnas.org/doi/pdf/10.1073/pnas.2426766122
+	1. This paper which also studied that the use of AI has an impact on how people are being seen when they use it indicate that there is also a great opportunity in evaluating the trust from the "presenters" view. As any board members which use AI as a help to evaluate and judge could be seen as incompetent.

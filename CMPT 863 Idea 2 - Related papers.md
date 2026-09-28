@@ -20,7 +20,7 @@ Compiled 2026-09-25 from four literature searches. Each entry gives the key refe
   *About:* Surveillance whose purpose was unexplained was read by the watched person as signalling distrust and an intention to evaluate, and it undermined intrinsic motivation. Surveillance framed as non-controlling did not.
   *Relation:* Framing lever for Study 2. Whether we tell presenters the checker is "there to help the audience follow" or "there to catch errors" should change hedging and preparation.
 
-- **Frey, B. S. (1993). Does monitoring increase work effort? The rivalry with trust and loyalty. *Economic Inquiry*, 31(4), 663–670.** https://doi.org/10.1111/j.1465-7295.1993.tb00897.x
+- **Frey, B. S. (1993). Does monitoring increase work effort? The rivalry with trust and loyalty. *Economic Inquiry*, 31(664), 3–670.** https://doi.org/10.1111/j.1465-7295.1993.tb00897.x
   *About:* Argues that where a personal relationship exists, intensified monitoring is read as distrust and crowds out effort; the disciplining effect wins only in impersonal relations.
   *Relation:* Predicts that presenter behaviour change should be strongest in small, personal audiences (a board, a seminar) rather than anonymous ones.
 
