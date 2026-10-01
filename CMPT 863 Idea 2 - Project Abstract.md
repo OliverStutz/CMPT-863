@@ -1,10 +1,8 @@
-# Checked by the Camera: Does an AI Slide Checker in the Audience's Hands Cost the Presenter Trust They Did Not Lose?
-
-*Draft v0, 2026-09-26. Option 2: designing a study. Working research plan, see the draft notes at the end.*
+# Does an AI content checker in the Audience's Hands Cost the Presenter Trust They Did Not Lose?
 
 ## Research question
 
-Vision-capable LLMs make it easy for anyone in a meeting to point a phone or laptop camera at a projected slide and have the figures checked while the presenter is still talking. Boards are an obvious place for this. Aamir et al. (2026) interviewed board directors about cybersecurity governance and found that many lack the literacy and the confidence to question the cyber-risk reports presented to them. An automated checker could close that gap. It could also change how the directors see the person presenting.
+Vision-capable LLMs make it easy for anyone in a meeting to point a phone or laptop camera at a projected slide and have the content checked while the presenter is still talking. Boards are an obvious place for this. Aamir et al. (2026) interviewed board directors about cybersecurity governance and found that many lack the literacy and the confidence to question the cyber-risk reports presented to them. An automated checker could close that gap. It could also change how the directors see the person presenting(human to human trust relationship).
 
 Research on AI fact-checking mostly asks whether people believe the checked *claim*. We ask what happens to trust in the *person*:
 
