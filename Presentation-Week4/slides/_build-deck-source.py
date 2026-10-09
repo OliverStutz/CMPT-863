@@ -78,3 +78,20 @@ for f in qfiles:
 (here.parent / "Week 4 - Questions Source.md").write_text("\n".join(qparts), encoding="utf-8")
 (here.parent / "Week 4 - Questions - Class only.md").write_text("\n".join(cparts), encoding="utf-8")
 print("wrote", here.parent / "Week 4 - Questions Source.md", "and", here.parent / "Week 4 - Questions - Class only.md")
+
+# ---------------------------------------------------------------------------
+# Discussion guide (file 16): presenter copy without the log, and the pair cards alone
+gfile = here / "16-Discussion-Guide.md"
+if gfile.exists():
+    gtext = gfile.read_text(encoding="utf-8")
+    gbody = re.split(r"\n## Verification log\n", gtext, maxsplit=1)[0].rstrip() + "\n"
+    ghead = (f"Generated {datetime.date.today().isoformat()} from `slides/16-Discussion-Guide.md` by `slides/_build-deck-source.py`. "
+             "Edit the section file, then regenerate. The verification log and open items stay in the section file.\n\n")
+    gbody = gbody.replace("\n\n---\n\n## 0.", "\n\n" + ghead + "---\n\n## 0.", 1)
+    (here.parent / "Week 4 - Discussion Guide.md").write_text(gbody, encoding="utf-8")
+    cards = re.search(r"\n## 4\. Pair cards\n(.*?)\n---\n", gtext, re.S)
+    if cards:
+        ctext = ("# Week 4 pair cards\n\n" + ghead.replace("Edit the section file", "Edit section 4 of the guide") +
+                 cards.group(1).strip() + "\n")
+        (here.parent / "Week 4 - Discussion Cards.md").write_text(ctext, encoding="utf-8")
+    print("wrote", here.parent / "Week 4 - Discussion Guide.md", "and", here.parent / "Week 4 - Discussion Cards.md")

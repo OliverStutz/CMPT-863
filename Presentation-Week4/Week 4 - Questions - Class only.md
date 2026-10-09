@@ -1,6 +1,6 @@
 # Week 4 question sets, class version: the questions only
 
-Generated 2026-09-30 by `slides/_build-deck-source.py`. Model answers, discrimination notes, probes and the class-use plans are in `Week 4 - Questions Source.md` and in the section files.
+Generated 2026-10-01 by `slides/_build-deck-source.py`. Model answers, discrimination notes, probes and the class-use plans are in `Week 4 - Questions Source.md` and in the section files.
 
 
 ---

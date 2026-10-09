@@ -1,6 +1,6 @@
 # Week 4 deck source, presentation only: sections 01 to 12
 
-Generated 2026-09-30 from the section files in `slides/` by `slides/_build-deck-source.py`. Edit the section files, not this file, then regenerate. Speaker notes, verification logs and open items live in the section files; the full version with notes is `Week 4 - Deck Source.md`. Run sheet, placeholders and figure assets are in `slides/00-Overview.md`.
+Generated 2026-10-01 from the section files in `slides/` by `slides/_build-deck-source.py`. Edit the section files, not this file, then regenerate. Speaker notes, verification logs and open items live in the section files; the full version with notes is `Week 4 - Deck Source.md`. Run sheet, placeholders and figure assets are in `slides/00-Overview.md`.
 
 ## Slide 0: Title
 
@@ -287,7 +287,7 @@ Footer, small type: Tags: Counted = tallied from logs or ratings; Coded = sorted
 
 # 12 Discussion bridge: our reading, the tensions, the hand-over
 
-**Purpose:** close the presentation with the presenters' own reading of the paper, the tensions the class will argue about, and the plan for the 30-minute discussion. **Slides:** 3. **Time:** 3:00. **Speaker:** Oliver (sole presenter). **Previous section:** 11 Research directions. **Next:** the discussion itself (plan in a separate document, to be written).
+**Purpose:** close the presentation with the presenters' own reading of the paper, the tensions the class will argue about, and the plan for the 30-minute discussion. **Slides:** 3. **Time:** 3:00. **Speaker:** Oliver (sole presenter). **Previous section:** 11 Research directions. **Next:** the discussion itself (plan in `16-Discussion-Guide.md`).
 
 Source material: revision 2 of `Week 4 - Slides.md`, slides 20 to 22, which passed two independent Opus reviews after correction. Written by the orchestrator, 2026-09-30.
 
@@ -326,6 +326,6 @@ Three smaller things we found interesting
 - **What you wrote.** **[classmate]** **[classmate]** **[classmate]**
 - **How the next 30 minutes run**
   1. **Warm-up, 5 min: a live elicitation.** We show the effect of two commands, one the paper's participants agreed on and one they did not (Figure 3). On three, everyone performs the gesture they would use, on the desk. We count the groups and compute the agreement score together.
-  2. **Pairs, 5 min:** pick one of the four questions and take opposite sides.
+  2. **Pairs, 5 min:** one card per pair, a question and two roles, one each.
   3. **Full group, 20 min:** we follow what comes up.
 

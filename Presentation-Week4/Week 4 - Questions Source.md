@@ -1,6 +1,6 @@
 # Week 4 question sets, presenter version: files 13 to 15
 
-Generated 2026-09-30 from `slides/13-Questions-Paper.md`, `14-Questions-Presentation.md` and `15-Questions-Synthesis.md` by `slides/_build-deck-source.py`. Edit the section files, then regenerate. Verification logs and open items are left in the section files. The class-facing version with question stems only is `Week 4 - Questions - Class only.md`.
+Generated 2026-10-01 from `slides/13-Questions-Paper.md`, `14-Questions-Presentation.md` and `15-Questions-Synthesis.md` by `slides/_build-deck-source.py`. Edit the section files, then regenerate. Verification logs and open items are left in the section files. The class-facing version with question stems only is `Week 4 - Questions - Class only.md`.
 
 
 ---

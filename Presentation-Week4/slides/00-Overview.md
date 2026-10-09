@@ -12,7 +12,9 @@ Four generated files in the presentation folder, all from `_build-deck-source.py
 - `../Week 4 - Deck Source.md`: sections 01 to 12 behind a title slide, with speaker notes, without verification logs and open items. 19 slides, about 12,800 words.
 - `../Week 4 - Deck Source - Presentation only.md`: the same slides with every speaker note removed; on-slide text, timing and visual directions only. About 3,600 words.
 - `../Week 4 - Questions Source.md`: question sets 13 to 15 in full (stems, model answers, discrimination notes, probes, class-use plans), for the presenter. 30 questions, about 12,500 words.
-- `../Week 4 - Questions - Class only.md`: the 30 question stems with their form tag and nothing else, for projecting or handing out. About 1,000 words. Reviewed for stand-alone readability by an Opus agent (`../reports/opus-G-presentation-only-review.md`): 11 must-fix and 25 should-fix items applied to the section files on 2026-09-30 (dangling section references removed, labels added, ambiguous bullets reworded, slide 12.2 cut to about 100 words); the 11 optional items are listed in the report and not applied.
+- `../Week 4 - Questions - Class only.md`: the 30 question stems with their form tag and nothing else, for projecting or handing out. About 1,000 words.
+- `../Week 4 - Discussion Guide.md`: `16-Discussion-Guide.md` without its verification log and open items, for the presenter on the day.
+- `../Week 4 - Discussion Cards.md`: the eight pair cards from section 4 of the guide, for printing and cutting. Reviewed for stand-alone readability by an Opus agent (`../reports/opus-G-presentation-only-review.md`): 11 must-fix and 25 should-fix items applied to the section files on 2026-09-30 (dangling section references removed, labels added, ambiguous bullets reworded, slide 12.2 cut to about 100 words); the 11 optional items are listed in the report and not applied.
 
 ## Run sheet
 
@@ -64,7 +66,7 @@ Each file's **Transition** line was checked against the next file's opening; all
 
 - **[date]** on the title slide.
 - **[classmate]** slots, filled after the commentaries are posted: on the slides of 06, 09, 12.2 and 12.3; in the speaker notes of 02, 05, 11 and 12.1. Credit by name.
-- **Discussion plan**: a separate document, not yet written. Section 12.3 states the three-step plan it must detail.
+- **Discussion plan**: written, `16-Discussion-Guide.md` (2026-10-01). Section 12.3 states the three-step plan it details.
 
 ## Verification status
 
@@ -103,6 +105,7 @@ Three files of questions for the discussion half and for the participation gradi
 | 13-Questions-Paper.md | Did they read the paper? Answerable from the paper, not from the slides | 12 | verified: 12 of 12 answers confirmed; Q13.5 and Q13.6 re-aimed at their paper-only parts; Q13.12 borderline |
 | 14-Questions-Presentation.md | Did they listen? Answerable from what the sections say or argue, not from the paper | 10 | verified: 10 of 10 answers confirmed; Q14.7 re-aimed at the Olsen and floor-or-ceiling points; Q14.2 and Q14.4 borderline |
 | 15-Questions-Synthesis.md | Both, with more than one defensible answer; doubles as discussion material, mapped to the tensions on slide 12.2 | 8 | verified: all 8 discriminate; five side-arguments corrected (attribution, what 43.5% measures, physical share, command versus gesture complexity, Figure 3 tail) |
+| 16-Discussion-Guide.md | The facilitator's plan for the 30 minutes: six open anchor questions with several defensible positions each, zoom-in and zoom-out probes, participation moves, threads; eight pair cards with roles; the flow; the thread map; how sets 13 to 15 slot in as probes | 6 anchors, 8 cards | written 2026-10-01; two independent Opus cross-checks (`../reports/opus-H-discussion-guide-check-1.md`, `-2.md`) |
 
 Each question carries its form (quick check, short answer, pair discussion), what it tests, a model answer with page or slide, why it discriminates, likely wrong answers, and a follow-up probe. Each file ends with a plan for when to use its questions in the 30-minute discussion.
 
@@ -113,7 +116,7 @@ Each question carries its form (quick check, short answer, pair discussion), wha
 4. **Group, 20 min:** set 15's order: two opposed pairs report on Q15.2; Q15.5 as a show of hands; Q15.4 to bring in the course readings; Q15.7 only if time allows, facts and interpretation kept apart; close on Q15.8. For a lull: Q14.5 restarts discussion, Q14.6 moves it to design, Q13.6 to Q13.9 probe the paper's details.
 5. **Grading:** per contribution note the student, the question, and three marks: cited the paper with a page, cited the talk with a section, acknowledged the other side's strongest point. Paper-only details show reading; section-specific points show listening.
 
-This combination is the discussion plan; a separate document is no longer needed unless Oliver wants one for submission.
+On 2026-10-01 `16-Discussion-Guide.md` replaced this combination as the discussion plan. It keeps the warm-up, uses role cards instead of two-sided questions in the pair phase, runs the group phase on three anchor questions with three branches, and uses sets 13 to 15 as probes for lulls; set 15's grading marks stay in force (its section 8).
 
 ## Assets to render for the deck
 

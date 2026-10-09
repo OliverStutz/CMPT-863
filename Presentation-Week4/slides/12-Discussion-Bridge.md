@@ -1,6 +1,6 @@
 # 12 Discussion bridge: our reading, the tensions, the hand-over
 
-**Purpose:** close the presentation with the presenters' own reading of the paper, the tensions the class will argue about, and the plan for the 30-minute discussion. **Slides:** 3. **Time:** 3:00. **Speaker:** Oliver (sole presenter). **Previous section:** 11 Research directions. **Next:** the discussion itself (plan in a separate document, to be written).
+**Purpose:** close the presentation with the presenters' own reading of the paper, the tensions the class will argue about, and the plan for the 30-minute discussion. **Slides:** 3. **Time:** 3:00. **Speaker:** Oliver (sole presenter). **Previous section:** 11 Research directions. **Next:** the discussion itself (plan in `16-Discussion-Guide.md`).
 
 Source material: revision 2 of `Week 4 - Slides.md`, slides 20 to 22, which passed two independent Opus reviews after correction. Written by the orchestrator, 2026-09-30.
 
@@ -51,13 +51,13 @@ Three smaller things we found interesting
 - **What you wrote.** **[classmate]** **[classmate]** **[classmate]**
 - **How the next 30 minutes run**
   1. **Warm-up, 5 min: a live elicitation.** We show the effect of two commands, one the paper's participants agreed on and one they did not (Figure 3). On three, everyone performs the gesture they would use, on the desk. We count the groups and compute the agreement score together.
-  2. **Pairs, 5 min:** pick one of the four questions and take opposite sides.
+  2. **Pairs, 5 min:** one card per pair, a question and two roles, one each.
   3. **Full group, 20 min:** we follow what comes up.
 
 **Speaker notes**
-- **Say:** **[classmate]** (name three or four themes from the commentaries, credit each person, and say which tension each feeds). Here is how the next half hour runs. First a five-minute live elicitation: we show you the effect of two commands, one from the top of Figure 3 and one from the tail. On three, everyone performs the gesture they would use, on the desk. We count the groups and compute the agreement score together, so you see the method work and see what it misses. Then five minutes in pairs: pick one of the four questions and take opposite sides. Then twenty minutes together, and we follow whatever is interesting.
+- **Say:** **[classmate]** (name three or four themes from the commentaries, credit each person, and say which tension each feeds). Here is how the next half hour runs. First a five-minute live elicitation: we show you the effect of two commands, one from the top of Figure 3 and one from the tail. On three, everyone performs the gesture they would use, on the desk. We count the groups and compute the agreement score together, so you see the method work and see what it misses. Then five minutes in pairs: each pair gets a card with one question and two roles, one each, and writes down where you disagree and where you agree. Then twenty minutes together, and we follow whatever is interesting.
 - **Transition:** none; the discussion starts.
-- **Watch out:** Choose "move a little" and "undo" or "help." Expect near-total agreement on move and a spread on undo, including smartphone-era gestures such as shake, which shows legacy bias in the room. Tally on the board, not on a slide. Keep the agreement arithmetic ready: square each group's share, add. The full discussion plan is a separate document still to be written.
+- **Watch out:** Choose "move a little" and "undo" or "help." Expect near-total agreement on move and a spread on undo, including smartphone-era gestures such as shake, which shows legacy bias in the room. Tally on the board, not on a slide. Keep the agreement arithmetic ready: square each group's share, add. The full discussion plan is `16-Discussion-Guide.md`: six anchor questions, eight pair cards, the flow of the half hour and the moves for the room.
 - **Sources:** Figure 3 p. 1088 for the top and tail commands; Eq. 1 p. 1087 for the live score.
 
 ## Verification log
@@ -76,5 +76,5 @@ Three smaller things we found interesting
 
 ## Open items
 - Commentary slots on 12.2 and 12.3 are filled after classmates' commentaries are posted.
-- The discussion plan (prompts, follow-ups, timing, how to pull in commentaries) is a separate document to write next.
+- The discussion plan is `16-Discussion-Guide.md` (written 2026-10-01). Slide 12.3's pair step was reworded the same day to match its role cards.
 - Sections 06 and 11 are referenced in the script of 12.1; confirm their final titles once those files exist.

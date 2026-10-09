@@ -285,3 +285,19 @@ Eight questions that need the paper and the presentation together and have more 
 ## Brief 16: Verify the question sets (report `../reports/opus-F-questions-check.md`; run after Briefs 13 to 15 are complete)
 
 Independent verifier. Read the paper PDF, all section files 01 to 12, and the three question files. For every question: (a) is the model answer correct, with the page or slide it cites (CONFIRMED / WRONG / UNVERIFIABLE, with evidence); (b) does it discriminate as claimed (for set 13, could a student answer it from the section files alone; for set 14, from the paper alone); (c) does it contradict any item in the Part 1 pitfalls list; (d) is it meaningful rather than trivia. Check style: no em-dashes. List every correction as an exact replacement (old text, new text). Do not edit the question files. Return a summary under 200 words with counts per file and corrections in priority order.
+
+## Brief 17: Verify the discussion guide (two independent reviewers; reports `../reports/opus-H-discussion-guide-check-1.md` and `-2.md`; run 2026-10-01)
+
+Independent verifier. Read Part 1 of this file (common rules and the pitfalls list). Read the paper PDF in full. Read `slides/16-Discussion-Guide.md`. Read the section files it cites (03, 04, 05, 06, 07, 09, 10, 11, 12, 15) where needed to confirm a "section" citation. Do not edit any file except your own report. The other reviewer works from the same brief and does not see your report.
+
+Check:
+(a) Every page citation and quotation in 16 against the PDF: CONFIRMED / WRONG / UNVERIFIABLE, with the exact text found. Chart readings marked "about" count as confirmed within 0.03 of the rendered figure; render Figures 2 and 3 if needed.
+(b) Every outside fact (patent application, GI 2010, Morris et al. 2014, Vatavu and Wobbrock 2015, DIS 2020, the four course readings, the culture examples, device dates) against the section files' verification logs or `progress.md`. Confirm the guide reproduces them without strengthening them.
+(c) Conflicts with the Part 1 pitfalls list, by pitfall number.
+(d) Each anchor, judged against the five guidance principles quoted in the guide's introduction and against the presenter's requirement that questions "allow some deeper discussions and participants to elaborate properly about the details and express their view points." For each anchor: does the stem invite elaboration rather than yes or no? Are there at least three distinct defensible positions, at least one of which defends the paper? Do the zoom-in probes touch specific evidence and the zoom-out probes significance? Verdict strong / adequate / weak, with the single most valuable improvement.
+(e) The pair cards: does each produce a real disagreement? Is any role unfair, unworkable, or likely to embarrass a student?
+(f) Timing realism of section 5, and whether the three-minute versions are usable as written.
+(g) Up to three discussion questions the guide lacks and should have, each with the paper evidence it would draw on.
+(h) Style: no em-dashes or en-dashes used as dashes; "the paper says" against "we argue" labelling; any motive stated as fact.
+
+Return: a report file with a summary under 250 words (citations confirmed / wrong / unverifiable; anchors strong / adequate / weak), then the tables, then every correction as an exact replacement (old text, new text) in priority order: blockers, should-fix, nice-to-have. Return the same summary to the orchestrator.
