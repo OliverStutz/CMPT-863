@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "week6/Toward Sociable Robots.md",
+                "file": "CMPT 863 Project Abstract v7.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Toward Sociable Robots"
+              "title": "CMPT 863 Project Abstract v7"
             }
           },
           {
@@ -111,7 +111,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 468.40234375
+    "width": 344.85546875
   },
   "right": {
     "id": "139609b4b43494e3",
@@ -218,8 +218,11 @@
   },
   "active": "57345b8054518ea3",
   "lastOpenFiles": [
-    "week5/Commentaries-v2.md",
+    "CMPT 863 Project Abstract v6.md",
+    "CMPT 863 Project Abstract v7.md",
+    "CMPT 863 Idea 2 - Project Abstract v4.md",
     "week6/Toward Sociable Robots.md",
+    "week5/Commentaries-v2.md",
     "CMPT 863 Idea 2 - Shortlist.md",
     "week5/Week 5 - Tangible Bits-1.pdf",
     "week6",
@@ -246,14 +249,11 @@
     "Presentation-Week4/Week 4 - Deck Source - Presentation only.md",
     "Presentation-Week4/reports/opus-G-presentation-only-review.md",
     "Presentation-Week4/reports/opus-F-questions-check.md",
-    "CMPT 863 Project Abstract v6.md",
     "Presentation-Week4/slides/13-Questions-Paper.md",
     "Presentation-Week4/slides/15-Questions-Synthesis.md",
     "Presentation-Week4/slides/14-Questions-Presentation.md",
     "Presentation-Week4/reports/opus-E-connections-crosscheck.md",
     "Presentation-Week4/slides/00-Overview.md",
-    "Presentation-Week4/slides/10-Connections.md",
-    "Presentation-Week4/slides/04-Method.md",
     "illustration-excalidraw.png"
   ]
 }
