@@ -38,7 +38,15 @@ Status key: **read** (Oliver has read it and commented), **next** (full text in 
 
 ---
 
-## 4. Hendriks, Kienhues & Bromme (2015), PLOS ONE. METI. (next; full text in `../references/`)
+## 4. Hendriks, Kienhues & Bromme (2015), PLOS ONE. METI. (read 2026-10-19)
+
+**Oliver's reading.** A great reference for what trust in an expert is made of, and the scale Kim et al. (2026) used. But it has shortcomings for our study. We want participants to respond casually to the three metrics in Abstract v7, not to think too much and too precisely about the CISO; a full inventory at every step would overpollute the study and tire the participants out. We test this properly by running the study first with the measures as written in Abstract v7. METI is the reference the three items are drawn from, not the instrument.
+
+**What the full text says.** Epistemic trustworthiness is defined (p. 3) as "those features of experts that decide whether recipients will depend on and defer to them due to their own limited resources": a layperson's judgement of whether to accept an expert's claim they cannot check themselves. The authors set it apart from source credibility, which names what makes a message persuasive; epistemic trustworthiness is the recipient's guard against being misled, and trust adds dependence and exposure to risk. The scale is fourteen antonym pairs rated on a 7-point semantic differential, in three subscales. Expertise (6): competent, intelligent, well educated, professional, experienced, qualified. Integrity (4): sincere, honest, just, fair. Benevolence (4): moral, ethical, responsible, considerate. Cronbach's alpha in Study 1 was .91, .82 and .90. Validated by exploratory factor analysis (n = 237), confirmatory factor analysis (n = 345) and an experiment (n = 137) in which a source description aimed at one dimension moved that subscale most. The factors correlate (expertise with integrity .63, integrity with benevolence .71), so they are facets of one construct, not independent traits. The inventory was built for a single judgement of an unfamiliar online source and was given once per study, in a survey of about ten minutes. The paper says nothing about repeated administration within one session.
+
+**Consequence for our study.** Our procedure takes seven trust ratings in about ten minutes: one baseline, then one after each flag and one after each answer on slides 2 to 4. The full METI at each point would be 98 adjective ratings; the Abstract v7 measures are 28 (the 0-to-10 trust rating plus one item each for competence, benevolence and integrity). The design therefore stays with Abstract v7 and METI supplies the wording: one pair per subscale, taken from the strongest-loading items (competent–incompetent, sincere–insincere, moral–immoral), so the three items are defensibly METI-derived and the paper is cited as their basis. This replaces design rule 1's "adopt METI". Two costs to state in the review: single items are less reliable than four- to six-item subscales, and the results compare with Kim et al. (2026) in construct but not in instrument. The paper's own factor correlations predict that the three ratings will move together, which is acceptable for a casual reading. If the three items turn out uninformative in the first run, the fallback is the full METI once, at the end of the session, never at every step.
+
+**Open.** Fix the wording of the three items (strongest-loading pair or subscale label). Pilot whether seven rounds of four ratings already feel repetitive.
 
 ## 5. Opdenbusch, Hielscher & Sasse (2025), NDSS. "Where are we on cyber?" (next; full text in `../references/`)
 
@@ -66,8 +74,9 @@ Status key: **read** (Oliver has read it and commented), **next** (full text in 
 
 ## Design rules collected so far
 
-1. Adopt METI (expertise or competence, integrity, benevolence) for the three-part trust rating, so results compare with Kim et al. (2026). (Paper 1)
+1. Take the three-part trust rating (competence, benevolence, integrity) from METI's subscales, one item each, not the fourteen-pair inventory. Results then compare with Kim et al. (2026) in construct, not in instrument. (Papers 1 and 4)
 2. Word H3 as "a denial without a reason restores less trust than a reasoned answer". A bare denial is not the denial Kim et al. (2004) tested. (Paper 2)
 3. The CISO's reasoned answer must always give more inputs and more proposals than the checker's flag; only the denial condition offers less. (Paper 3)
 4. Our flags should make the CISO look less careful than the checker, which is the direction that moved trust in Madanay et al. (2025); never the reverse. (Paper 3)
 5. State in the review what each closest design lacks that we add: wrong flags, the expert's answer, the listener's power. (Papers 1 to 3)
+6. Keep every rating point to four quick responses: 0-to-10 trust plus the three items. Participants should react, not deliberate. Run the study first with the Abstract v7 measures; the full METI, if ever, once at the end. (Paper 4)
