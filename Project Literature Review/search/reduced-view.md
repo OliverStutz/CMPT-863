@@ -101,7 +101,7 @@ Rubric scores (out of 25) are from the search files: trust in a human measured /
 
 - **Venue and year:** J. Applied Psychology, 2007. Score 15/25.
 - **Summary from:** publisher abstract (OpenAlex).
-- **Full text:** missing; no open copy exists. SFU PsycArticles: https://proxy.lib.sfu.ca/login?url=https://doi.org/10.1037/0021-9010.92.4.893
+- **Full text:** in `../references/` as `Ferrin-2007-silence-speaks-volumes-JAP.pdf` (published PDF, added by Oliver 2026-10-19 from SFU PsycArticles).
 - **Design:** two laboratory studies in two countries. An accused party responded to a competence or integrity violation with apology, denial, or reticence (declining to confirm or deny). Measured trust.
 - **Finding:** reticence did worse than the better of apology and denial in each case: for integrity violations it, like apology, failed to address guilt; for competence violations it, like denial, failed to signal that the person would improve.
 - **Why it matters:** reticence is the nearest tested analogue to a reply with no information, so it is the better support for H3 than Kim et al. (2004). With Kim et al. (2004) it decides whether "denial with no reason" lowers trust or only restores less.
