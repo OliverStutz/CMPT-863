@@ -173,8 +173,8 @@ Short take for the review:
 - **Type:** product (research prototype)
 - **Verified:** Page read 2026-10-18
 - **Design:** Squash, from the Tech & Check Cooperative, listens to a speech, converts it to text, filters factual claims with ClaimBuster, and matches them with Elasticsearch against published fact-checks (Washington Post, FactCheck.org, PolitiFact). Matches pop up on the video screen.
-- **Finding (the one fact that matters):** During the 2020 State of the Union, Squash showed 14 relevant fact-checks and 20 non-relevant ones, up from 6 relevant pop-ups in 2019. The lab responded by adding a human editor who approves each pop-up. A UX test found viewers liked the idea of real-time fact-checks but were often confused by the pop-up design.
-- **Relation:** Product and counter-evidence on checker accuracy. A fully automated live checker produced more wrong matches than right ones, and its makers added a human in the loop. This is a real-world precedent for flags that are wrong in context, as all of ours are.
+- **Finding (the one fact that matters):** During the 2020 State of the Union, Squash showed 14 relevant fact-checks and 20 non-relevant ones, up from 6 relevant pop-ups in 2019. The lab responded by building an interface for a human editor to approve each pop-up before it appears. A UX test found viewers liked the idea of real-time fact-checks but were often confused by the pop-up design.
+- **Relation:** Product and counter-evidence on checker accuracy. A fully automated live checker showed more irrelevant matches than relevant ones (20 of 34 pop-ups; unrelated fact-checks, not false verdicts), and its makers began adding a human in the loop. This is a real-world precedent for flags that are wrong in context, as all of ours are.
 - **Access:** Open access, accessed 2026-10-18.
 - **Score:** 1=0 2=4 3=2 4=4 5=4 total=14/25
 

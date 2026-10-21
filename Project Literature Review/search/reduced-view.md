@@ -33,7 +33,7 @@ Rubric scores (out of 25) are from the search files: trust in a human measured /
 - **Summary from:** publisher abstract (Europe PMC).
 - **Full text:** in `../references/` as plain text from the Europe PMC XML (no figures).
 - **Design:** 1,606 US adults imagined a lung-cancer screening CT and were randomised to a result from a radiologist only, AI and radiologist in agreement, a radiologist who recommended more testing than the AI, or one who recommended less. Measured agreement with the recommendation, likelihood of recommending the radiologist, and how good a provider the radiologist is.
-- **Finding:** when the radiologist recommended less than the AI, agreement fell to a mean of 4.01 against 4.55 to 4.63 in the other three conditions, and that radiologist was rated the worst provider. A radiologist who recommended more than the AI paid no penalty.
+- **Finding:** when the radiologist recommended less than the AI, agreement fell to a mean of 4.01 against 4.55 to 4.63 in the other three conditions, and that radiologist was rated lowest of the four conditions (6.82 against 7.45 to 7.58 on a 1-to-10 scale). A radiologist who recommended more than the AI paid no penalty.
 - **Why it matters:** the strongest support for H1 from a large sample, and a warning that the penalty is asymmetric: it depends on whether the AI looks more cautious than the expert. Our flags play the cautious role.
 - **Check when reading:** which direction of discrepancy maps onto our flags; our flags say the slide is wrong, not that more caution is needed.
 
