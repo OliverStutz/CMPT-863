@@ -1,0 +1,1123 @@
+    The Three Paradigms of HCI
+    Steve Harrison                              Deborah Tatar                                    Phoebe Sengers
+    Department of Computer Science              Department of Computer Science and               Information Science and
+    and (by courtesy) Art and Art               (by courtesy) Psychology                         Science & Technology Studies
+    History                                     Virginia Tech                                    Cornell University
+    Virginia Tech                               123 VTKW II                                      301 College Ave.
+    121 VTKW II                                 2202 Kraft Dr – MC 0106                          Ithaca, NY 14580 USA
+    2202 Kraft Dr – MC 0106                     Blacksburg, VA 24060 USA                         sengers@cs.cornell.edu
+    Blacksburg, VA 24060 USA                    dtatar@cs.vt.edu
+    srh@cs.vt.edu
+
+
+
+
+    ABSTRACT
+    When looking out across the intellectual landscape of HCI, how do we make sense of it? More impor-
+    tantly, how do we evaluate what constitutes legitimate investigation? As an interdisciplinary field, HCI
+    faces challenges in incorporating sometimes conflicting intellectual approaches. While new approaches
+    enrich our view of interaction, they can also lead to conflicting notions of methodology and validity,
+    whose resolution remains murky without explicit discussion of their underlying epistemological commit-
+    ments. Informal histories of HCI commonly identify two major intellectual waves that have formed the
+    field: the first orienting from engineering and human factors with its focus on optimizing man-machine
+    fit, and the second stemming from cognitive science, with an increased emphasis on theory and on what is
+    happening not only in the computer but, simultaneously, in the human mind. HCI also draws on a wide
+    variety of apparently disparate approaches, such as participatory design, situated action, ethnography, and
+    value-sensitive design, which arise from phenomena the other two waves find difficult to handle, such as
+    embodiment, situated meaning, values, and social issues. We demonstrate that many of these approaches
+    can be usefully understood as united in a coherent third wave or paradigm we term situated perspectives,
+    which treats interaction as a form of meaning making in which the artifact and its context are mutually
+    defining and subject to multiple interpretations. By explicitly laying out the differing perspectives these
+    three waves have on what interaction is, how it should be described, and how it should be studied we lay
+    the basis for clarifying what should count as valid work in HCI and how these differing approaches can
+    fruitfully interact.
+
+    INTRODUCTION
+    Over the last few years, the authors of this paper have become increasingly aware that a third paradigm
+    has been discussed in corners and cafes with much head nodding at the CHI conference, but has not been
+    widely introduced as a legitimate frame or lens through which to view contributions. This paper is an at-
+    tempt to give wider voice to the implications of this idea, first named by Malcolm McCullough’s book
+    (2004), Digital Ground, and discussed but not named in Paul Dourish’s Where the Action Is (2001). Our
+    name for this is “situated perspectives.”
+
+    Looking back over the history of HCI publications, we can see how our community has broadened intel-
+    lectually from its original roots in engineering research and, later, cognitive science. The official title of
+    the central conference in HCI is “Conference on Human Factors in Computing Systems” even though we
+    usually call it “CHI”. Human factors1 for interaction originated in the desire to evaluate whether pilots
+    could make error-free use of the increasingly complex control systems of their planes under normal con-
+    ditions and under conditions of stress. It was, in origin, a-theoretic and entirely pragmatic. The confer-
+
+
+
+1
+    Coming originally from “scientific management” (i.e. Taylorism) in the early 20th Century, human factors began as an attempt to increase produc-
+    tion and reduce injury. By the time of computers, it had moved on to concerns with “critical incidents,” identified by group consensus (Flana-
+    ghan, 1954).
+                                                                                                               2
+ence and field still reflects these roots not only in its name but also in the occasional use of simple per-
+formance metrics.
+
+However, as Grudin (2005) documents, CHI is more dominated by a second wave brought by the cogni-
+tive revolution. HCI adopted its own amalgam of cognitive science ideas centrally captured in Card,
+Moran & Newell (1983), oriented around the idea that human information processing is deeply analogous
+to computational signal processing, and that the primary computer-human interaction task is enabling
+communication between the machine and the person. This cognitive-revolution-influenced approach to
+humans and technology is what we usually think of when we refer to the HCI field, and particularly that
+represented at the CHI conference. As we will argue below, this central idea has deeply informed the ways
+our field conceives of design and evaluation.
+
+The value of the space opened up by these two paradigms is undeniable. Yet one consequence of the
+dominance of these two paradigms is the difficulty of addressing the phenomena that these paradigms
+mark as marginal. Over the last twenty years a wide variety of critiques and approaches have been
+emerging that appear to fit poorly the models and methods emerging from either human factors or the
+cognitive revolution. These include participatory design, value-sensitive design, user experience design,
+ethnomethodology, embodied interaction, interaction analysis, and critical design. On the surface, these
+critiques appear to involve a disparate array of issues and approaches; yet we will argue that many of
+these approaches can be usefully seen as elements of a third paradigm, which treats interaction not as
+analogous to information processing and transmission but as a form of meaning making in which the arti-
+fact and its context are mutually defining and subject to multiple interpretations. Meaning making is en-
+tailed both by the analytic frame employed by designers and analysts, as well as by the users and other
+stakeholders in the situation of use.
+
+These critiques and approaches not only focus on different topics and questions, they also suggest alter-
+native metrics and methods for design and evaluation that can be difficult to reconcile with ones emerging
+from the first two paradigms. Their clash with some of the central assumptions and understandings of
+HCI as constituted so far had led to a variety of fates. Some topics, such as affective computing, have
+found ways to back-fit new phenomena under study to the information-processing model common in
+HCI. Some, such as ethnographic approaches, have been amalgamated to HCI in an uneasy marriage.
+Some, such as ethnomethodological concerns about the centrality of practices outside those formalized in
+HCI, have been heard but not fully worked through, spawning alternative fields such as CSCW outside of
+the mainstream represented by CHI. In all these cases, when force-fitting new insights to old paradigms,
+HCI fails to capitalize on the full value of these approaches.
+
+We will use the rest of this paper to argue that:
+
+    1) the commonly acknowledged waves of influence into HCI can be usefully seen in terms of para-
+       digm shift,
+
+    2) the elements of a third paradigm, that of situated perspectives, are in place,
+
+    3)    the lack of clarity about the epistemological distinctions between paradigms is a limiting factor
+         in the development of the field, leading to serious problems in evaluation of research and in va-
+         lidity of published research results for all three paradigms,
+
+    4) researchers need to clearly understand the nature of their epistemological commitments and ex-
+       plicate how they influence the choice of appropriate research methodology, and
+
+    5) reviewers need to be aware of the differences between paradigms and assess research methods
+       and contributions accordingly.
+
+Understanding Paradigms
+In order to make this argument, we first need to explain what paradigms mean in the context of HCI. The
+term ‘paradigm’ as a way to describe waves of research in a field derives from Thomas Kuhn’s theory of
+                                                                                                                 3
+the structure of scientific revolutions (Kuhn, 1970). This theory says that science does not progress only
+from a gradual accumulation of facts, but rather by successive and overlapping waves which
+fundamentally re-frame ideas. These ideas may fundamentally alter the nature of what we take to be
+facts. Canonical examples of such paradigm shifts include the acceptance of continental drift by earth sci-
+entists and the shift from a mechanically elegant Newtonian physics to the messy and, at times, counter-
+intuitive relativistic physics.
+
+Kuhn argued that a particular paradigm can be characterized by a common understanding of what phe-
+nomenon is being studied, the kinds of questions that are useful to ask about the phenomenon, how we
+should structure our approach to answering those questions, and how the results should be interpreted.
+Kuhn tracks changing paradigms in physics by noting shifts in the ‘paradigmatic examples’ (i.e. classic
+experiments) used in schools to teach the field. This methodology for tracking changing paradigms does
+not adapt to HCI, owing to our interdisciplinary breadth and the dearth of classical reproducible experi-
+ments and demonstrations in our field. We suggest, following Agre’s focus on discourse (1997, pp. 33-
+48), that paradigm shifts can be traced in HCI by tracing shifts in the underlying metaphor of interaction
+used in discussion.
+
+Agre’s theory of generative metaphors in technical work (1997, pp. 33-48) suggests that technical fields
+tend to be structured around particular metaphors that suggest the questions that are interesting to ask and
+methods for arriving at answers to them. So, for example, the metaphor underlying cognitive science –
+that human minds are like information processors – suggests questions it could be interesting to ask: how
+humans process their input, how they represent information internally, how they access memory, and so
+forth. It also suggests methods for finding answers to those questions, for example that we can effec-
+tively model human mental activity using computational code and validate these models by comparing
+computational and human input and output. An important attribute of these metaphors is that while they
+by no means strictly dictate what is done in a field, they do bring certain phenomena into the center of
+investigation, while marginalizing others. In cognitive science, for example, it is relatively straightfor-
+ward to analyze intellectual, abstract skills, but it has been more difficult for the field to model embodied
+skills.
+
+One difference between Kuhn’s focus on scientific inquiry and Agre’s emphasis on metaphor in discourse
+is that the notion of scientific inquiry implies an absolutist metric, in which one paradigm has to be right
+and the others wrong. Thus, Kuhn argues that Newtonian physics is wrong, though convenient. In con-
+trast, Agre’s approach allows metaphors to exist side-by-side without the necessity of reconciling all con-
+tradictions.
+
+Following Agre, we argue that central to each paradigm in HCI is a different metaphor of interaction.
+Each such metaphor introduces ‘centers’ and ‘margins’ that drive choices about what phenomena consti-
+tute important descriptive qualities of interactions, what questions are interesting to ask about interaction,
+what methods are appropriate for studying and designing interaction and what validation procedures are
+required to establish knowledge claims about interaction. A paradigm shift, then, could be said to occur
+when a new generative metaphor is driving new choices of what to research and how, and can be identi-
+fied when problems and issues that used to be marginalized have moved to the center.
+
+The First and Second Paradigms
+Using this model of paradigms, we can now characterize the first two waves of research in HCI. The first
+paradigm, an amalgam of engineering and human factors, saw interaction as a form of man-machine cou-
+pling in ways inspired by industrial engineering and ergonomics. The goal of work in this paradigm,
+then, is to optimize the fit between humans and machines; the questions to be answered focus on identi-
+fying problems in coupling and developing pragmatic solutions to them. Occupying the center of the first
+paradigm are concrete problems that arise in interaction and cause disruption; at the margin are phe-
+nonema that underlie interaction but do not directly lead to noticeable trouble.
+
+The second paradigm, in contrast, is organized around a central metaphor of mind and computer as cou-
+pled information processors. At the center is a set of information processing phenomena or issues in com-
+                                                                                                                  4
+puters and users such as ‘how does information get in’, ‘what transformations does it undergo’, ‘how does
+it go out again,’ ‘how can it be communicated efficiently’ and so forth. To appropriate Flyvbjerg’s char-
+acterization of the state of modern social sciences, it places “rationality and rational analysis [as] the most
+important mode of operation for human activity” (2001, p. 23). At the center are causal phenomena that
+explain a central tendency. Left at the margin are phenomena that are difficult to assimilate to information
+processing, such as those that admit of variation and multi-causal explanation including how people feel
+about interaction, the place of a particular interaction in larger systems of use, and elusive and enigmatic
+aspects of everyday life such as “what is fun?”. The point is not that the margins can’t be talked about -
+you can make an information-processing model of any phenomenon - but that things at the margin are
+likely to be under-recognized and, when recognized, are likely to be seen as holding little legitmacy for
+investigation and design.
+
+An Emerging Third Paradigm?
+This description of the two paradigms that have been dominant in HCI is not intended to imply that all
+research projects or researchers fit neatly into one of these two categories. Neither do the paradigms nec-
+essarily contradict one another. Work may be done that cuts across paradigms or that exists outside of
+them entirely. Rather, the paradigms provide broad perspectives that are useful for sorting out what prob-
+lems are interesting and likely to be solved, to suggest success criteria for finding their solution, and to
+guide evaluation and acceptance of work in the field.
+
+Of course, when paradigms clash, problems may arise. An example of such a clash is the ‘Damaged Mer-
+chandise’ controversy in the mid-‘90’s, in which Gray and Salzman argued not only that specific prag-
+matically-oriented approaches to usability evaluation are invalid, but also that usability can only be vali-
+dated through the scientifically and theoretically grounded methods of the second paradigm [(Gibson,
+1979), (Gray & Salzman, 1998); also see (Friedman, 1997)]. Similar clashes, we would argue, are ap-
+pearing now. In this section, we describe emerging strands of research that poorly fit to the two dominant
+paradigms at CHI and suggest that a third paradigm is at hand.
+
+We start by noting that our goal is not to argue that there are only and exactly three paradigms in HCI.
+Alternative constructions of paradigms are certainly possible. Our primary argument is that the apparent
+proliferation of alternatives to the two commonly identified paradigms in HCI can be conceptually uni-
+fied. There is at least one specific, additional, coherent paradigm with its own methodologies and legiti-
+mation. By recognizing this coherence, we organize and clarify much simmering dispute in the field.
+
+Emerging Issues
+Following our definition of paradigms, a paradigm shift can be tracked by noticing attempts to bring mar-
+ginal issues into the center of attention. To show that a new paradigm may be at hand, we describe some
+of the contemporary strands of research that suggest patterns at the edge of the information-processing
+metaphor and the need to grapple with alternative perspectives.
+
+Current work in ubiquitous and pervasive computing brings the dynamic use context of computing into
+central focus. Some methods of dealing with the importance of this context follow directly from the first
+and second paradigms, notably ones that attempt to identify and optimize information flow between mo-
+bile and ubiquitous devices and their context. These approaches model use-context as yet another source
+of information which can be formalized and transmitted to machines. But approaches to ubicomp that
+derive from disciplines such as ethnography, design, and the arts are based on the idea that use-context is,
+in the end, fundamentally unspecifiable and must be dealt with by other means [e.g. (Dourish, 2004)] De-
+scribing identified factors and conditions becomes a crucial contribution from this perspective. This does
+happen around the edges. Pervasive gaming takes changing context as a central focus for investigation
+(Benford, 2004a; Benford, 2004b; Benford, et. al, 2005; Benford, et. al., 2006), and often publishes
+changes in context as a central finding. However, it is not widely accepted as a centrally important no-
+tion. The notion of seamfulness (Chalmers & Galani, 2004) and the elaboration of where seams occur
+have been published in ToCHI and DIS, but are usually hidden in the rhetoric of a new form of activity.
+                                                                                                                   5
+A related set of issues arises out of workplace studies, which focus on the social situation of interaction.
+These perspectives have often been hard to reconcile with CHI, leading to their parallel exploration in
+CSCW. In particular, the centrality of social, situated actions in explaining the meaning of interaction is at
+odds with the information-theoretic view of social interaction that is at the core of the second paradigm
+(Aoki & Woodruf, 2005; Suchman, 1987). Activity theory, for example, is incorporated to the extent that
+it is used to create accounts of an existing situation, but its relevance is seen as limited. It is by-and-large
+not involved in discussions of design or evaluation.
+
+A third set of issues is raised by learning environments and what it means to understand them. K-12
+learning goals are quite specified, but metrics such as user satisfaction and even performance are only
+partial indicators of the two phenomenon of central interest: (1) learning and (2) how to successfully pro-
+mote learning in a classroom context. Tutorial programs that supplant the classroom are quite consistent
+with the second paradigm, tying learning tightly to information transfer, but ‘information transfer’ is a
+limited understanding both of what teachers mean by ‘learning’ and of what it takes to help learning hap-
+pen in a sustained way. Classroom level interventions that utilize sophisticated, interdependent claims
+about fit entail complex reasoning about means and ends. The benefits of the technology have to do with
+its relationship to this complex setting rather than its prima facie novelty or unique contribution to learn-
+ing.
+
+A fourth set of issues arises out of the domain of non-task-oriented computing, such as ambient interfaces
+and experience-centered design. These approaches tend to be bad fits to the first and second paradigms,
+whose methods tend to require problems to be formalized and expressed in terms of tasks, goals and effi-
+ciency - precisely what non-task-oriented approaches are intended to question. It is difficult, for example,
+to apply usability studies to ambient interfaces, since standard evaluation techniques are ‘task-focused’ in
+the sense of asking users to pay attention to and evaluate the interface, precisely what the system is de-
+vised to avoid. Alternative methods require discussion and thought and may involve values.
+
+Last, yet another set of issues arise out of the marginalization of emotion in classic cognitive work. A
+wide range of approaches to emotion, notably those of Picard (1997) and Norman (2004), has been in-
+spired by recent cognitive psychology, which argues that emotion plays a central role in cognition and
+models emotional exchange as a type of information flow. But other approaches to affective computing
+reject the equation of emotion with information and focus instead on the interpretation and co-
+construction of emotion in action in ways analogous to situated action approaches in workplace studies
+[e.g. (Begiun & Clot, 2004)].
+
+While each of these issues – and probably quite a few more - can be and are usually seen as a separate
+descriptor of what is marginalized in the prior paradigms, in this paper we will argue that, taken as a
+whole, many of these forms of refocusing HCI can be usefully understood as part of a coherent third
+paradigm based on several core principles. Next, we delineate those principles and the ways in which
+they drive research questions and methods for arriving at their answers in ways different from the first
+two paradigms.
+
+Principles of the Third Paradigm
+
+INTELLECTUAL COMMITMENTS
+This position unites a number of intellectual commitments that bring to the center issues marginalized by
+the first two paradigms.
+
+1. The construction of meaning: The first paradigm tends to take a pragmatic approach to meaning, ig-
+noring it unless it causes a problem, while the second interprets meaning in terms of information flows.
+The third paradigm, in contrast, sees meaning and meaning construction as a central focus. It adopts the
+stance that meaning is constructed on the fly, often collaboratively, by people in specific contexts and
+situations, and therefore that interaction itself is an essential element in meaning construction. Meaning
+derives from information, of course, but in this perspective cannot be summed up by mapping information
+flow; it is, instead, irreducibly connected to the viewpoints, interactions, histories, and local resources
+                                                                                                                  6
+available to those making sense of the interface and therefore to some extent beyond the reach of formal-
+ization. This notion is at the heart of Suchman’s Plans and Situated Actions (1987) and has been consti-
+tutive of CSCW; in other areas we see, for example, research on the value of ambiguity, notably the heav-
+ily cited work of Gaver, Beaver, & Benford (2003).
+
+2. Putting users in their place: If meaning is in some ways irreducibly local, then knowledge is strongly
+situated as well. Following Haraway’s definition (1988), the term situated knowledges refers to the idea
+that people’s understanding of the world, themselves, and, in the case of HCI, interaction is strongly
+informed by their varying physical and social situations. Designing interaction, then, moves from at-
+tempting to establish one correct understanding and set of metrics of interaction to studying the local,
+situated practices of users, taking into account but not adjudicating the varying and perhaps conflicting
+perspectives of users. Aoki & Woodruff (2005), for example, argue for the value of CMC systems ac-
+commodating multiple understandings of what is happening in a relationship.
+
+3. Putting interfaces in their place: McCullough’s Digital Ground (2004), which treats ubicomp from
+an architectural perspective, analyzes the significance of technologies becoming designed for or designed
+to adapt to specific locations, times, social situations, and surrounding systems. Broadly, ‘putting inter-
+faces in their place’ is grounded in the recognition that the specifics of particular contexts greatly define
+the meaning and the nature of an interaction. Since all possibilities cannot necessarily be designed for,
+one design strategy is to design the computation and the interface as embodied. By designing the interface
+to fit into its intended physical and social setting, much in the way that robotics has embraced the idea
+(Horswill, nd; Brooks, 1990; Steele & Brooks, 1995), and by drawing on the notion of the embodied hu-
+man mind, the device or system does not have to model every contingency. Other strategies include loca-
+tion awareness or situation awareness, for example cell phones knowing if they are in a movie theater or
+if their owner is in the middle of non-phone conversation.
+
+The first and second paradigms acknowledge context primarily as “those non-technological factors that
+affect the use of the technology.” Under the third paradigm, researchers tend to ask not only “how does
+context give our design meaning?” but also “how does our design accommodate the context?” This latter
+question includes what researchers do not put into their design, their restraint, or “zensign” (diGiano et
+al., 2007; Tatar et al., 2007). It also encompasses the possibility that the technological system is reported
+not because, taken alone, it is particularly unique or attractive, but because of how it fits into the particu-
+lars of a complex situation. A consequence of this is that context is a central component not only to the
+problem (if any) but also to design and evaluation.
+
+4. Putting researchers in their place: If users’ knowledge is situated, so is that of the researchers study-
+ing them. Compared to the second paradigm, at least, the range of disciplines and perspectives constitut-
+ing the third paradigm is remarkably catholic, ranging from the arts to sociology to policy. The goal does
+not appear to be to establish one of these disciplines as the gold standard. Indeed, one characteristic of
+the third paradigm is a preference for multiple interpretations that give a rich sense of the site of interac-
+tion over a single, objective description of it (Sengers & Gaver, 2006).
+
+5. Explicit focus on values in design: Given that the phenomenological perspective highlights the variety
+of potentially valid viewpoints, evaluation of what makes a system a success can no longer be rooted a
+priori in measures said to be universally valid. Instead, we must ask questions about what it means for a
+system to be ‘good’ in a particular context – a question that quickly brings us to issues of values. Value-
+based approaches to HCI such as participatory design and value-sensitive design have come into use to
+establish new criteria of success - and therefore of decision-making - in system design and evaluation
+(Friedman, 1997). All call for some form of explication and explicit negotiation of standards of success.
+Instead of being marginalized as a confounding factor, the context of design is seen as central, leading to
+questions such as “Who is making the design decision?”, “Who is paying for it?”, “What is this saying
+about the user?” and so on. Likewise, in aesthetic evaluation of interfaces, “elegance” is no longer exclu-
+sively premiated; it is just as likely that “appropriate” or “appropriable” are central aesthetic require-
+ments.
+                                                                                                                 7
+6. The necessity, but inadequacy, of theory: In comparison to the first paradigm, the third paradigm has
+a much greater emphasis on theory as a resource for making sense of what is happening at the site of in-
+teraction. Nevertheless, because context is seen as an equally essential ingredient for knowledge-making,
+the third paradigm recognizes that theory in the abstract has necessary limitations. In contrast to the sec-
+ond paradigm, which often sees theory as primary and design and evaluation as ways of instantiating,
+testing, and developing theories, third-paradigm approaches tend to focus on theory more as heuristics to
+be drawn on, with full understanding emerging from the combination of theoretical lenses and what hap-
+pens practically at the scene of action – what Gaver calls “humble theory” (2006). So ethnographic and
+particularly ethnomethodological approaches, for example, tend to eschew a priori categories of interest
+in favor of discovering what emerges from interaction (Emerson, et. al., 1995). Similarly, cultural probes
+are purposefully constructed to avoid asking direct questions that would limit discovery to what is sug-
+gested by researchers’ theoretical interests (Gaver, et. al, 2004; Boehner, et. al., 2007).
+
+THE UNDERLYING ROLE OF EMBODIMENT
+In the third paradigm, embodied interaction is not only a shared intellectual commitment, but also a cross-
+cutting perspective at the heart of other commitments. Both the first and second paradigms recognize the
+human body and discuss some entailments of the fact that we live within bodies. In human factors, atten-
+tion is paid to such qualities as the fit of a mouse to the human hand or the amenability of particular font
+sizes to be easily read. Cognitively based work in HCI has laid out physical constraints that usefully in-
+form interface design such as the speed at which humans are able to react in various situations.
+
+Embodiment in the third paradigm is more than optional. Where the Action Is (2001) argues for embodied
+interaction as a theme uniting tangible interaction and ethnographic and ethnomethodological approaches.
+Dourish emphasizes that embodied interaction does not involve primarily a shift in what we build but a
+more fundamental shift in the way we understand the nature of interaction: “Embodiment is not a property
+of systems, technologies, or artifacts; it is a property of interaction…. In contrast to Cartesian ap-
+proaches that separate mind from body and thought from action, embodied interaction emphasizes their
+duality” (p. 189).
+
+Klemmer, Hartmann, & Takayama (2006) go further than this. In a review of the literature on embodi-
+ment, they highlight five central implications an embodied stance has for the way we think about inter-
+faces. A focus on embodied interaction moves from the second paradigm idea that thinking is cognitive,
+abstract, and information-based to one where thinking is also achieved through doing things in the world,
+for example expression through gestures, learning through manipulation, or thinking through building
+prototypes. It suggests that our GUI interfaces place too little emphasis on the differential abilities of the
+human body, overemphasizing seeing, hearing, and motor control of our hands, while under-supporting
+other senses and our physical abilities such as action-centered skills and motor memory. It refocuses at-
+tention from the single-user / single-computer paradigm that has dominated the first and second para-
+digms towards collaboration and communication through physically shared objects. It highlights the im-
+portance of risk as a positive aspect of embodied practice; there is no undo button in the real world. Fi-
+nally, it reminds us that, while under the first and second paradigms we have tended to focus on aspects of
+activity that are easily automated, real-world practice is complex and rich, interleaving physical activity
+and awareness with abstract thoughts, rituals, and social interaction in ways that defy a purely informa-
+tional approach.
+
+Dourish’s proposition and Klemmer et al.’s implications are indeed radical. Not only do they put physical
+embodiment – i.e. having a body - into a central, defining role, but they argue for the centrality of a linked
+viewpoint, in which all action, interaction, and knowledge is seen as embodied in situated human actors.
+At base, this rejects a simple view of the mind as an information processor. It puts a non-information
+processing viewpoint in the center of understanding.
+
+Furthermore, Dourish and Klemmer argue that the embodied perspective is by itself a shift to recognizing
+a plurality of perspectives and appreciating the value of accommodating those differences rather than
+trying to reduce them to one single perspective. The commitments that we identify in a range of literatures
+in HCI to meaning, plurality, location, context and an ongoing search for necessarily inadequate theories
+                                                                                                                                                                  8
+    are a consequence of the human, embodied experience of partial, fragmented knowledge. The approach
+    does not rule out global knowledge, but it focuses on the ways in which global claims must be rooted in
+    the local.
+
+    Thus, a perspective drawing on embodied interaction is not simply a different topic for standard HCI
+    methods, nor only a different understanding of what is salient about interaction. Rather, this perspective
+    is grounded in substantially altered epistemological commitments to first- and second-paradigm HCI.
+    These commitments systematically lead to changed research questions, methodologies, and forms of de-
+    sign and evaluation – in other words, a third paradigm.
+
+    The Third Paradigm, Defined
+    We are now in a position to define the third paradigm more precisely, following the framework developed
+    in the first part of this paper. The third paradigm contains a variety of perspectives and approaches whose
+    central metaphor is interaction as phenomenologically situated. The goal for interaction is to support
+    situated action and meaning-making in specific contexts, and the questions that arise revolve around how
+    to complement formalized, computational representations and actions with the rich, complex, and messy
+    situations at hand around them. Because of its emphasis on multiple meanings made in context, we term
+    the third paradigm situated perspectives.
+
+    Because of its emphasis on multiple perspectives, the third paradigm does not espouse a single, correct set
+    of methods or approaches to answer these questions. Instead, we see a variety of approaches that are em-
+    bedded in a similar epistemological substrate. This substrate is analogous to a biological matrix, a com-
+    patible environment that supports the emergence of a heterogeneous variety of specific structures and
+    connects them to one another. The third paradigm thereby fulfills Kurt Lewin’s (1951, p. 240) demand
+    that we “draw on the totality of coexisting facts which are conceived of as mutually interdependent” to
+    explain, predict, and influence human behavior and experience. In a curious way, the third paradigm re-
+    sembles the first in its ability to recognize issues phenomenologically. However, rather than eschewing
+    theory, it adopts multiple theories or stances and considers them non-exclusively.
+
+    The description of the third paradigm should not sound new – many researchers in HCI are already
+    working out of this framework, although it has not been systematically recognized as such. One goal of
+    this paper is simply to bring what already appears to be happening in CHI to the surface for conscious
+    consideration. Indeed, a survey of the 151 long and short papers at CHI 2006 shows that 30 could be
+    thought of as developed from the situated perspectives paradigm.
+
+    The Term “Situated”
+    As identified by Béguin & Clot (2004), there are at least three widespread definitions of the term “situ-
+    ated”: the interactionist, the ecological, and the cultural. In the first, the situation is an account of the “full
+    range of resources that the actor has available to convey the significance of his or her own actions, and
+    interpret the actions of others” (Suchman, 1987, p. 118). This definition focuses on the genesis of action
+    in the relationship between the action and the material and social circumstances of that action. It asks how
+    society is produced by behavior (Goffman, 1959). A second definition stems from ecological psychology
+    (Gibson, 1979). In this, the situation is that part of the organization of action that is taken care of by the
+    environment, whether designed or pre-existing. This definition often leads to questions about how we
+    arrange the world. Hutchins (1995) builds on this to attain a third approach in which (1) the connection of
+    cognitive and cultural artifacts is emphasized and (2) the individual acts in a way situated by the presence
+    of others in the distributed system of the group in which the individual is operating. This approach is of-
+    ten associated with questions about the relationship between individuals and the movement of information
+    between systems elements.
+
+
+
+
+2
+    The name of the paradigm seems to distress many reviewers; the authors are quite open to alternative names for the paradigm. In fact, we see the indetermi-
+     nacy of the name to reflect the emergent nature of paradigm. See the appendix for a discussion of alternative names for the paradigm.
+                                                                                                                       9
+                       Paradigm 1:              Paradigm 2:                             Paradigm 3:
+                      Human Factors/         Cognitive Revolution                   Situated Perspectives
+                       Engineering
+
+ Metaphor of in- Interaction as            Interaction as information   Interaction as phenomenologically situated
+      teraction man-machine                communication
+                 coupling
+
+ Central goal for Optimizing fit           Optimizing accuracy and      Support for situated action in the world
+     interaction between man and           efficiency of information
+                  machine                  transfer
+
+     Typical ques- How can we fix          What mismatches come         What existing situated activities in the
+  tions of interest specific problems      up in communication          world should we support?
+                    that arise in inter-   between computers and        How do users appropriate technologies,
+                    action?                people?                      and how can we support those appropria-
+                                           How can we accurately        tions?
+                                           model what people do?        How can we support interaction without
+                                           How can we improve the       constraining it too strongly by what a com-
+                                           efficiency of computer       puter can do or understand?
+                                           use?                         What are the politics and values at the site
+                                                                        of interaction, and how can we support
+                                                                        those in design?
+                                           Table 1: Paradigms compared
+All of these are systems approaches in that they seek to explain or account for the relationship between
+system elements and activities. In this sense, all of these definitions are encompassed by third paradigm
+(although the Gibsonian term “affordance” is frequently utilized in second paradigm work not as a spe-
+cific claim about the match between properties of a system and properties of the human(s) using the sys-
+tem, but rather as a general term of praise.”).
+
+Intelligent and important discussions may be held about the relationship between these definitions of the
+situation and about other possible meanings. However, it is worth noting that all of these are quite differ-
+ent uses of the term than, for example, in modern, scientific, cognitive approaches to social psychology.
+One of the underpinnings of modern social psychology is actor-observer theory, the idea that people have
+a systematic cognitive bias in which they err by attributing another person’s behavior to personal disposi-
+tion (e.g. to the person) rather than to the setting (e.g. any relevant aspect of the person or environment
+other than stable personality dispositions) (Ross and Nisbett, 1991). The conclusion of actor-observer
+theory is that the situation has undue influence on the observer’s belief about the actor.
+
+Comparing the Paradigms
+As mentioned previously, our goal is not to suggest that the three paradigms identified in this paper are
+the only possible construction of paradigms in HCI. Rather, we argue that it is useful in understanding
+what is happening in contemporary HCI to look at the field as a whole in terms of these three paradigms,
+allowing us to understand why differences arise between intellectual approaches contributing to HCI and
+how we might best adjudicate conflicts between them. Each paradigm takes a different metaphor of in-
+teraction as central to the enterprise of HCI. As a consequence, each has a different goal for interaction,
+and this leads to differences in the typical questions that each paradigm finds important to answer. The
+differences between these paradigms are summarized in Table 1.
+
+To clarify the differences among the paradigms, as well as the ways they can fruitfully co-exist, let us take
+a simple and hopefully well-known interface example. In the 1960’s, the United States Air Force devel-
+oped automated cockpit warning systems to alert pilots to hazardous conditions. The systems used re-
+corded voices to tell pilots to turn, climb, or dive to avoid head-on collisions, among other things. Look-
+ing at this problem from the lens of the different paradigms leads to the following constructions:
+                                                                                                                                         10
+    1. The first paradigm. The situations that drove the initial system design were classic examples of
+    “critical incidents” (Flanagan, 1954). The Air Force realized they needed to quickly gain the pilots’ atten-
+    tion. At the time, all pilots and fight controllers were male, so someone had the bright idea of using a
+    woman’s voice so that it would be immediately identified as the “emergency voice”. This was clever and
+    worked well.
+
+    2. The second paradigm. Of course, thinking about it terms of information theory, this not only reduced
+    errors (a fundamental value of the first paradigm), it transmitted information more efficiently. It is easy to
+    see that there could be a taxonomy of voice types created based on cognitive load and response times.
+
+    3. The third paradigm. From the outset, there were design issues based on the meaning of this ap-
+    proach. The particular female voice was reputed to have been selected for its sultry and seductive tone3.
+    This quality reinforced the idea of the space of the cockpit being “male,” echoed in movies like Top Gun.
+    Of course, as women became flight controllers and pilots, this first and second paradigm strategy ceased
+    to be effective. It also caused interface designers to explore new meanings of the gender of the voice.
+
+    While different paradigms focus on different problems, we can see that all three of these perspectives can
+    peacefully exist – that whatever the solution, pilots should be warned of peril in a timely fashion, that
+    measurable improvement in this context is better, and that the larger issues of the construction of prob-
+    lematic meaning also matter. As we will describe later, the situation becomes more challenging when the
+    paradigms come in conflict.
+
+    Different Ways of Knowing
+    Each of the paradigms described in this paper involves a different central phenomenon of interest, differ-
+    ent sets of questions that are considered interesting or useful to ask, and different kinds of methods con-
+    sidered appropriate for answering those questions. Uniting these different aspects for each paradigm are
+    differing conceptions of what it means to know something is true. Our goal in this section is to outline
+    the contrasting epistemological commitments of the different paradigms, summarized in Table 2. Because
+    the first-paradigm is less oriented to systematic knowledge production than the second or third, we will
+    primarily discuss contrasts between second- and third-paradigm epistemologies.
+
+    1. Objective vs. subjective knowledge: The first and second paradigms emphasize the importance of
+    objective knowledge. The third paradigm, in contrast, sees knowledge as arising from situated viewpoints
+    in the world. This point of view often sees the dominant focus on objective knowledge as suspect in rid-
+    ing roughshod over the complexities of multiple perspectives at the scene of action. However, situated
+    viewpoints represent more than breaking the mirror of objectivity into fragments, instead recognizing the
+    subjectivity of the researcher and the relationship between the researcher and the researched (Chalmers &
+    Galani, 2004; McCarthy & Wright, 2004) indeed, this recognition is essential to participatory design. Yet
+    where issues of intersubjectivity are common in anthropology and education, they are remote and difficult
+    to address in the second paradigm.
+
+
+
+
+3
+    One interesting side effect was to gender popular media representations of flight control automata as female. Particularly notable
+    is the original StarTrek computer.
+                                                                                                                         11
+
+                        Paradigm 1:                   Paradigm 2:                              Paradigm 3:
+                       Human Factors/              Cognitive Revolution                    Situated Perspectives
+                        Engineering
+
+     Appropriate Engineering,               Laboratory and theoretical behav-        Ethnography, action research,
+    disciplines for programming,            ioral science                            practice-based research, interac-
+       interaction ergonomics                                                        tion analysis
+
+   Kind of meth- Cool hacks                 Verified design and evaluation           A palette of situated design and
+   ods strived for                          methods that can be applied re-          evaluation strategies
+                                            gardless of context
+
+      Legitimate Pragmatic, ob-             Objective statements with general        Thick description, stakeholder
+  kinds of knowl- jective details           applicability                            “care-abouts”
+             edge
+
+   How you know       You tried it out      You refute the idea that the differ-     You argue about the relationship
+     something is     and it worked.        ence between experimental condi-         between your data and what you
+            true                            tions is due to chance                   seek to understand.
+
+            Values    Reduce errors         Optimization                             Construction of meaning is in-
+                      Ad hoc is OK          Generalizability wherever possible       trinsic to interaction activity
+                      Cool hacks de-        Principled evaluation is a priori        What goes on around systems is
+                      sired                 better than ad hoc, since design         more interesting than what’s hap-
+                                            can be structured to reflect para-       pening at the interface
+                                            digm                                     “Zensign” – what you don’t build
+                                            Structured design better than un-        is as important as what you do
+                                            structured                               build
+                                            Reduction of ambiguity                   Goal is to grapple with the full
+                                            Top-down view of knowledge               complexity around the system
+                              Table 2: Epistemological distinctions between the paradigms
+
+2. Generalized vs. situated knowledge: The second paradigm values generalized models, as exemplified
+by GOMS (“Goals, Operators, Methods and Selections”) in Card, Moran, and Newell (1983) and Keiras
+(1983). But because the third paradigm sees knowledge as arising and becoming meaningful in specific
+situations, it has a greater appreciation for detailed, rich descriptions of specific situations. In part, this
+refers back to the arguments around situated action, which argued that while abstract knowledge and for-
+malisms are certainly useful, they do not directly drive or explain our activity in the world. To better un-
+derstand what people are doing, we need to track the situated contingencies and strategies people use to
+apply this abstract knowledge in real situations. Where the second paradigm down-played whether an
+office had books in it or that a computer sitting under a desk produced lots of heat when analyzing mouse
+performance, that the third paradigm recognizes that “externalities” are often central figures in the under-
+standing of interaction.
+
+3. Information vs. interpretation: The second paradigm arises out of a combination of computer science
+and laboratory behavioral sciences that emphasize analytic means such as statistical analysis, classifica-
+tion and corroboration in making sense of what is going on at the site of interaction, often under con-
+trolled conditions. As Sengers & Gaver argue, however, new approaches to CHI see interaction as
+stimulating multiple interpretations in concrete, real-world situations, and the job of the evaluator to iden-
+tify and track those interpretations, often in collaboration with their ‘subjects’ (Sengers & Gaver, 2006).
+The epistemological stance brought to this site is generally hermeneutic, not analytic, and focuses on de-
+veloping wholistic, reflective understanding while staying open to the possibility of simultaneous, con-
+flicting interpretation. As Bannon writes, “Our critique relied on the centrality of interpretation in the
+conduct of work, and also on the fact that the development of computer-based applications requires the
+                                                                                                                     12
+    collaboration or involvement of a variety of distinct communities.... [characterized by an] essential in-
+    commensurability of their world views and languages” (Bannon, 1995).
+
+    4. “Clean” vs. “messy” formalisms: The second paradigm, reacting to the a-theoretical orientation of the
+    first paradigm, values clean, principled, well-defined forms of knowledge. The third paradigm, in con-
+    trast, sees the practical trade-offs in design as more often “messy” rather than principled. Paradigmatic for
+    the second paradigm, for example, are design spaces, which are, as Tatar argues (2007), clean, mathe-
+    matical representations of what is at stake in design and suggest that design decisions can be made inde-
+    pendently of each other and with little regard for context. Tatar contrasts design spaces with ‘design ten-
+    sions’, a series of (non-orthogonal) axes laying out conflicting design opportunities that come out in
+    practice, the contextual issues that they impinge upon, and the ways in which they may be practically ne-
+    gotiated. The difference between these ways of thinking is rooted in whether researchers place the clean-
+    liness and certitude of formal models at the center of their thinking or whether they instead place an ap-
+    preciation for the complexity of real-world, messy behavior and activity at the center.
+
+    Clarification: The Role of Design
+    So far in our discussion, we have set aside questions about the role design plays in each paradigm. The
+    relationship of design to the paradigms we have identified depends, in part, on whether we take design as
+    in its common usage in HCI as simply the process of creating systems or as referring to the specialized
+    discipline of design arising out of product and industrial design.
+
+    DESIGN IN HCI PRACTICE
+    In the context of common HCI practice, design and analysis have been sometimes conceptualized as sepa-
+    rate, dual paradigms; while the underlying traditions of design and analysis differ, our argument here is
+    that HCI encompasses both. The balance between design and analysis is a characteristic of all three para-
+    digms. Furthermore, we do not privilege design or analysis in our structuring of the paradigms. On the
+    other hand, each of the paradigms we outline here has differing goals with respect to design. As Wright,
+    Blythe, and McCarthy (2006) discuss, the notion of what design is and how to approach it therefore looks
+    different in different paradigms. The underlying metrics of evaluation of each are reflected in differing
+    aesthetics of “good design.” For the sake of contrast, we cartoon the different relationships design and
+    analysis have in each paradigm:
+
+    1. The first paradigm: In valuing “usability”, the first paradigm adopts the idea of variance reduction
+    from engineering. To put this in the context of process, designing in the first paradigm is integral with, but
+    post-facto to the human factors enterprise. Designs are constituted as problems and solutions. Initial de-
+    signs are solutions to problems understood in previous designs. Since critical incidents (the “coin of the
+    realm” of human factors) are most often failures during use, new design knowledge is primarily created in
+    use or use-like testing.
+
+    2. The second paradigm: Design in the second paradigm is principled. Although in practice it relies
+    upon heuristics and conventions for much of its basic knowledge, there is a fundamental difference from
+    the first paradigm in when, how, and by what means evaluation is carried out. User testing looks for proc-
+    ess improvement along the lines of information theory that therefore can be validated without full-
+    deployment or simulation of the final conditions. This means that evaluation is often tightly coupled with
+    creation – in fact, design is often constructed as hypothesis-testing, rather than problem-solving. It is for
+    this reason that the scientific (or perhaps quasi-scientific) aspects of HCI can seem to make design appear
+    secondary4. One structural consequence of being built on a single set of principles is that design can be
+    more clearly organized in top-down and goal-directed structures. Because it is top-down, its goal is to
+    address the abstracted qualities identified in the research rather than to communicate with the research.
+
+    3. The third paradigm: In the third paradigm, design is an element of enquiry. Since interaction is seen
+    as an element of situated action in the world, the understanding or construction of the situation is the core
+
+
+4
+    This may be one fundamental source of the tension between design and analysis in HCI.
+                                                                                                                13
+of the design. In this, the intellectual questions that form the analytic frame are intrinsic elements of the
+design process. Thus, problems, hypotheses and solutions are not the primary construction of design
+moves.
+
+DESIGN AS A DISCIPLINARY PRACTICE
+If we take design instead as a disciplinary practice such as taught in arts colleges, design is in some ways
+a natural fit for the third paradigm, which similarly values and addresses the complexity of the situation of
+design. The construction of design as part of a scientific practice in the second paradigm makes for an
+uncomfortable fit for many designers. However, different constructions and approaches to design are
+better fits for different paradigms. So, for example, Fallman describes (and critiques) a ‘conservative’
+account of design that sees it as a problem-solving activity. In this account, once a problem is analyzed
+and defined, a solution can be achieved through a succession of design decisions that are based entirely on
+the problem definition and the project’s constraints (Fallman, 2003); such an approach aligns well with
+the first and second paradigms. Other approaches to design highlight a more situated approach to design
+and a more provisional relationship to theory or construction of truth (Gaver, 2006); critical design, for
+example, which highlights design as an opportunity to spur reflection on political, social, and cultural di-
+mensions of technology, is a natural fit for the third paradigm (Dunne & Raby, 2001). In sum, whether
+taken as a practice or a discipline, design is not at home in a single paradigm; instead, each paradigm
+takes a different stance to design for which particular design practices may be a better or worse fit.
+
+Getting the Best out of Multiple Paradigms
+Given HCI’s nature as an interdisciplinary field, it would be easy to argue that issues around validity and
+evaluation are already adequately confusing. What value is there to HCI in adding an explicitly identified
+third paradigm to the mix, rather than requiring third-paradigm work to conform to well-understood and
+agreed-upon standards arising from the first two paradigms? Here, we outline three major advantages to
+the field of fully embracing at least one additional paradigm:
+
+    (1) we will develop a better understanding of interaction;
+
+    (2) we will recognize good work when it occurs; and
+
+    (3) we will increase the validity of our methods and knowledge.
+
+Better understanding of interaction
+Each paradigm takes as central a different metaphor of interaction. Based on this metaphor, each para-
+digm is able to centrally focus on and address different kinds of phenomena, and to leave different phe-
+nonema at the margin. Different paradigms therefore lead to different kinds of questions which are seen
+as important to answer. Thus, the first advantage of recognizing additional paradigms arises from the re-
+alization that, whatever our personal stance to research, multiple paradigms allow the field as a whole
+to develop a more complete overall understanding of the nature of interaction and good practices
+around design and evaluation.
+
+Indeed, if we wish the field to be consequential, we must explain important questions. However, many
+questions which have clear social, cultural, and economic importance for present-day interfaces are diffi-
+cult to address within first- and second paradigm frameworks. For example, in these paradigms, it is diffi-
+cult to explain why people play games or why there are more Windows machines than Macintoshes. The
+advantages of aesthetics are challenging to understand, since the value of a nice looking interface must be
+expressed in functional terms. For example, instead of talking about emotional design as significant in its
+own right, Don Norman (2004) is compelled to cite studies showing that good-looking interfaces produce
+more efficient outcomes. Isn’t engendering a rich emotional experience enough of a reason to be inter-
+ested? If ugly interfaces were more efficient, would that close the discussion down? Furthermore, there
+are legitimate questions about equivalency of designs rather than differences between them that cannot be
+well explored using statistical methods.
+                                                                                                                                                                      14
+    For the most part, the CHI conference missed the rise of the Internet; this is old news, often attributed
+    solely to CHI’s focus on the very detailed aspects of interfaces and browsers’ ability to present informa-
+    tion in different formats. From the stand-point of a strict cognitive approach, there is limited language that
+    would describe the general phenomena of a unified information browsing-, socializing-, retail-, play-,
+    educational-, and work-environment. From a third paradigm point of view, we would not demand a single
+    unified language but take each of these and their confluence as significant. This approach does not guar-
+    antee that reviewers will spot all important trends, but recognizing the third paradigm as an additional,
+    valid lens of discovery in HCI may help us to better distinguish a class of urgent issues which matter to
+    HCI researchers.
+
+    Multiple perspectives allow us to approach interaction more broadly. This insight is to some extent ac-
+    knowledged in HCI practice; the enthusiastic proliferation of alternative practices is itself a sign that HCI
+    researchers and reviewers recognize the need for new lenses on interaction. The notion of communities in
+    the CHI conference, for example, may be seen as a reflection of the notion that some new perspectives
+    ought to be acknowledged.
+
+    Recognition of solid contribution
+    While the recognition of multiple paradigms allows us to deal with a broader array of questions in the
+    field, it is equally important to recognize that there are substantial differences in the way that different
+    paradigms structure their approaches to answering these questions. As a consequence, the nature of va-
+    lidity necessarily undergoes substantial alteration as we move from one paradigm to another. Notions of
+    validity drawn from one paradigm fail to accurately characterize a solid contribution of work in another
+    paradigm. Therefore, the second advantage of recognizing an additional paradigm is the realization that
+    we must develop differing standards of validity for work in different paradigms in order to be con-
+    fident of recognizing good work in each paradigm.
+
+    While the value of multiple perspectives is likely broadly accepted in HCI, the insight that different per-
+    spectives require more nuanced and contextual understandings of validity appears a poor fit to HCI prac-
+    tice on the ground. The primary challenge, then, for the third paradigm to fully bloom is to break out of
+    the standards which have been set up by incompatible paradigms. Doing so is not easy; the results so far
+    have been, in part, a series of misappropriations, misunderstandings, and rejections of work resulting from
+    the third paradigm because it poorly fits ideas of method and validity arising from previous paradigms.
+    There are numerous kinds of problematic mismatches.
+
+    EXTERNAL LEGITIMIZATION NEEDED TO BE ACCEPTABLE
+    Dourish (2006) argues that 20 years after the introduction of ethnography into the HCI canon, it is still
+    systematically misunderstood as a method for extracting user requirements rather than a discipline that
+    analyzes the entire site of human-computer interaction. Thus, currently, an ethnography, by itself, does not
+    constitute a legitimate CHI publication without an additional instrumental component such as user re-
+    quirements or an evaluation of the interface using information-processing criteria.
+
+    LEGITIMIZATE APPROACHES WHICH ARE INCAPABLE OF ACCEPTANCE
+    There is a parallel, and even more disheartening situation for approaches that may be used in aspets of
+    practice but are not in the cannon of research. In Carroll’s Models, Theories and Frameworks of Human-
+    Computer Interaction (2003) there are extended discussions of fourteen models, theories or frameworks
+    of HCI, about half of which rarely, if ever, by themselves lead to CHI publications. That is, we find many
+    techniques used in requirements development, but not in the conceptualization or evaluation of the re-
+    sulting system – at least as represented in CHI papers. Perhaps this is because these models are practical
+    models for engineering purposes, but (1) it is unclear who actually uses these models in product design6
+    and (2) it is unclear what the nature of the models are if the designs they produce are not of interest in
+
+5
+    By rough count, at least 90 of the long and short papers in CHI 2006 reported quantified results. We cannot, of course, know how well the ac-
+    cepted papers represent the rejection criteria.
+6
+    When the Indy driver Mario Andretti was asked if his car used all of the products advertised on it, he is reputed to have said “Yes, but not enough to hurt the
+    engine.”
+                                                                                                                                                    15
+    themselves. It is as if physicists said “Now that we have shown that we can create linear accelerators, the
+    findings from these are irrelevant to research.”
+
+    MEASURING SUCCESS, MEASURING CONTRIBUTION
+    In the second paradigm, measuring contribution is equated with measuring success of the system; this is
+    convenient because both paradigms measures of success by measuring the comparative effectiveness and
+    efficiency of information transfer. User self-reported satisfaction might suffice, but is seen as a poor
+    cousin to efficiency. Measures of success from the third paradigm fare a variety of fates when reviewed
+    from this perspective. Some criteria, such as delight, are not seen as legitimate criteria at all. Other crite-
+    ria, such as provoking ideas or causing the reader to consider new possibilities, are not considered suffi-
+    cient criteria of success. Furthermore, balancing the concerns of different stakeholders in a clever way, or
+    enabling activity that would otherwise simply not be possible are not by-and-large sufficient measures of
+    success.
+
+    To compensate for this, as Grudin (2005) has documented, we see the rise of specialty research commu-
+    nities such as ICLS or CSCW bearing no relationship to the official communities in the CHI conference
+    with their own conferences and publications. They do not, as they might, form new sub-disciplines with a
+    more particular set of methods, values and aesthetics, but rather must adopt independent standards. When
+    we fail to recognize good work and drive it out of our community, the result is a loss to the HCI field.
+
+    Valid methods and knowledge
+    Even when third-paradigm research is not driven out of HCI, lack of recognition of the differences among
+    the paradigms leads to the danger of invalid methods and knowledge being accepted as part of the canon
+    of HCI. This arises because, in order to be represented in central HCI venues, third-paradigm work is
+    often required to conform to inappropriate standards in addition to or instead of its inherent forms of va-
+    lidity; the result is at best an additional, unnecessary hoop for this work to jump through and, at worst, the
+    publication of fundamentally invalid research knowledge. So, for example, Boehner et al. (2007) have
+    explored the adaptation of cultural probes in HCI from its original intention as a situated, dialogic, open-
+    ended method to a standardized recipe for extracting user requirements. These changes are sometimes
+    invisible to the researchers involved – apparently deriving from a conviction that a method must be in-
+    tended in first- or second-paradigm modes and a systematic blindness to other possibilities – or are de-
+    scribed by researchers as improvements that put the third-paradigm work on more solid scientific footing.
+    In the process, the forms of validity embodied in the original probes, which rest on personal engagement
+    between designer and those designed for, rich and situated interpretation of the probes, and recognition of
+    their fundamental ambiguity, are lost in many adaptations. Equally often, second-paradigm trappings
+    such as graphs and statistics are applied superficially and fail to adequately support the generalizations
+    researchers make from probes. The results end up looking valid from neither second- nor third-paradigm
+    perspectives.
+
+    As Boehner et al. argue, inappropriate alterations to third-paradigm methods appear to derive, in part,
+    from a naïve conception that methods alone can guarantee the validity of research results, without refer-
+    ence to their underlying methodology, or the underlying principles which organize a particular approach
+    to research and substantiate resulting knowledge claims. Because techniques arising from the third para-
+    digm are not seen as inherently valid, methods and insights from alternative perspectives are often simply
+    amalgamated to informational or engineering perspectives, without recognizing or dealing with the very
+    real incompatibilities between these perspectives. While discussion of methods is extremely common in
+    HCI literature, there is relatively little discussion of methodology or even, apparently, understanding that
+    methods need methodology in order to make sense. As a consequence, we see the adoption of a small
+    number of recipe-like methods as rigid standards for truth.
+
+    As represented in accepted papers, CHI holds controlled experimentation with a few kinds of quantifiable
+    outcomes in extraordinarily high esteem8. The canon of acceptable methods is even more confined than
+
+7
+    By rough count, at least 90 of the 151 long and short papers in CHI 2006 reported quantified results. We cannot, of course, know how well the
+    accepted papers represent the rejection criteria.
+                                                                                                                                                    16
+    that in psychology since many of the most famous psychological studies involve quasi-experimental or
+    demonstration designs (Gerrig & Zimbardo, 2002). Furthermore, even experiment-based theories that
+    grapple with highly contextual content are seen as insufficient, because they are difficult to apply without
+    training and thought. Monk, for example, concludes his discussion of Clark’s theory of language as fol-
+    lows: “In an ideal world, a theory should be encapsulated as a set of guidelines or rules that could be used
+    by a designer with very little background in human factors of human communication. Falling this, the
+    theory should be formalized as principles…. the theory is only really usable by researchers….” (Monk,
+    2001, p. 288). Insofar as HCI claims to be a scientific discipline, this is a surprising declaration. Insofar as
+    it is an engineering discipline, we note that civil engineers are required to have a considerable under-
+    standing of basic physics, followed by considerable instruction in how that physics relates to real materi-
+    als and conditions before they are certified to build bridges. It is not the theory’s job to be simpler than
+    the phenomena it describes. In any case, such limited guidelines or rules run counter to understandings of
+    the complexity of interaction that arise from the third paradigm.
+
+    It is important at this point to highlight, though, that divorcing method and methodology and replacing
+    nuanced discussion of how methods relate to methodology with rigid methods said to guarantee
+    truth is a substantial problem for any paradigm, not just the third. In order to create valid knowledge
+    in any paradigm, researchers must adapt methods to particular problems and invent appropriate new
+    methods. To do this correctly, they must understand the frame within which they are working. This is as
+    true for good experimental laboratory research as it is for good contextual fieldwork.
+
+    It is also possible that inappropriate alterations of third-paradigm methods occur because evaluators are
+    uncomfortable with their ability to differentiate high-quality from low-quality work. There is no simple
+    rule and intelligent, well-meaning people may differ. Reviewing third-paradigm papers cannot be handed
+    to graduate students with little oversight. Papers must be judged by critical theory methods, including
+    their resonance with prior literature with respect to complex recurring themes in human behavior. Spe-
+    cialized language and (worse) specialized usage may be involved. For example, for many years, CSCW
+    papers would have phrases drawn from ethnographic usage such as “doing being a student” or “doing
+    being a secretary” to acknowledge and emphasize the idea that roles are not static but must be continually
+    achieved, and defined through interactive activity. This was a manifestation in a pragmatic, engineering
+    context of an important finding in a number of fields (ethnography, ethnomethodology, sociology) that
+    feed the third paradigm.
+
+    In an interdisciplinary field like HCI, this requirement for reflection is essential. One of the advantages of
+    an interdisciplinary field like HCI is that work in different paradigms can cross-pollinate each other. In
+    HCI practice, we see a proliferation of hybrid forms which draw inspiration from, for example, both labo-
+    ratory studies and ethnographic fieldwork. Such hybrid work can bring together the best of both worlds -
+    or the worst. Where there are great distinctions in epistemological commitments between paradigms,
+    researchers hybridizing them must tread carefully in order to make sure that the hybrid methodologies
+    maintain validity. To do so, it is not adequate to combine two methods which are each considered valid
+    in a different paradigm; one must also articulate how the hybrid method makes sense with respect to a
+    single, consistent underlying methodology (which may correspond to one particular paradigm or be de-
+    veloped fresh for the needs of the researcher). So, for example, while both large-scale quantitative surveys
+    and small-scale, in-depth qualitative fieldwork can create useful forms of valid knowledge, hybridizing
+    them by making a small-scale quantitative survey of a single fieldsite is not a priori correct - nor neces-
+    sarily incorrect.. The devil is in the details, worked out with respect to the researcher’s methodological
+    commitments.
+
+    The third advantage, then, of recognizing that there are at least 3 paradigms in HCI is that we are able to
+    recognize the differences in methodology between paradigms and therefore increase the likelihood
+    of valid methods and knowledge in each paradigm, as well as in hybrid work. In order to know how
+
+
+8
+    By rough count, at least 90 of the 151 long and short papers in CHI 2006 reported quantified results. We cannot, of course, know how well the
+    accepted papers represent the rejection criteria.
+                                                                                                                                                     17
+     to do this well, need to understand the fundamental epistemological differences among the paradigms.
+     We will discuss this next.
+
+     Discussion: Where’s the Science?
+     From a second paradigm point of view, the contribution of HCI may be thought to rest on empirical, gen-
+     eralizable, scientific results. The third paradigm does not promise to address these. Yet a careful look at
+     the state of the second paradigm identifies several kinds of needs for third paradigm thinking.
+
+     First, many fields that feature empirical investigation such as that advocated by the second paradigm also
+     build on a substantial tradition of systematic observation of phenomena similar to that advocated by the
+     third paradigm. For example, the Linnean classification of organisms was a major empirical contribution
+     to biology though not, in origin, experimental.
+
+     Second, the empirical status of second paradigm thinking is itself subject to question. Critics raise the
+     question of whether true scientific theory is possible in the social sciences on which much second para-
+     digm epistemology is based. Flyvbjerg, for example, argues that “the problem for social studies is that
+     the background conditions change without the researcher being able to state in advance which aspects one
+     should hold constant in order for predictions to continue to operate” (Flyvbjerg, 2001, p. 45).
+
+     Of course, criticizing the nature of science as conducted in the second paradigm does not make the third
+     paradigm more scientific. What it does is raise the question of what science is in HCI and whether scien-
+     tific criteria are the best and most apt ones for the field.
+
+     Discussion: Science or Substantiation?
+     Even under the second paradigm, we in HCI are not pursuing abstract truth in general, but rather in more
+     particular, technologically defined ways. We are interested in generalizability, but generalizability of
+     meaningful design decisions. For example, we no longer do research on emacs keystrokes because the
+     emacs text-editor is no longer widely used. Our questions are almost always local and provisional.
+
+     Perhaps rather than searching for science, the field tacitly is searching for substantiation: reasons that I
+     can understand and believe what you say. All paradigms represent ways of coming to know about the
+     world, and all require continual reflection about goals, purposes, assumptions and legitimacy. In many
+     areas of HCI, particularly those centered in the second paradigm, the forms and paraphernalia of science
+     are used to accomplish this. But they may not be primary.
+
+     A further extension of the importance of substantiation (as opposed to science), is that we are, as a field,
+     engaged in the creation of a culture of use rather than the creation of knowledge about use. However, if
+     the creation of HCI culture is the central enterprise, then as computing becomes more pervasive---that is,
+     more central to everyday life---a multiplicity of values and viewpoints must be brought to be its construc-
+     tion.
+
+     Conclusion
+     In the opening chapter to HCI: Models, Theories and Frameworks, Jack Carroll (2003) describes HCI as
+     a multi-disciplinary science. By ordering the disciplines into three paradigms, it is our desire to bring
+     some clarity to the field, and begin mapping the relations between them. We may have used some radical
+     language to clarify the breaks we see between the first, second and third paradigms, but we also trust that
+     the reader recognizes the elements of their own work that are in each.
+
+
+
+
+9
+     By rough count, at least 90 of the long and short papers in CHI 2006 reported quantified results. We cannot, of course, know how well the ac-
+     cepted papers represent the rejection criteria.
+10
+     The sectioning noting this followed the little example of the B52 cockpit alert system which nothing, if not, a design example.
+11
+     This may be one fundamental source of the tension between design and analysis in HCI.
+                                                                                                                  18
+We are not arguing that the third paradigm is right, while the first and second paradigms are wrong.
+Rather, we argue that paradigms highlight different kinds of questions that are interesting and methods for
+answering them. Paradigms frequently co-exist and researchers may work within multiple paradigms.
+Even so, we believe it would be wise to recognize the differences and incompatibilities between para-
+digms that make them amenable to different sorts of problems; so that, for example, it would probably be
+unwise to attempt to uncover the rich appropriations of a situated technology with an objective laboratory
+test.
+
+We also believe it is important for CHI to understand that, sometimes, paradigms do clash; those clashes
+may appear in the form of a debates in the field about proper methodology, validity of results, etc. Work
+in one paradigm can easily look invalid to someone working in another paradigm, because it is based on
+quite different notions of what knowledge is and how it is to be generated. Or may seem valid but beside
+the point, since the driving questions are different.
+
+And when paradigms clash, the overlap of ways of seeing taken with conflicting epistemologies results in
+a miasma of legitimacies. HCI has always been a hybrid discipline and therefore has used either the in-
+tersection or union of legitimate practices from its constituents. Thus the second paradigm defines legiti-
+macy as measurable utility, and it is this standard to which third paradigm work tends to be held. But that
+is not a priori the definition of legitimacy; to allow the third paradigm to bear full fruit, we need to recog-
+nize and accommodate its notions of validity. And one cost of work in the third paradigm is precisely the
+need to explicate what is legitimate in the third paradigm enterprise. We would expect that any submis-
+sion in the third paradigm would explain how it places itself within the matrix of situated perspectives and
+explain (rather than argue for) its measures of success.
+
+We trust that if these arguments resonate with the reader, they will take the time to consider alternative
+constructions of the paradigms of HCI and to reflect on the underlying methodologies which motivate
+their work.
+
+We would expect that calling out the underlying paradigm will become a standard part of every publica-
+tion in our field. Thus, we will not be forced into the sort of pro forma corners that Paul Dourish (2006)
+warned us about at CHI 2006. Further, it is also reasonable to expect that evaluation of research and new
+interface ideas will become more nuanced and situated, and that richer descriptions (no matter what the
+paradigm) will become the standard. In this way, we hope that the third paradigm, just as the first and
+second, can be allowed to make a permanent contribution to the field.
+
+ACKNOWLEDGMENTS
+The authors would like to thank Malcolm McCullough for being the first to recognize these three para-
+digms, the participants in alt.chi for providing helpful feedback, and each other for contributing equally to
+fleshing out this idea. This work was supported in part by NSF awards IIS-0238132 and IIS-0534445.
+
+REFERENCES
+[1] Agre, P.E. (1997) Computation and Human Experience, Cambridge, UK, Cambridge University
+Press.
+[2] Aoki, P. M. & Woodruff, A. (2005) Making space for stories: ambiguity in the design of personal
+communication systems. In Proc. CHI '05. ACM Press, New York, NY, 181-190.
+[3] Bannon, L. J. (1995) “The politics of design: representing work.” Commun. ACM 38, 9 (Sep. 1995),
+66-68.
+[4] Béguin, P. and Clot, Y. (2004) Situated Action in the Development of Activity. Activities, 1(2) 50-63
+[5] Benford, S. et al. (2003) "Coping with uncertainty in a location-based game", IEEE Pervasive Com-
+puting, vol. 2 (3), pp. 34--41.
+[6] Benford, S. et al. (2004a) "Uncle Roy All Around You", Proc. of ACE'04, Singapore: ACM.
+[7] Benford, S. et al. (2004b) "The error of our ways", Proc. of UbiComp'04, pp. 70-87, Nottingham, UK:
+Springer.
+                                                                                                             19
+[8] Benford, S., Crabtree, A., Flintham, M., Drozd, A., Anastasi, R., Paxton, M., Tandavanitj, N., Adams,
+M., Row-Farr, J. (2006) “Can you see me now?”, ACM Transactions on Computer-Human Interaction
+(TOCHI), v.13 n.1, p.100-133, March 2006
+[9] Benford, S., Rowland, D., Flintham, M., Drozd, A., Hull, R., Reid, J., Morrison, J., Facer, K. (2005)
+“Life on the edge: supporting collaboration in location-based experiences”, Proceedings of the SIGCHI
+conference on Human factors in computing systems, April 02-07, 2005, Portland, Oregon, USA
+[10]     Boehner, K., DePaula, R., Dourish, P., and Sengers, P. (2005) “Affect: from information to inter-
+action”. In Proc. on Critical Computing ‘05. ACM Press, New York, NY, 59-68.
+[11]   Boehner, K., Vertesi, J., Sengers, P.,and Dourish, P. (2007) “How HCI Interprets the Probes”. In
+Proc. CHI 2007, ACM Press 2007, 1077-1086.
+[12]    Brooks, R. A., (1990) "Elephants Don't Play Chess", Robotics and Autonomous Systems (6),
+1990, pp. 3–15.
+[13]    Card, S, Newell, A., & Moran, T. (1983) The Psychology of Human-Computer Interaction, Law-
+rence Erlbaum Associates, Inc., Mahwah, NJ.
+[14]   Carroll, J. M., (2003) HCI Models, Theories, and Frameworks: Towards a Multidisciplinary Sci-
+ence Morgan Kaufmann, San Francisco, CA.
+[15]     Chalmers, M. & Galani, A. (2004) “Seamful interweaving: heterogeneity in the theory and design
+of interactive systems”. Proceedings of the 2004 conference on Designing interactive systems: processes,
+practices, methods, and techniques, ACM Press: New York, NY, p. 243 - 252.
+[16]    Dourish, P. (2006) “Implications for design”. In Proc.CHI '06. ACM Press, New York, NY, 541-
+550.
+[17]   Dourish, P, (2001) Where the action is: the foundations of embodied interaction, MIT Press,
+Cambridge, MA.
+[18]     Dourish, P. (2004) “What we talk about when we talk about context”. Personal Ubiquitous Com-
+put. 8, 1 (Feb. 2004), 19-30.
+[19]    Dunne, A. and F. Raby. (2001) Design Noir: The Secret Life of Electronic Objects.
+Basel:Birkhäuser, 2001,
+[20]   Emerson, R.M., R.I. Fretz, and L.L. Shaw. (1995) Writing Ethnographic Fieldnotes. Chicago, U.
+Chicago Press, 1995.
+[21]    Fallman, D. (2003). “Design-oriented human-computer interaction”. Proc. CHI 2003, 225-32.
+[22]    Flanagan, J.C. (1954) “The critical incident technique”. Psychol Bull. Vol 51, No 4, pp. 327-58.
+[23]    Flyvbjerg, B. (2001) Making Social Science Matter: Why social inquiry fails and how it can suc-
+ceed again. Cambridge: Cambridge University Press.
+[24]   Friedman, B. (Ed.) (1997). Human values and the design of computer technology. New York:
+Cambridge University Press and CSLI, Stanford University.
+[25]    Gaver, W. (2006). “Learning from experience”. CHI 2006 Workshop on Theory and Methods for
+Experience-Centered Design. http://wwwusers.cs.york.ac.uk/~mblythe/CHI/Gaver.pdf
+[26]    Gaver, W. W., Beaver, J., and Benford, S. (2003) “Ambiguity as a resource for design”. In Proc.
+CHI '03. ACM Press, New York, NY, 233-240.
+[27]    Gaver, W. W., Boucher, A., Pennington, S., and Walker, B. (2004) “Cultural probes and the value
+of uncertainty”. interactions 11, 5 (Sep. 2004), 53-56.
+[28]    Gerrig, R, and Zimbardo, P. G. (2002) Psychology and Life (16 th ed.) Boston: Allyn and Bacon.
+[29]    Gibson, J. J. (1979). The ecological approach to visual perception. London: Lawrence Erlbaum
+associates, 1986 (2 ed.).
+[30]    Goffman, E. (1959). The presentation of self in every day life. Doubleday, New York: Doubleday.
+                                                                                                            20
+[31]     Gray, W. D. (1995) Discount or disservice?: discount usability analysis--evaluation at a bargain
+price or simply damaged merchandise? (Panel session). In CHI ’95 Conf. Companion. ACM Press, New
+York, NY, 176-177.
+[32]  Gray, W. D., & Salzman, M. C. (1998) “Damaged Merchandise? A Review of Experiments that
+Compare Usability”. Human-Computer Interaction, 13(3), 231-261.
+[33]   Grudin, J. (2005) “Three Faces of Human-Computer Interaction." IEEE Annals of the History of
+Computing. Vol. 27, no. 4, Oct.-Dec. 2005. pp 46 - 62.
+[34]    Haraway, D. (1988). “Situated Knowledges”. Feminist Studies, Vol. 14, No. 3., pp. 575-599.
+[35]    Horswill, I. (nd) “Analysis of Adaptation and Environment.” Artificial Intelligence, Vol. 73, pp.
+1-30.
+[36]    Hutchins, E. (1995). Cognition in the wild. Cambridge, M.A.: MIT Press.
+[37]    Kaye, J. ‘J’. & P. Sengers. (2007) “The Evolution of Evaluation”. alt.chi 2007.
+http://www.viktoria.se/altchi/index.php?action=showsubmission&id=47.
+[38]   Kieras, D. (1988) Towards a practical GOMS Model methodology for user interface design. In
+M. Helander (ed.) Handbook of Human-Computer Interaction, Elsevier, North-Holland.
+[39]     Klemmer, S. R., Hartmann, B., and Takayama, L. (2006) “How bodies matter: five themes for
+interaction design”. In Proc. DIS '06. ACM Press, New York, NY, 140-149.
+[40]    Kuhn, T.S. (1970). The Structure of Scientific Revolutions, (second edn). University of Chicago
+Press, Chicago.
+[41]   Lefebvere, H. (1991) The Production of Space. Nicholson-Smith, D. translator. Malden, MA:
+Blackwell Publishing.
+[42]  Lewin, K. (1951) Field theory in social science; selected theoretical papers. D. Cartwright (ed.).
+New York: Harper & Row.
+[43]    McCarthy, J. and P. Wright. (2004) Technology as Experience. Cambridge, MA: MIT Press,
+2004.
+[44]    McCullough, M. (2004) Digital Ground. Cambridge, MA: MIT Press.
+[45]    Monk, A. (2001) “Common Ground in Electronically Mediated Communication: Clark's Theory
+of Language Use”. In Carroll, J. M., (Ed) HCI Models, Theories, and Frameworks: Towards a Multidis-
+ciplinary Science Morgan Kaufmann, San Francisco, CA
+[46]  Norman, D., (2004) Emotional Design: Why We Love (or Hate) Everyday Things. Basic Books,
+New York.
+[47]    Picard, R., (1997) Affective Computing. MIT Press, Cambridge.
+[48]  Ross, L. & Nisbett, R. E. (1991) The person and the situation: Perspectives of social psychology.
+New York: McGraw-Hill.
+[49]    Sengers, P. & Gaver, B. (2006) “Staying open to interpretation: Engaging multiple meanings in
+design and evaluation”. In Proc. DIS '06. ACM Press, New York, NY, 99-108.
+[50]    Steels, L. and R.A. Brooks, editors. (1995) The Artificial Life Route to Artificial Intelligence:
+Building Embodied Situated Agents, Lawrence Erlbaum Associates, Inc., Hillsdale, NJ, 1995.
+[51]    Suchman, L. (1987). Plans and Situated Actions. Cambridge: Cambridge University Press.
+[52]    Tatar, D. (2007) “Design Tensions”. Journal of Human Computer Interaction. Volume 22, no 4.
+[53]     Wright, P., Blythe, M. and McCarthy, J. (2006). “User experience and the idea of design in HCI”.
+Interactive Systems: 12th International Workshop. Revised Papers Lecture Notes in Computer Science
+Volume 3941 / 2006. Springer Verlag, pp. 1 – 14.
+                                                                                                              21
+
+Appendix
+Alternative Names for the Third Paradigm
+In earlier versions of this paper, we used a different term for the third paradigm. Because of its emphasis
+on multiple perspectives, the third paradigm does not espouse a single, correct set of methods or ap-
+proaches. Instead, as discussed previously, we see a variety of approaches that are embedded in a similar
+epistemological substrate, like a biological matrix. For this reason, we called it the phenomenological
+matrix, a multidimensional characterization of concerns in which relationships and sequences can be de-
+fined. “Matrix” also conveyed the idea that the there are bonds between various phenomenologically-
+based HCI enterprises. The relationship of approaches that we characterize as constituting the third para-
+digm often have competing phenomenologies and sometimes are advanced by contentious advocates so
+that their intrinsic relations may be obscured; this name hoped to bridge those chasms. But that same
+ecumenism, also meant that readers had to take the step of making the same associations.
+
+Phenomenological matrix had one other downside: in recent years, design – the world of academic high-
+design, in particular – has become associated with phenomenology. In the section, “Clarification: the role
+of design”, we debunk the idea that design is only present in phenomenologically-based HCI. Nonethe-
+less, we find that readers tend to unconsciously use this bias to conflate phenomenology with design.
+
+These two reasons caused us to use situated perspectives instead.
+
+There is a third alternative which we, the authors, find ourselves using in our conversations developing
+this work: the third paradigm. This is more than a convenience since the third paradigm is in large part an
+emergent paradigm and any particularizing name has the potential to exclude or include ideas and meth-
+ods without examination. We are not alone in this “alternate to the other” formulation. The post-structural
+geographer Henri Lefebvere uses the term thirdspace in analogous fashion to differentiate the relative and
+a-structural from the structural spatiality.
+
+Regardless, the authors are quite open to alternative names for the paradigm, particularly as the grope for
+a name leads to further examination of the various paradigms of HCI.
+
