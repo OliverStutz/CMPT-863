@@ -307,17 +307,5 @@ Three smaller things
 - Rams's principles on Rams's products, in the essay's sketch (p. 944 to 945).
 - Schön listed, never cited (p. 946).
 
-## Slide 11.3: Over to you
 
-**Time:** 1:00 · **Visual:** three or four short quotes from classmates' commentaries with names, each paired with the tension it speaks to (filled after the commentaries are posted), then the three-step plan
-
-**On the slide**
-- **[classmate]** on standards or scientism, with the tension it feeds
-- **[classmate]** on Popper, Lakatos or "sometimes right"
-- **[classmate]** on annotated portfolios or Rams
-- **[classmate]** on their own project or the many worlds
-- The next thirty minutes:
-  1. Hands in three: is your own project research through design? Yes, no, depends what counts.
-  2. Pairs, five minutes, one card each: a question and two roles.
-  3. Three anchors, then one sentence from each of you: "One thing I now expect from research through design."
 
