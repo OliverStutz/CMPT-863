@@ -243,3 +243,8 @@ Still open for v3 (and v2, v1): the thesis (v3 slide 16), the [classmate] slots 
 | The full layout is written out now, at high quality, so that reading it once is enough and iteration is the exception | 2026-10-19 |
 | An Opus agent mines the earlier course readings for candidate connections so Oliver can choose which to use (report R) | 2026-10-19 |
 | Oliver's own CISO trust study stays out of this presentation; it belongs to another week | 2026-10-19 |
+
+## 9. Question day, 2026-10-22 (morning before the talk)
+- Oliver's questions on the deck, the paper and its history answered through briefed Opus agents (follow-ups to the same agent) and checked against `assets/paper-text.txt`; full record in `Week 7 - Question Log 2026-10-22.md` (34 entries, corrections, open decisions).
+- New files: `slides3/extra-3b-Waves.md` (optional three-waves slide, 1:15, checks pass); `assets/frayling-1993.pdf` and `-text.txt` (Frayling's original, OCR); `assets/harrison-tatar-sengers-three-paradigms-text.txt`; `slides3/Role Cards v3.md` (role-card pack, written by an agent, committed separately when done).
+- Open: slide 10 labels (three options offered), slide 12 coffee-maker opener, two Say wording fixes (slides 5 and 10), Bowers dagger on slide 17. None applied; see the log.
