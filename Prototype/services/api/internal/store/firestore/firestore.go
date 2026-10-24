@@ -38,6 +38,10 @@ const (
 // Store is the Firestore implementation.
 type Store struct {
 	c *firestore.Client
+	// alloc admits one allocating transaction (one that reads
+	// counters/allocation, that is a consent) at a time per process. See
+	// allocGate.
+	alloc chan struct{}
 }
 
 // New connects to the (default) database of a project.
@@ -46,7 +50,49 @@ func New(ctx context.Context, projectID string) (*Store, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Store{c: c}, nil
+	return &Store{c: c, alloc: make(chan struct{}, 1)}, nil
+}
+
+// allocGate serialises, within one process, the transactions that read and
+// write the shared counters/allocation document (5.5).
+//
+// DECISION (reports/concurrency-review.md): without it, concurrent consents
+// in one instance all read the counter document and then conflict at commit.
+// Under the emulator's pessimistic locking (and a database in pessimistic
+// mode) two readers that both want to write deadlock until the lock timeout,
+// and every consent arriving meanwhile joins the convoy: at 200 sessions
+// started within 10 s, 60 % of consents failed after 5 attempts. Under
+// optimistic concurrency (the production database) the same overlap is an
+// abort and a retry. With the gate, consents of one instance never contend
+// with each other; only consents on different Cloud Run instances can, and
+// the transaction still guarantees correctness then. Trade-off: one
+// instance allocates at most one session per transaction round trip (about
+// 25 to 50 a second in production), far above any expected sign-up rate.
+// The gate is held across the client library's retries of the same
+// transaction and released when RunTx returns.
+type allocGate struct {
+	s    *Store
+	held bool
+}
+
+func (g *allocGate) acquire(ctx context.Context) error {
+	if g.held {
+		return nil
+	}
+	select {
+	case g.s.alloc <- struct{}{}:
+		g.held = true
+		return nil
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+}
+
+func (g *allocGate) release() {
+	if g.held {
+		<-g.s.alloc
+		g.held = false
+	}
 }
 
 func (s *Store) Close() error { return s.c.Close() }
@@ -173,13 +219,17 @@ func (s *Store) GetSession(ctx context.Context, id string) (*domain.Session, err
 // applied in memory rather than through further composite indexes.
 func (s *Store) ListSessions(ctx context.Context, f store.SessionFilter) ([]*domain.Session, error) {
 	q := s.c.Collection(colSessions).Query
+	// DECISION (reports/concurrency-review.md): updatedSince comes first. The
+	// admin page polls every 5 s with updatedSince and often a runId; with
+	// runId first every poll read every session of the run, with updatedSince
+	// first it reads only the sessions changed since the last poll.
 	switch {
+	case f.UpdatedSince != nil:
+		q = q.Where("updatedAt", ">", *f.UpdatedSince)
 	case f.RunID != "":
 		q = q.Where("runId", "==", f.RunID)
 	case f.IP != "":
 		q = q.Where("ip", "==", f.IP)
-	case f.UpdatedSince != nil:
-		q = q.Where("updatedAt", ">", *f.UpdatedSince)
 	case len(f.Statuses) > 0:
 		q = q.Where("status", "in", f.Statuses)
 	}
@@ -207,12 +257,17 @@ func (s *Store) ListSessions(ctx context.Context, f store.SessionFilter) ([]*dom
 }
 
 type loader struct {
-	s   *Store
-	tx  *firestore.Transaction
-	ref *firestore.DocumentRef
+	s    *Store
+	ctx  context.Context
+	tx   *firestore.Transaction
+	ref  *firestore.DocumentRef
+	gate *allocGate
 }
 
 func (l loader) LoadCounters() (*domain.Counters, error) {
+	if err := l.gate.acquire(l.ctx); err != nil {
+		return nil, err
+	}
 	d, err := l.tx.Get(l.s.c.Collection(colCounters).Doc(docAlloc))
 	if notFound(err) {
 		return &domain.Counters{}, nil
@@ -288,6 +343,8 @@ func (s *Store) RunTx(ctx context.Context, id string, fn func(domain.Tx) error) 
 
 func (s *Store) runTx(ctx context.Context, id string, attempt func(*store.Buffer), fn func(domain.Tx) error) error {
 	ref := s.c.Collection(colSessions).Doc(id)
+	gate := &allocGate{s: s}
+	defer gate.release()
 	return s.c.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		d, err := tx.Get(ref)
 		if notFound(err) {
@@ -300,7 +357,7 @@ func (s *Store) runTx(ctx context.Context, id string, attempt func(*store.Buffer
 		if err != nil {
 			return err
 		}
-		b := store.NewBuffer(loader{s: s, tx: tx, ref: ref}, sess)
+		b := store.NewBuffer(loader{s: s, ctx: ctx, tx: tx, ref: ref, gate: gate}, sess)
 		err = fn(b)
 		attempt(b)
 		if err != nil {
