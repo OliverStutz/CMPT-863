@@ -184,4 +184,19 @@ describe("StepRouter flow", () => {
       partial: { trust: null, competence: null, benevolence: null, integrity: 2 },
     });
   });
+
+  it("keeps the slide and the checker overlay on the action screen when the descriptor carries it", async () => {
+    const overlay = { status: "flagged" as const, markings: [{ id: "s2.m1", targetIds: ["s2.num1"], appearAtMs: 0, color: "#E8A33D", shape: "box" as const, label: "Numbers do not add up", detail: "Detail." }] };
+    const action = step({
+      stepId: "p10", scene: "action", sceneRef: "s2.action", closesInMs: 15000, overlay,
+      options: [{ id: "nothing", label: "Say nothing" }, { id: "challenge", label: "Challenge Daniel with the checker's finding" }],
+    });
+    const srv = mockServer({ pack, first: action, onEvent: () => srv.ok(action) });
+    render(<StudyRoute code="RUN1" onBlocked={() => undefined} api={new ApiClient({ fetch: srv.fetch })} />);
+    await screen.findByRole("button", { name: "Say nothing" });
+    expect(document.getElementById("s2.num3")).toHaveTextContent("$8 million");
+    expect(await screen.findByTestId("checker-panel")).toHaveTextContent("Numbers do not add up");
+    // Shown again, not newly: no marking_shown outside the slide step.
+    expect(srv.events.filter((e) => e.type === "marking_shown")).toHaveLength(0);
+  });
 });

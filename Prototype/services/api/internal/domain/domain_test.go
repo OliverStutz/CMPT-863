@@ -7,6 +7,8 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -289,8 +291,26 @@ func TestHappyPathBothGroups(t *testing.T) {
 			if step.Scene == domain.KindSlide && wantGroup == "checker" && step.Overlay == nil {
 				t.Fatal("checker slide without overlay")
 			}
-			if step.Scene == domain.KindSlide && wantGroup == "neutral" && step.Overlay != nil {
-				t.Fatal("neutral slide with overlay")
+			if wantGroup == "neutral" && step.Overlay != nil {
+				t.Fatalf("neutral %s step with overlay", step.Scene)
+			}
+			// The overlay persists on the slide's later steps until the next
+			// slide; rating steps and steps of no slide never carry it.
+			idx, err := strconv.Atoi(strings.TrimPrefix(step.StepID, "p"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			ps := ct.Plan.Steps[idx]
+			persist := false
+			switch step.Scene {
+			case domain.KindSlide, domain.KindPostView, domain.KindAction, domain.KindQuestion, domain.KindAnswer:
+				persist = ps.SlideID != ""
+			}
+			if wantGroup == "checker" && persist && (step.Overlay == nil || step.Overlay != ct.Overlay(ps.SlideID)) {
+				t.Fatalf("checker %s step of slide %s without that slide's overlay", step.Scene, ps.SlideID)
+			}
+			if wantGroup == "checker" && !persist && step.Overlay != nil {
+				t.Fatalf("checker %s step carries an overlay", step.Scene)
 			}
 			if done {
 				break

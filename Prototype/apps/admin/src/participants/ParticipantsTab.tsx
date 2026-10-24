@@ -180,7 +180,7 @@ export function ParticipantsTab() {
                   <td className="mono">{r.lastStep ?? "-"}</td>
                   <td>{audioText(r)}</td>
                   <td className="mono">{r.reloadCount ?? 0}</td>
-                  <td>
+                  <td className="flags">
                     {(r.flags ?? []).map((f) => (
                       <Chip key={f} chip={flagChip(f)} />
                     ))}

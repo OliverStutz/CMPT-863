@@ -199,3 +199,29 @@
   font-size: 1.1rem;
   color: var(--text-muted);
 }
+.actionTitle {
+  font-size: 28px;
+  margin: 0 0 8px;
+  color: var(--navy);
+}
+.actionTitle:focus {
+  outline: none;
+}
+.actionOptions {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+.actionOptions .choice {
+  margin: 0;
+  font-size: 21px;
+  padding: 12px 14px;
+}
+.actionOptions .choiceDetail {
+  font-size: 16px;
+}
+.actionNote {
+  margin: 10px 0 0;
+  font-size: 17px;
+  color: #52606d;
+}

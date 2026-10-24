@@ -57,6 +57,23 @@ function playedVariant(res: { steps: Json[] }, slideId: string): "reason" | "den
   return null;
 }
 
+/** Flagged slides: the checker marks stay on screen from the slide until the next slide begins. */
+const flaggedSlides = new Set<string>(slides.filter((s: Json) => s.checker?.status === "flagged").map((s: Json) => s.id));
+/** The slide whose marks a post-view, action, question or answer step must still show, if any. */
+function persistSlideOf(step: Json): string | null {
+  if (!["postView", "action", "question", "answer"].includes(step.scene) || !step.sceneRef) return null;
+  const slideId = String(step.sceneRef).split(".")[0];
+  return slides.some((s: Json) => s.id === slideId) ? slideId : null;
+}
+interface PersistCheck {
+  stepId: string;
+  scene: string;
+  slideId: string;
+  flagged: boolean;
+  marks: number;
+  panel: boolean;
+}
+
 // ---------- admin API ----------
 async function adminContext(request: APIRequestContext) {
   const gate = await request.get(`/admin/?k=${encodeURIComponent(GATE_KEY)}`, { maxRedirects: 0 });
@@ -82,6 +99,7 @@ interface SessionResult {
   steps: Json[];
   actions: string[];
   transcripts: string[];
+  persist: PersistCheck[];
 }
 
 async function runSession(browser: Browser, request: APIRequestContext, runCode: string, label: string): Promise<SessionResult> {
@@ -124,6 +142,48 @@ async function runSession(browser: Browser, request: APIRequestContext, runCode:
     );
   });
   page.on("pageerror", (e) => console.log(`[${label}] page error: ${e.message}`));
+
+  // Persistence of the checker marks: on the first request a post-view, action, question or answer step
+  // sends (or the request that leaves it), that step is still on screen, so the request is held while
+  // the page is inspected. Checker sessions must still show the slide's marked segments (flagged slides)
+  // or the panel (unflagged slides); neutral sessions never show either.
+  const persist: PersistCheck[] = [];
+  const inspected = new Set<string>();
+  await page.route(/\/api\/v1\//, async (route) => {
+    const req = route.request();
+    let type = "";
+    if (req.method() === "POST" && req.url().includes("/events")) {
+      try {
+        type = JSON.parse(req.postData() ?? "{}").type ?? "";
+      } catch {
+        /* ignore */
+      }
+    }
+    await Promise.all([...pending]);
+    const cur: Json = latest;
+    const slideId = cur ? persistSlideOf(cur) : null;
+    if (cur && slideId && type !== "marking_shown" && type !== "visibility" && !inspected.has(cur.stepId)) {
+      inspected.add(cur.stepId);
+      const flagged = flaggedSlides.has(slideId);
+      const marks = page.locator("[data-marking-id]");
+      const panel = page.getByTestId("checker-panel");
+      if (cur.overlay) {
+        const target = flagged ? marks.first() : panel;
+        await target.waitFor({ state: "visible", timeout: 5_000 }).catch(() => undefined);
+      } else {
+        await page.waitForTimeout(250);
+      }
+      persist.push({
+        stepId: cur.stepId,
+        scene: cur.scene,
+        slideId,
+        flagged,
+        marks: await marks.count(),
+        panel: await panel.isVisible().catch(() => false),
+      });
+    }
+    await route.continue();
+  });
 
   await page.goto(`/s/${runCode}`);
 
@@ -248,7 +308,7 @@ async function runSession(browser: Browser, request: APIRequestContext, runCode:
   await ctx.close();
   mkdirSync(OUT, { recursive: true });
   writeFileSync(resolve(OUT, `${label}-${group}.json`), JSON.stringify({ sessionId, group, actions, bodies }, null, 1));
-  return { sessionId, group, bodies, steps, actions, transcripts };
+  return { sessionId, group, bodies, steps, actions, transcripts, persist };
 }
 
 /** Clicks one point of a ScaleRow (the radio is visually hidden; its label is the target). */
@@ -341,6 +401,32 @@ test("checker and neutral sessions, admin view, export, leak check", async ({ br
   const neutral = results.find((r) => r.group === "neutral")!;
   expect(checker, "a checker session").toBeTruthy();
   expect(neutral, "a neutral session").toBeTruthy();
+
+  // ---- checker marks persist after the slide (checker only) ----
+  for (const res of [checker, neutral]) {
+    writeFileSync(resolve(OUT, `persist-${res.group}.json`), JSON.stringify(res.persist, null, 1));
+    if (res.group === "neutral") {
+      for (const c of res.persist) {
+        expect(c.marks, `neutral ${c.scene} ${c.stepId} (${c.slideId}): no marked segment`).toBe(0);
+        expect(c.panel, `neutral ${c.scene} ${c.stepId} (${c.slideId}): no checker panel`).toBe(false);
+      }
+      continue;
+    }
+    for (const c of res.persist) {
+      if (c.flagged) expect(c.marks, `checker ${c.scene} ${c.stepId} (${c.slideId}): marked segment still highlighted`).toBeGreaterThan(0);
+      expect(c.panel, `checker ${c.scene} ${c.stepId} (${c.slideId}): checker panel still shown`).toBe(true);
+    }
+    for (const slideId of flaggedSlides) {
+      const seen = new Set(res.persist.filter((c) => c.slideId === slideId).map((c) => c.scene));
+      for (const scene of ["postView", "action", "question", "answer"]) {
+        expect(seen.has(scene), `checker ${slideId}: ${scene} step inspected`).toBe(true);
+      }
+    }
+  }
+  // The neutral session was inspected on the same steps.
+  for (const slideId of flaggedSlides) {
+    expect(neutral.persist.some((c) => c.slideId === slideId && c.scene === "action"), `neutral ${slideId}: action step inspected`).toBe(true);
+  }
 
   // ---- leak check over every body each session received ----
   const report: string[] = [];

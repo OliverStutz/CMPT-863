@@ -1,6 +1,6 @@
 # Progress: prototype build and deployment
 
-Single place for the state of the prototype. Updated whenever a component, the deployment or the content changes. Last updated 2026-10-24, after the load test, the store fix and revision 4.
+Single place for the state of the prototype. Updated whenever a component, the deployment or the content changes. Last updated 2026-10-24, after the screenshot walk; a fix round for its findings is running.
 
 ## Status at a glance
 
@@ -67,6 +67,7 @@ Running when this was written: the integration agent (edits under `services/`, `
 ## Log
 
 - 2026-10-23: prompt saved; flow brief; architecture and content v1 by two Opus agents; independent cross-check (66 findings); technical fixes applied; content v1.1 and v1.2; schema; decisions document; Oliver's first eight answers.
+- 2026-10-24 (screens): screenshot walk of both groups and the admin (104 frames, contact sheet, index in `reports/screenshots/2026-10-24/README.md`). Found: slide 3 network diagram asset missing in the deployed content; checker marks vanish after the narration instead of staying through the viewing pause, action, question and answer; admin Flags column clipped at 1366 px. Fix round started.
 - 2026-10-24 (checks): `e2e/security.sh` run live: 23 of 23 pass; the two traversal probes are answered by Google's front end with a redirect to the cleaned path, which the service then answers 404 (request logs confirm the uncleaned path never reaches the service); the script accepts that form. Snapshots dc4165f and the following commit.
 - 2026-10-24 (load): 200-session burst exposed the allocation counter; per-instance gate added; image 753f193 rolled out as revision 4; live flows and the 23 security checks re-run.
 - 2026-10-24 (deploy): image d259725 pushed and rolled out; content mirrored to the bucket; first revision had started before the upload and held no configs, fixed by wiring `extra_env` (ALLOW_TEST_CONFIGS=true on dev) through Terraform, which rolled revision 3; live security checks and the live Playwright flows pass; runs kyfxfg and tvfe8g created.

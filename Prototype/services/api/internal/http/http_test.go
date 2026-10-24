@@ -231,7 +231,7 @@ func (p *participant) walk(action string, stop func(*domain.Step) bool) {
 			p.mustOK("audio_check_answered", map[string]any{"choiceId": "river"})
 		case domain.KindExample, domain.KindOpening, domain.KindSlide, domain.KindQuestion, domain.KindAnswer:
 			p.mustOK("scene_started", map[string]any{"sceneId": st.SceneRef})
-			if st.Overlay != nil && st.Overlay.Status == "flagged" {
+			if st.Scene == domain.KindSlide && st.Overlay != nil && st.Overlay.Status == "flagged" {
 				for _, m := range st.Overlay.Markings {
 					_, _ = p.send("marking_shown", map[string]any{"sceneId": st.SceneRef, "markingId": m.ID})
 				}

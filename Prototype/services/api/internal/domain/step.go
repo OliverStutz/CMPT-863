@@ -63,6 +63,16 @@ func (ct *Content) CurrentIndex(s *Session) int {
 	return ct.Plan.Index(s.CurrentState)
 }
 
+// keepsOverlay reports whether a step of a slide shows that slide's checker
+// overlay (for checker sessions).
+func keepsOverlay(kind string) bool {
+	switch kind {
+	case KindSlide, KindPostView, KindAction, KindQuestion, KindAnswer:
+		return true
+	}
+	return false
+}
+
 // Describe builds the step descriptor for the session's current step.
 func (ct *Content) Describe(s *Session, now time.Time, resumed bool) *Step {
 	idx := ct.CurrentIndex(s)
@@ -86,8 +96,18 @@ func (ct *Content) Describe(s *Session, now time.Time, resumed bool) *Step {
 		step.Restart = d.ClipStartedAt != nil && s.RestartAllowed
 	}
 
+	// The checker overlay stays with a slide from its own step until the next
+	// slide begins: the post-audio view, the action, the question, the answer
+	// and the post-answer view of that slide carry it too, so the marks and the
+	// panel remain on screen while the question and answer refer to them.
+	// Rating steps are a separate screen and carry none. Checker sessions only
+	// (4.3); neutral sessions never get the field.
+	if s.Group == string(sc.GroupChecker) && st.SlideID != "" && keepsOverlay(st.Kind) {
+		step.Overlay = ct.Overlay(st.SlideID)
+	}
+
 	switch st.Kind {
-	case KindDeviceGate, KindConsent, KindExample, KindOpening, KindQuestion, KindAnswer, KindDone:
+	case KindDeviceGate, KindConsent, KindExample, KindOpening, KindQuestion, KindAnswer, KindDone, KindSlide:
 	case KindAudioCheck:
 		// No transcript: the clip's text is the answer to the check.
 		step.AudioURL = ct.AudioURL(ct.ClipFor(s, st))
@@ -96,10 +116,6 @@ func (ct *Content) Describe(s *Session, now time.Time, resumed bool) *Step {
 		step.PreStartText = append([]string{}, c.Setup.PreStartText.Both...)
 		if s.Group == string(sc.GroupChecker) {
 			step.PreStartText = append(step.PreStartText, c.Setup.PreStartText.Checker...)
-		}
-	case KindSlide:
-		if s.Group == string(sc.GroupChecker) {
-			step.Overlay = ct.Overlay(st.SlideID)
 		}
 	case KindPostView:
 		step.OpensInMs = msUntil(d.RatingOpensAt, now)

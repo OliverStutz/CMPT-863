@@ -26,6 +26,8 @@ interface Props {
   onMarkingShown?: (id: string) => void;
   /** Controls drawn in the stage's lower right corner (countdown, Continue). */
   controls?: ReactNode;
+  /** A larger card at the bottom of the stage, between the table portraits and the CISO (action choice). */
+  dialog?: ReactNode;
 }
 
 const STAGE_W = 1600;
@@ -103,6 +105,7 @@ export function BoardroomScene(p: Props) {
         <Portrait role="member" label="Board member" speaking={p.speaking === "member"} className={styles.member} />
 
         {p.controls && <div className={styles.controls}>{p.controls}</div>}
+        {p.dialog && <div className={styles.dialog}>{p.dialog}</div>}
       </div>
     </div>
   );
