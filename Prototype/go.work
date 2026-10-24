@@ -3,3 +3,4 @@ go 1.27
 use ./services/api
 use ./tools/tts
 use ./tools/content-lint
+use ./load

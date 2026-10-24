@@ -82,3 +82,9 @@ variable "force_destroy_buckets" {
   type    = bool
   default = false
 }
+
+variable "extra_env" {
+  description = "Further plain environment variables for the API service (for example ALLOW_TEST_CONFIGS on dev)."
+  type        = map(string)
+  default     = {}
+}

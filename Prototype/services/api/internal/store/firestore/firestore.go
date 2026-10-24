@@ -11,7 +11,9 @@ package firestore
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"sort"
+	"sync/atomic"
 
 	"cloud.google.com/go/firestore"
 	"google.golang.org/api/iterator"
@@ -258,7 +260,33 @@ func (l loader) LoadConsumedEvent(seq int64) (*domain.Event, error) {
 	return &e, docs[0].DataTo(&e)
 }
 
+// TxStats counts session transactions and their attempts since the process
+// started. An attempt beyond the first is a retry after contention (Firestore
+// answered ABORTED and the client library ran the callback again).
+// Added for the concurrency review (reports/concurrency-review.md).
+var TxStats struct {
+	Transactions, Attempts, Retried, AllocRetried, Failed atomic.Int64
+}
+
 func (s *Store) RunTx(ctx context.Context, id string, fn func(domain.Tx) error) error {
+	attempts, alloc := 0, false
+	err := s.runTx(ctx, id, func(b *store.Buffer) { attempts++; alloc = b.CountersDirty }, fn)
+	TxStats.Transactions.Add(1)
+	TxStats.Attempts.Add(int64(attempts))
+	if attempts > 1 {
+		TxStats.Retried.Add(1)
+		if alloc {
+			TxStats.AllocRetried.Add(1)
+		}
+		slog.Info("firestore transaction retried", "session", id, "attempts", attempts, "allocation", alloc, "err", err)
+	}
+	if err != nil && !errors.Is(err, store.ErrNotFound) {
+		TxStats.Failed.Add(1)
+	}
+	return err
+}
+
+func (s *Store) runTx(ctx context.Context, id string, attempt func(*store.Buffer), fn func(domain.Tx) error) error {
 	ref := s.c.Collection(colSessions).Doc(id)
 	return s.c.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		d, err := tx.Get(ref)
@@ -273,7 +301,9 @@ func (s *Store) RunTx(ctx context.Context, id string, fn func(domain.Tx) error) 
 			return err
 		}
 		b := store.NewBuffer(loader{s: s, tx: tx, ref: ref}, sess)
-		if err := fn(b); err != nil {
+		err = fn(b)
+		attempt(b)
+		if err != nil {
 			return err
 		}
 		if err := tx.Set(ref, b.S); err != nil {

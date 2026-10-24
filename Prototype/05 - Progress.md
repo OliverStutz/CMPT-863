@@ -1,6 +1,6 @@
 # Progress: prototype build and deployment
 
-Single place for the state of the prototype. Updated whenever a component, the deployment or the content changes. Last updated 2026-10-24, after the audio pipeline report.
+Single place for the state of the prototype. Updated whenever a component, the deployment or the content changes. Last updated 2026-10-24, after the live deployment and the live end-to-end run.
 
 ## Status at a glance
 
@@ -8,24 +8,25 @@ Single place for the state of the prototype. Updated whenever a component, the d
 |---|---|---|
 | Study design and content | v1.4 content with flags from the Opus VLM run; JSON validates against the schema | TTS audio, voice samples for Oliver, profile card and boardroom images |
 | Architecture | Revised to all 53 decisions; change log in `02` section 18 | Keep in step with integration findings |
-| Go backend (`services/api`) | Built; go test and go vet clean (domain, http, both stores, sweeper, config); eight security tests pass; live run against the Firestore emulator worked | Integration in progress; wording lint and GCS config upload still open |
-| Participant app (`apps/participant`) | Built; typecheck, build and 16 tests pass; not yet run against the backend | Integration: reconcile step descriptor fields and scene pack shape |
-| Admin app (`apps/admin`) | Built; typecheck, build and 11 tests pass | Integration: endpoint check against the backend, admin gate behaviour |
+| Go backend (`services/api`) | Built and integrated; go test and go vet clean; security tests pass; deployed | Wording lint lives in `tools/content-lint`; admin config upload to GCS still open |
+| Participant app (`apps/participant`) | Built, integrated and deployed; 16 unit tests; Playwright flows pass locally and live | Real images for boardroom, chair, CISO and member (drawn placeholders now) |
+| Admin app (`apps/admin`) | Built, integrated and deployed behind the URL gate and password; 11 unit tests | Config upload tab is read-only for now |
 | Terraform (`infra/terraform`) | Bootstrap and dev applied, 86 resources; state in the bucket | Prod environment once a second project exists |
-| Dockerfile and CI | Written; docker build is part of the integration pass now running | Push and rollout after integration, with Oliver's permission for the push |
-| Cloud Run (dev) | Service live on Google's placeholder image; Oliver allowed the image push, the apply with its digest and the content upload (2026-10-24) | Push, apply and upload right after integration and the security checks pass |
+| Dockerfile and CI | Image builds and runs; pushed as `api:d259725` (digest in `envs/dev/terraform.tfvars`); GitHub workflows written but GitHub environment variables not yet set | Set the GitHub variables listed in `infra/README.md` to enable deploys from main |
+| Cloud Run (dev) | Revision `study-api-00003-wcn` live on the real image with `ALLOW_TEST_CONFIGS=true`; configs 1.3.0, 1.4.0 and test-fast-1.4.0 loaded from the bucket; live security checks pass; live Playwright flows pass (checker and neutral) | Pilot with 3 to 5 people on run `kyfxfg` |
 | Secrets | Three containers, version 1 each (password hash, access key, session key) | None; rotate by adding versions |
-| Content in the bucket | Empty | Upload after the asset allowlist is verified |
+| Content in the bucket | Mirrored from `content/` (configs, schema, slides, audio 1.4.0 with manifest, samples, VLM drafts); only the allowlisted paths are reachable through the service | Re-mirror after any content change: `gcloud storage rsync content gs://cmpt863-study-content --recursive --exclude='.*/\.cache/.*|.*\.py$'` |
 | TTS tool, content lint | Built; 18 and 11 tests pass; lint on v1.4: 0 failures. Audio set `content/audio/1.4.0/` (23 clips, 6 min 53 s, about USD 0.11) with voices CISO en-US-Neural2-J, chair en-US-Neural2-F, member en-US-Neural2-E (picked without listening). Samples in `content/audio/samples/`. Denials padded to their reasons on all three slides (s2 15.6 s, s3 17.3 s, s4 17.0 s); lint with manifest: 0 failures, 0 warnings; audio set 6 min 58 s | Oliver listens to the samples and confirms or changes the voices; `tools/tts` regenerates from cache |
-| End-to-end tests | Being written by the integration agent in `e2e/` (Playwright, Firefox, audio output muted) | Run both groups against the local server |
+| End-to-end tests | `e2e/` Playwright (Firefox, muted) and `e2e/security.sh` (23 checks); pass locally on the fast and the real timing, and live on the fast config | Run live on the real timing before the pilot (about 15 min) |
 | Load test and concurrency review | Being built in `load/` (Go generator, 50 and 200 concurrent sessions, memory store and Firestore emulator) with `reports/concurrency-review.md` on the Firestore layout, the allocation counter as the only shared write, indexes, export cost and what can run asynchronously | Fold any store change into the image before rollout |
-| Git | Snapshot committed and pushed to origin main on 2026-10-24 (commit 6bb9d0c, 230 files); integration and audio work were still in progress at that point | Next snapshot after integration |
+| Git | Snapshots on origin main: 6bb9d0c (documents, code, infra), d259725 (integration, e2e, audio pipeline), plus the live-verified state | Commit the load test when its agent reports |
 
 ## Deployment facts
 
 - Project `cmpt863-study` under the organisation, billing linked (CAD), region `northamerica-northeast1`.
 - Terraform state: `gs://cmpt863-study-tfstate`, prefixes `study/bootstrap` and `study/dev`, versioned.
-- Service URL: `https://study-api-pju4jz7m4a-nn.a.run.app` (placeholder image until the first real deploy).
+- Service URL: `https://study-api-pju4jz7m4a-nn.a.run.app`, revision `study-api-00003-wcn`, image `api@sha256:7c333d02...` from commit d259725.
+- Runs created 2026-10-24: `kyfxfg` (name "Pilot 1.4.0", config 1.4.0, real timing, link `https://study-api-pju4jz7m4a-nn.a.run.app/s/kyfxfg`) and `tvfe8g` ("Fast walk-through", test-fast-1.4.0, link `https://study-api-pju4jz7m4a-nn.a.run.app/s/tvfe8g`). Admin: `https://study-api-pju4jz7m4a-nn.a.run.app/admin/?k=<access key>` once per browser, then the password; both in the credentials file.
 - Buckets: `cmpt863-study-content` (private), `cmpt863-study-tts-cache` (private), `cmpt863-study-tfstate`.
 - Admin plaintext credentials: only in `/home/oliver/.config/cmpt863-study/admin-credentials.txt`, owner-only, outside the repository. Secret Manager holds the bcrypt hash, the access key and the session key.
 - CI identity: Workload Identity Federation for `OliverStutz/CMPT-863`; GitHub environment variables not yet set.
@@ -54,7 +55,7 @@ Running when this was written: the integration agent (edits under `services/`, `
 
 1. Verify the pieces: `cd services/api && go test ./... && go vet ./...`; `cd apps/participant && npm ci && npm run typecheck && npm run build && npm test`; same in `apps/admin`; `cd tools/tts && go test ./...`; `cd tools/content-lint && go test ./... && go run . -config ../../content/study-config.v1.4.json -manifest ../../content/audio/1.4.0/manifest.json`.
 2. Run locally: `make dev` (Firestore emulator on 8081, API on 8080 with `CONTENT_DIR=content`), then open `http://localhost:8080/admin/?k=dev-gate-key`, password `dev`, create a run on config `1.4.0`, open its link.
-3. Build and push the image (Oliver allowed this on 2026-10-24):
+3. Build and push the image (Oliver allowed this on 2026-10-24; done once for d259725, repeat for a new commit):
    `gcloud auth configure-docker northamerica-northeast1-docker.pkg.dev --quiet`
    `docker build -t northamerica-northeast1-docker.pkg.dev/cmpt863-study/study/api:$(git rev-parse --short HEAD) .`
    `docker push northamerica-northeast1-docker.pkg.dev/cmpt863-study/study/api:$(git rev-parse --short HEAD)` and note the digest it prints.
@@ -66,6 +67,7 @@ Running when this was written: the integration agent (edits under `services/`, `
 ## Log
 
 - 2026-10-23: prompt saved; flow brief; architecture and content v1 by two Opus agents; independent cross-check (66 findings); technical fixes applied; content v1.1 and v1.2; schema; decisions document; Oliver's first eight answers.
+- 2026-10-24 (deploy): image d259725 pushed and rolled out; content mirrored to the bucket; first revision had started before the upload and held no configs, fixed by wiring `extra_env` (ALLOW_TEST_CONFIGS=true on dev) through Terraform, which rolled revision 3; live security checks and the live Playwright flows pass; runs kyfxfg and tvfe8g created.
 - 2026-10-24 (later): denial padding enabled on s2 and s4, audio regenerated from cache, lint clean. Audio pipeline delivered (tools/tts, tools/content-lint, voice samples, v1.4.0 audio set). Oliver allowed image push, apply with digest and content upload.
 - 2026-10-24 (late): first snapshot pushed to origin main (6bb9d0c). Backend delivered with the token trail, admin gate and asset allowlist; integration pass started.
 - 2026-10-24: all 53 decisions answered; content v1.3 (five-stage deck, neutral company) and v1.4 (flags from the VLM run, selection logged); slides rendered; Opus VLM drafting run archived with its fixed prompt; architecture revised to all decisions; builds started for backend, both apps and infrastructure; project created, bootstrap and dev environment applied; secrets set; security rules added to the backend scope.

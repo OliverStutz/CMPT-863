@@ -67,6 +67,7 @@ module "cloud_run" {
   project_id                 = var.project_id
   region                     = var.region
   image_digest               = var.image_digest
+  extra_env                  = var.extra_env
   min_instances              = var.min_instances
   max_instances              = var.max_instances
   content_bucket             = local.content_bucket_name
