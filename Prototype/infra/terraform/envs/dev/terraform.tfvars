@@ -20,8 +20,8 @@ force_destroy_buckets       = false
 # The billing account is in CAD; a budget must use the account currency.
 budget_currency = "CAD"
 
-# Current image (commit 62f6fb1). CI overwrites this on deploy.
-image_digest = "northamerica-northeast1-docker.pkg.dev/cmpt863-study/study/api@sha256:192af98ca0c7285258d1eed609f789da836bc0c818b73129700f8678a2578662"
+# Current image (commit 62a9155). CI overwrites this on deploy.
+image_digest = "northamerica-northeast1-docker.pkg.dev/cmpt863-study/study/api@sha256:86857ed7d9e39faec8912dca9a6fb718a80c7ebde89967f828631a0e44c02102"
 
 # Dev accepts configs whose version starts with "test" (fast end-to-end runs). Never set on prod.
 extra_env = { ALLOW_TEST_CONFIGS = "true" }
