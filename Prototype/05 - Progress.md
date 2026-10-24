@@ -1,6 +1,6 @@
 # Progress: prototype build and deployment
 
-Single place for the state of the prototype. Updated whenever a component, the deployment or the content changes. Last updated 2026-10-24, after the screenshot walk; a fix round for its findings is running.
+Single place for the state of the prototype. Updated whenever a component, the deployment or the content changes. Last updated 2026-10-24, after the screenshot-walk fixes were rolled out as revision 5.
 
 ## Status at a glance
 
@@ -9,23 +9,23 @@ Single place for the state of the prototype. Updated whenever a component, the d
 | Study design and content | v1.4 content with flags from the Opus VLM run; JSON validates against the schema | TTS audio, voice samples for Oliver, profile card and boardroom images |
 | Architecture | Revised to all 53 decisions; change log in `02` section 18 | Keep in step with integration findings |
 | Go backend (`services/api`) | Built and integrated; go test and go vet clean; security tests pass; deployed | Wording lint lives in `tools/content-lint`; admin config upload to GCS still open |
-| Participant app (`apps/participant`) | Built, integrated and deployed; 16 unit tests; Playwright flows pass locally and live | Real images for boardroom, chair, CISO and member (drawn placeholders now) |
+| Participant app (`apps/participant`) | Built, integrated and deployed; 17 unit tests; Playwright flows pass locally and live; marks and panel persist through post-view, action, question and answer; action screen inside the boardroom; slide 3 diagram asset in place | Real images for boardroom, chair, CISO and member (drawn placeholders now) |
 | Admin app (`apps/admin`) | Built, integrated and deployed behind the URL gate and password; 11 unit tests | Config upload tab is read-only for now |
 | Terraform (`infra/terraform`) | Bootstrap and dev applied, 86 resources; state in the bucket | Prod environment once a second project exists |
 | Dockerfile and CI | Image builds and runs; pushed as `api:d259725` (digest in `envs/dev/terraform.tfvars`); GitHub workflows written but GitHub environment variables not yet set | Set the GitHub variables listed in `infra/README.md` to enable deploys from main |
-| Cloud Run (dev) | Revision `study-api-00004-w6s` live on image `api:753f193` (store fix) with `ALLOW_TEST_CONFIGS=true`; configs 1.3.0, 1.4.0 and test-fast-1.4.0 loaded from the bucket; live security checks pass; live Playwright flows pass (checker and neutral) | Pilot with 3 to 5 people on run `kyfxfg` |
+| Cloud Run (dev) | Revision `study-api-00005-vf4` live on image `api:62f6fb1` (screenshot-walk fixes) with `ALLOW_TEST_CONFIGS=true`; configs 1.3.0, 1.4.0 and test-fast-1.4.0 loaded from the bucket; live security checks pass; live Playwright flows pass (checker and neutral) | Pilot with 3 to 5 people on run `kyfxfg` |
 | Secrets | Three containers, version 1 each (password hash, access key, session key) | None; rotate by adding versions |
 | Content in the bucket | Mirrored from `content/` (configs, schema, slides, audio 1.4.0 with manifest, samples, VLM drafts); only the allowlisted paths are reachable through the service | Re-mirror after any content change: `gcloud storage rsync content gs://cmpt863-study-content --recursive --exclude='.*/\.cache/.*|.*\.py$'` |
 | TTS tool, content lint | Built; 18 and 11 tests pass; lint on v1.4: 0 failures. Audio set `content/audio/1.4.0/` (23 clips, 6 min 53 s, about USD 0.11) with voices CISO en-US-Neural2-J, chair en-US-Neural2-F, member en-US-Neural2-E (picked without listening). Samples in `content/audio/samples/`. Denials padded to their reasons on all three slides (s2 15.6 s, s3 17.3 s, s4 17.0 s); lint with manifest: 0 failures, 0 warnings; audio set 6 min 58 s | Oliver listens to the samples and confirms or changes the voices; `tools/tts` regenerates from cache |
 | End-to-end tests | `e2e/` Playwright (Firefox, muted) and `e2e/security.sh` (23 checks); pass locally on the fast and the real timing, and live on the fast config | Run live on the real timing before the pilot (about 15 min) |
 | Load test and concurrency review | Done. `load/` generator; results: 50 sessions clean on memory and emulator; a 200-session burst failed 1,084 consents on the allocation counter, fixed by a per-instance gate in the Firestore store; 200 and 400 bursts then clean, event p99 under 2 ms on the emulator, groups and denial slides balanced. `reports/concurrency-review.md` has the layout, indexes and async recommendations | Later: parallel streamed export before 1,000 sessions; use or drop the three composite indexes |
-| Git | Snapshots on origin main: 6bb9d0c, d259725, cc97907 (live verified), 753f193 (load test and store fix) | Keep snapshotting after each change |
+| Git | Snapshots on origin main: 6bb9d0c, d259725, cc97907, 753f193, 288b2df, 62f6fb1 (screenshot-walk fixes, screenshots, consent placeholder) | Keep snapshotting after each change |
 
 ## Deployment facts
 
 - Project `cmpt863-study` under the organisation, billing linked (CAD), region `northamerica-northeast1`.
 - Terraform state: `gs://cmpt863-study-tfstate`, prefixes `study/bootstrap` and `study/dev`, versioned.
-- Service URL: `https://study-api-pju4jz7m4a-nn.a.run.app`, revision `study-api-00004-w6s`, image `api@sha256:c00172b4...` from commit 753f193.
+- Service URL: `https://study-api-pju4jz7m4a-nn.a.run.app`, revision `study-api-00005-vf4`, image `api@sha256:192af98c...` from commit 62f6fb1.
 - Runs created 2026-10-24: `kyfxfg` (name "Pilot 1.4.0", config 1.4.0, real timing, link `https://study-api-pju4jz7m4a-nn.a.run.app/s/kyfxfg`) and `tvfe8g` ("Fast walk-through", test-fast-1.4.0, link `https://study-api-pju4jz7m4a-nn.a.run.app/s/tvfe8g`). Admin: `https://study-api-pju4jz7m4a-nn.a.run.app/admin/?k=<access key>` once per browser, then the password; both in the credentials file.
 - Buckets: `cmpt863-study-content` (private), `cmpt863-study-tts-cache` (private), `cmpt863-study-tfstate`.
 - Admin plaintext credentials: only in `/home/oliver/.config/cmpt863-study/admin-credentials.txt`, owner-only, outside the repository. Secret Manager holds the bcrypt hash, the access key and the session key.
@@ -45,7 +45,7 @@ Many participants must run at the same time without contention, and the build ru
 ## Still needed from Oliver
 
 - A domain and who runs its DNS (optional for the pilot).
-- The SFU consent PDF and ethics wording (data retention, raw IP, browser string).
+- The SFU consent PDF and ethics wording (data retention, raw IP, browser string). A one-page placeholder is served as `consent/consent-placeholder.pdf` until then.
 - Voice choice from the samples once the TTS tool exists.
 - Real images for the boardroom, chair, CISO and board member, or approval of drawn placeholders.
 
@@ -67,6 +67,7 @@ Running when this was written: the integration agent (edits under `services/`, `
 ## Log
 
 - 2026-10-23: prompt saved; flow brief; architecture and content v1 by two Opus agents; independent cross-check (66 findings); technical fixes applied; content v1.1 and v1.2; schema; decisions document; Oliver's first eight answers.
+- 2026-10-24 (fixes): diagram asset, persistent marks, action screen in the boardroom, wrapped flag chips, consent placeholder; image 62f6fb1 rolled out as revision 5; content re-mirrored.
 - 2026-10-24 (screens): screenshot walk of both groups and the admin (104 frames, contact sheet, index in `reports/screenshots/2026-10-24/README.md`). Found: slide 3 network diagram asset missing in the deployed content; checker marks vanish after the narration instead of staying through the viewing pause, action, question and answer; admin Flags column clipped at 1366 px. Fix round started.
 - 2026-10-24 (checks): `e2e/security.sh` run live: 23 of 23 pass; the two traversal probes are answered by Google's front end with a redirect to the cleaned path, which the service then answers 404 (request logs confirm the uncleaned path never reaches the service); the script accepts that form. Snapshots dc4165f and the following commit.
 - 2026-10-24 (load): 200-session burst exposed the allocation counter; per-instance gate added; image 753f193 rolled out as revision 4; live flows and the 23 security checks re-run.
