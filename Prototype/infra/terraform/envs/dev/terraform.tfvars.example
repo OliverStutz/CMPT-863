@@ -1,0 +1,22 @@
+# Copy to terraform.tfvars and fill in. Nothing here is secret.
+project_id = "REPLACE-study-dev" # OPEN Q: still to be named
+region     = "northamerica-northeast1"
+# firestore_location = ""        # defaults to region; fixed once created
+
+min_instances = 0
+max_instances = 10
+
+domain = "" # OPEN Q; check Cloud Run domain mapping availability for the region first
+
+alert_email     = "REPLACE@example.org"
+billing_account = "" # XXXXXX-XXXXXX-XXXXXX, or empty to create the budget by hand
+budget_amount   = 25
+
+ci_deploy_sa_email = "ci-deploy@REPLACE-study-dev.iam.gserviceaccount.com" # bootstrap output
+
+# Dev can be torn down; keep the database protected anyway.
+firestore_delete_protection = true
+run_deletion_protection     = false
+force_destroy_buckets       = false
+
+# image_digest is set by CI (deploy.yml); leave unset for the first apply.

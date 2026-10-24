@@ -1,0 +1,8 @@
+{
+  "model": "Claude Opus via Claude Code agent",
+  "date": "2026-10-24",
+  "promptFile": "prompt.md",
+  "inputs": ["s1.png", "s2.png", "s3.png", "s4.png", "s5.png"],
+  "outputs": ["s1.raw.md", "s2.raw.md", "s3.raw.md", "s4.raw.md", "s5.raw.md"],
+  "notes": "Fresh agent; no project files read other than prompt.md; one pass per slide; answers not revised"
+}

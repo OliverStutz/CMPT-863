@@ -1,0 +1,20 @@
+# Keep the build context small; the content assets are served from GCS,
+# not baked into the image (architecture section 2).
+**/node_modules
+.git
+.github
+infra
+docs
+reports
+e2e
+load
+*.md
+.obsidian
+.env
+.env.*
+**/*.mp3
+services/api/bin
+services/api/web/participant
+services/api/web/admin
+Dockerfile
+.dockerignore

@@ -1,0 +1,224 @@
+/* 1600 x 900 logical canvas; values are the v1.3 SVGs (1920 x 1080) times 5/6. */
+.slide {
+  position: relative;
+  background: #ffffff;
+  color: #1f2933;
+  font-family: Inter, Helvetica, Arial, sans-serif;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.titleBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1600px;
+  height: 125px;
+  background: #14325a;
+  display: flex;
+  align-items: center;
+}
+.title {
+  margin: 0 0 0 67px;
+  font-size: 48px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.1;
+  max-width: 1460px;
+}
+.accent {
+  position: absolute;
+  left: 0;
+  top: 125px;
+  width: 1600px;
+  height: 5px;
+  background: #d9822b;
+}
+.footerRule {
+  position: absolute;
+  left: 67px;
+  top: 843px;
+  width: 1466px;
+  height: 2px;
+  background: #c9d2de;
+}
+.slideNumber {
+  position: absolute;
+  right: 67px;
+  top: 858px;
+  font-size: 20px;
+  color: #5f6b7a;
+}
+.body {
+  position: absolute;
+  left: 67px;
+  top: 183px;
+  width: 1466px;
+}
+.bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.bullet {
+  position: relative;
+  padding-left: 37px;
+  font-size: 30px;
+  line-height: 1.45;
+  margin: 0 0 28px;
+}
+.bullet::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 13px;
+  width: 12px;
+  height: 12px;
+  background: #d9822b;
+}
+/* slide 1: bullets left, number panel right */
+.twoCol {
+  position: absolute;
+  left: 67px;
+  top: 205px;
+  width: 1466px;
+  display: grid;
+  grid-template-columns: 820px 517px;
+  column-gap: 129px;
+}
+.leftCol,
+.rightCol {
+  min-width: 0;
+}
+.numberPanel {
+  background: #eef1f6;
+  border-left: 8px solid #d9822b;
+  padding: 60px 32px 55px 33px;
+  margin-bottom: 24px;
+}
+.numberPanelValue {
+  font-size: 62px;
+  font-weight: 700;
+  color: #14325a;
+  line-height: 1.1;
+}
+.numberPanelCaption {
+  margin-top: 22px;
+  font-size: 32px;
+  line-height: 1.4;
+}
+/* slide 2: full-width number rows */
+.numberRow {
+  display: flex;
+  align-items: center;
+  height: 98px;
+  background: #eef1f6;
+  border-left: 8px solid #d9822b;
+  margin-bottom: 19px;
+  box-sizing: border-box;
+}
+.numberRowValue {
+  flex: 0 0 425px;
+  padding-left: 33px;
+  font-size: 50px;
+  font-weight: 700;
+  color: #14325a;
+}
+.numberRowCaption {
+  font-size: 32px;
+  padding-top: 8px;
+}
+.numberRow + .bullets {
+  margin-top: 50px;
+}
+/* slide 4: cost table */
+.table {
+  position: absolute;
+  left: 67px;
+  top: 192px;
+  width: 1466px;
+}
+.tableRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 105px;
+  padding: 0 34px;
+  border-bottom: 1px solid #d5dce6;
+  font-size: 37px;
+}
+.tableShaded {
+  background: #f6f8fc;
+}
+.tableTotal {
+  margin-top: 12px;
+  border-top: 4px solid #14325a;
+  border-bottom: 0;
+  background: #eef1f6;
+  font-weight: 700;
+  color: #14325a;
+  font-size: 40px;
+  height: 100px;
+}
+.tableCaption {
+  min-width: 0;
+}
+.tableValue {
+  text-align: right;
+  white-space: nowrap;
+}
+/* slide 3: media left, bullets right */
+.mediaGrid {
+  position: absolute;
+  left: 50px;
+  top: 155px;
+  width: 1483px;
+  display: grid;
+  grid-template-columns: 842px 1fr;
+  column-gap: 75px;
+}
+.mediaCol {
+  min-width: 0;
+}
+.sideCol {
+  padding-top: 40px;
+  min-width: 0;
+}
+.imageBox {
+  width: 842px;
+  height: 675px;
+  background: #f7f9fc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.imagePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+  border: 3px dashed #c9d2de;
+  color: #5f6b7a;
+  font-size: 22px;
+  line-height: 1.5;
+  text-align: center;
+}
+.chartBox {
+  width: 842px;
+  min-height: 560px;
+  background: #f7f9fc;
+  padding: 24px;
+  box-sizing: border-box;
+}
+.chartCaption {
+  font-size: 24px;
+  margin-top: 12px;
+  color: #3e4c59;
+}

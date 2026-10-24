@@ -1,0 +1,1043 @@
+{
+  "version": "test-fast-1.4.0",
+  "locale": "en",
+  "_status": "Local end-to-end test copy of study-config.v1.4.json with short timings (e2e/README.md). Not for participants.",
+  "_scenario": {
+    "company": "Meridian Logistics (fictional), freight and warehousing, no country named; 12 warehouses and head office, 1,400 staff, about $480 million revenue",
+    "budget": "$2.4 million, plain $",
+    "stakes": "insurance renewal in 10 months; largest customer's new contract",
+    "ciso": "Daniel Hale, male",
+    "chair": "Margaret Lin, female",
+    "denialSlides": [
+      "s2",
+      "s3",
+      "s4"
+    ],
+    "_rule": "denial slide balanced within each group, server-side"
+  },
+  "timing": {
+    "postAudioViewMs": 300,
+    "postAnswerViewMs": 300,
+    "ratingWindowMs": 15000,
+    "actionWindowMs": 15000,
+    "formWindowMs": 30000,
+    "linePauseMs": 50,
+    "audioEndToleranceMs": 1500,
+    "latencyAllowanceMs": 3000,
+    "abandonAfterMs": 1800000,
+    "msPerWordEstimate": 15,
+    "_note": "Fast timings for the local Playwright flows; all texts are those of v1.4.0."
+  },
+  "voices": {
+    "ciso": {
+      "provider": "google-tts",
+      "name": "TBD",
+      "languageCode": "en-US",
+      "_open": "3.6: shortlist, Oliver picks; male"
+    },
+    "chair": {
+      "provider": "google-tts",
+      "name": "TBD",
+      "languageCode": "en-US",
+      "_open": "3.6: clearly different from the CISO"
+    },
+    "member": {
+      "provider": "google-tts",
+      "name": "TBD",
+      "languageCode": "en-US",
+      "_open": "3.6: board member who speaks the participant's question (1.4)"
+    }
+  },
+  "options": {
+    "deviceGate": {
+      "minWidthPx": 1024,
+      "allowPhones": false,
+      "_note": "2.9"
+    }
+  },
+  "labels": {
+    "panelTitle": "Slide checker",
+    "noIssues": "No issues found",
+    "panelIdle": "",
+    "ratingSubmit": "Next",
+    "timeLeft": "Time left",
+    "continue": "Continue",
+    "playTestSound": "Play",
+    "replayTestSound": "Play",
+    "startMeeting": "Start",
+    "_note": "v1.3 section 11 uses 'Play' for the replayable test clip and 'Start' on the last setup screen; the architecture's examples are 'Play test sound', 'Play again' and 'Start the meeting'. panelIdle empty: nothing shown before a flag (1.18, brief default)."
+  },
+  "colors": {
+    "flag": "#E8A33D",
+    "noIssues": "#5B8C6A"
+  },
+  "consent": {
+    "version": "0-placeholder",
+    "pdfAssetKey": "consent-placeholder.pdf",
+    "checkboxLabel": "[PLACEHOLDER: checkbox text from the ethics form]",
+    "acceptLabel": "I accept the terms and would like to participate in the study",
+    "_open": "2.14, 3.1: placeholder until the SFU ethics form; must state that the raw IP address is stored"
+  },
+  "setup": {
+    "instruction": "Please turn on your sound. Press Play and listen. You can play the clip as often as you like.",
+    "audioCheck": {
+      "clip": {
+        "id": "setup.audioTest",
+        "voice": "chair",
+        "text": "This is a short sound check. If you can hear this clearly, the word to choose is lantern."
+      },
+      "prompt": "Then choose the word you heard. You can answer once.",
+      "options": [
+        {
+          "id": "river",
+          "label": "river"
+        },
+        {
+          "id": "lantern",
+          "label": "lantern"
+        },
+        {
+          "id": "pencil",
+          "label": "pencil"
+        },
+        {
+          "id": "garden",
+          "label": "garden"
+        }
+      ],
+      "correctOptionId": "lantern",
+      "_note": "2.4: one answer, clip replayable, recorded and shown in the admin view; no feedback; never blocks."
+    },
+    "exampleScene": {
+      "layout": [
+        {
+          "kind": "title",
+          "id": "ex.title",
+          "text": "Board meeting, agenda"
+        },
+        {
+          "kind": "bullet",
+          "id": "ex.b1",
+          "text": "1. Minutes of the last meeting"
+        },
+        {
+          "kind": "bullet",
+          "id": "ex.b2",
+          "text": "2. Quarterly results"
+        },
+        {
+          "kind": "bullet",
+          "id": "ex.b3",
+          "text": "3. New warehouse lease"
+        },
+        {
+          "kind": "bullet",
+          "id": "ex.b4",
+          "text": "4. Protection of our network"
+        }
+      ],
+      "lines": [
+        {
+          "id": "setup.example",
+          "voice": "chair",
+          "text": "Welcome to the board meeting of Meridian Logistics. This is a short example of how the meeting will look and sound. The slides appear on the screen, and you will hear each speaker."
+        }
+      ],
+      "_note": "Same for both groups; no checker shown."
+    },
+    "preStartText": {
+      "both": [
+        "The meeting is about to start.",
+        "You will hear each speaker once. The audio cannot be replayed."
+      ],
+      "checker": [
+        "During this meeting, a checker reads each slide and marks anything it finds."
+      ],
+      "_pending": "v1.3 places the checker line after the first line of 'both'; the schema implies both then checker. Needs a position, or accept the checker line at the end."
+    }
+  },
+  "rating": {
+    "instruction": "Please rate Daniel Hale. Go with your first impression.",
+    "items": [
+      {
+        "id": "trust",
+        "label": "Your trust in Daniel Hale",
+        "scale": {
+          "min": 0,
+          "max": 10,
+          "minLabel": "No trust at all",
+          "maxLabel": "Complete trust"
+        }
+      },
+      {
+        "id": "competence",
+        "scale": {
+          "min": 1,
+          "max": 7,
+          "minLabel": "incompetent",
+          "maxLabel": "competent"
+        },
+        "_meti": "expertise; Hendriks et al. 2015, Table 1 p. 6, Table 3 p. 8"
+      },
+      {
+        "id": "benevolence",
+        "scale": {
+          "min": 1,
+          "max": 7,
+          "minLabel": "irresponsible",
+          "maxLabel": "responsible"
+        },
+        "_meti": "benevolence; Table 1 p. 6 (.741). Alternative: inconsiderate / considerate"
+      },
+      {
+        "id": "integrity",
+        "scale": {
+          "min": 1,
+          "max": 7,
+          "minLabel": "dishonest",
+          "maxLabel": "honest"
+        },
+        "_meti": "integrity; Table 1 p. 6 (.841)"
+      }
+    ],
+    "_note": "1.13, 1.23, 2.2, 2.8: clickable numbers, nothing preselected, fixed order, partial kept on timeout.",
+    "_pending": "v1.3 shows the stem 'Daniel Hale is:' above the three antonym items; the schema has no field for it."
+  },
+  "actions": {
+    "checker": {
+      "prompt": "What do you do now?",
+      "note": "If you say nothing, the chair asks a question.",
+      "options": [
+        {
+          "id": "nothing",
+          "label": "Say nothing"
+        },
+        {
+          "id": "explain",
+          "label": "Ask Daniel to explain"
+        },
+        {
+          "id": "challenge",
+          "label": "Challenge Daniel with the checker's finding"
+        }
+      ],
+      "_note": "2.1: timeout stored as missing; the chair asks. Proposal: show the spoken question under the two speaking options in small type."
+    },
+    "neutral": {
+      "prompt": "Do you have a question about this slide?",
+      "note": "The chair will now ask a question.",
+      "options": [
+        {
+          "id": "hasQuestion",
+          "label": "Yes"
+        },
+        {
+          "id": "noQuestion",
+          "label": "No"
+        }
+      ],
+      "_note": "2.1: timeout stored as missing."
+    }
+  },
+  "scenes": [
+    {
+      "kind": "opening",
+      "id": "opening",
+      "profileCard": {
+        "name": "Daniel Hale",
+        "role": "Chief Information Security Officer, Meridian Logistics",
+        "lines": [
+          "Head of security at Meridian Logistics for 6 years",
+          "12 years before that protecting the networks of a national bank and a large hospital group",
+          "Led the response to two attempted break-ins this year, both stopped before any harm",
+          "Holds the main professional certifications in his field"
+        ],
+        "showFromLineId": "opening.chair.2"
+      },
+      "lines": [
+        {
+          "id": "opening.chair.1",
+          "voice": "chair",
+          "text": "Good morning, everyone, and thank you for being here. Let us move to item four on our agenda: the protection of our network."
+        },
+        {
+          "id": "opening.chair.2",
+          "voice": "chair",
+          "text": "Presenting today is Daniel Hale, our Chief Information Security Officer. Daniel has led our security for six years. Before he joined us, he spent twelve years protecting the networks of a national bank and a large hospital group. This year he led our response to two attempted break-ins, and both were stopped before any harm was done. He holds the main professional certifications in his field."
+        },
+        {
+          "id": "opening.chair.3",
+          "voice": "chair",
+          "text": "Daniel is asking the board for two point four million dollars to strengthen the protection of our warehouses and our head office. Our insurer and our largest customer both expect this protection to be in place within the year. We will hear his five slides and ask our questions along the way. The board will decide on the budget today."
+        },
+        {
+          "id": "opening.chair.4",
+          "voice": "chair",
+          "text": "Daniel, the floor is yours."
+        },
+        {
+          "id": "opening.ciso.5",
+          "voice": "ciso",
+          "text": "Thank you, Margaret. Good morning, everyone."
+        }
+      ],
+      "_note": "Chair reads the profile with the card on screen; the CISO greets once before T0 (1.12). The checker shows nothing during the opening."
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T0",
+      "point": "T0",
+      "after": "opening"
+    },
+    {
+      "kind": "slide",
+      "id": "s1",
+      "layout": [
+        {
+          "kind": "title",
+          "id": "s1.title",
+          "text": "Where we stand today"
+        },
+        {
+          "kind": "number",
+          "id": "s1.num1",
+          "value": "$2.4 million",
+          "caption": "budget request for approval today"
+        },
+        {
+          "kind": "bullet",
+          "id": "s1.b1",
+          "text": "Our 12 warehouses and head office run on one network: orders, scanners, trucks and payroll"
+        },
+        {
+          "kind": "bullet",
+          "id": "s1.b2",
+          "text": "This year we stopped two attempted break-ins into that network"
+        },
+        {
+          "kind": "bullet",
+          "id": "s1.b3",
+          "text": "Attackers are getting better"
+        },
+        {
+          "kind": "bullet",
+          "id": "s1.b4",
+          "text": "Our insurer and our largest customer now expect stronger protection"
+        }
+      ],
+      "narration": {
+        "id": "s1.narration",
+        "voice": "ciso",
+        "text": "I will keep this short, because I am asking you for a decision today. Everything we do runs on one network. Orders come in, the scanners in our twelve warehouses track every pallet, our trucks get their routes, and our fourteen hundred people get paid. If that network fails, shipments slow, orders queue and customers wait. This year, we stopped two attempted break-ins. Both were caught early, and no harm was done. But attackers are getting better. Our insurer and our largest customer have both told us they now expect stronger protection. Today, I am asking for two point four million dollars. I will show you the risk, the plan, the cost, and the decision."
+      },
+      "checker": {
+        "status": "noIssues",
+        "appearAtMs": 8000,
+        "_open": "1.18: timing is the brief default"
+      }
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T1",
+      "point": "T1",
+      "after": "s1"
+    },
+    {
+      "kind": "slide",
+      "id": "s2",
+      "layout": [
+        {
+          "kind": "title",
+          "id": "s2.title",
+          "text": "The risk and what it would cost us"
+        },
+        {
+          "kind": "number",
+          "id": "s2.num1",
+          "value": "$1.2 million",
+          "caption": "goods we ship each working day"
+        },
+        {
+          "kind": "number",
+          "id": "s2.num2",
+          "value": "5 days",
+          "caption": "how long a serious attack stops a company like ours"
+        },
+        {
+          "kind": "number",
+          "id": "s2.num3",
+          "value": "$8 million",
+          "caption": "cost to us of one serious attack"
+        },
+        {
+          "kind": "bullet",
+          "id": "s2.b1",
+          "text": "Our insurance renews in 10 months: without stronger protection, the premium rises or cover ends"
+        },
+        {
+          "kind": "bullet",
+          "id": "s2.b2",
+          "text": "Our largest customer's new contract requires the same protection"
+        }
+      ],
+      "narration": {
+        "id": "s2.narration",
+        "voice": "ciso",
+        "text": "So what is the risk? Our warehouses ship about one point two million dollars of goods every working day. When an attack reaches the systems in our warehouses, those shipments stop. A serious attack can keep a company like ours down for about five days. In total, one serious attack would cost us about eight million dollars. That is more than three times what I am asking for today. And there is a second risk. Our insurance renews in ten months. Without stronger protection, the premium rises, or the cover ends. Our largest customer has written the same requirement into its new contract. If we do nothing, we put both at risk."
+      },
+      "checker": {
+        "status": "flagged",
+        "markings": [
+          {
+            "id": "s2.m1",
+            "targetIds": [
+              "s2.num1",
+              "s2.num2",
+              "s2.num3"
+            ],
+            "appearAtMs": 18000,
+            "anchorText": "In total, one serious attack would cost us about eight million dollars",
+            "shape": "box",
+            "label": "$8 million does not follow from shown figures",
+            "detail": "Five days at $1.2 million of goods per day gives $6 million, so the slide leaves $2 million of the $8 million unexplained.",
+            "vlmRun": "v1.3",
+            "_source": "VLM run v1.3; label verbatim, detail edited as logged in content/vlm-drafts/v1.3/selection.md",
+            "_whyWrong": "Five days of shipments are $6 million; the other $2 million is recovery (specialists, overtime, replaced equipment, customer penalties), not itemised on the slide."
+          }
+        ]
+      },
+      "routineQuestion": {
+        "id": "s2.question.routine",
+        "voice": "chair",
+        "text": "Thank you, Daniel. Before we move on, can you tell us why you see the risk this way?"
+      },
+      "participantQuestions": {
+        "explain": {
+          "id": "s2.question.explain",
+          "voice": "member",
+          "text": "Daniel, could you explain how you get to eight million dollars for one attack?"
+        },
+        "challenge": {
+          "id": "s2.question.challenge",
+          "voice": "member",
+          "text": "My checker flags this slide: \"$8 million does not follow from shown figures.\" What do you say to that?"
+        }
+      },
+      "answers": {
+        "mode": "whole",
+        "reason": {
+          "id": "s2.answer.a",
+          "voice": "ciso",
+          "text": "This is a fair picture of our risk. Five days of lost shipments come to six million dollars. The other two million is the cost of recovery: outside specialists, overtime, replaced equipment and penalties to our customers. That is the risk we face."
+        },
+        "denial": {
+          "id": "s2.answer.b",
+          "voice": "ciso",
+          "text": "This is a fair picture of our risk. I have looked at these numbers very closely, and I am confident in every one of them. I would show this same picture to any board, and I stand behind it. That is the risk we face."
+        },
+        "padDenialToReason": false,
+        "_note": "Full-length denial (v1.4 recommendation for this slide). Alternative: the short denial 'This is a fair picture of our risk. That is the risk we face.' with padDenialToReason true. Line ids are neutral; the server picks the answer by the session's denial slide."
+      },
+      "template": "numbers"
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T2a",
+      "point": "T2a",
+      "after": "s2"
+    },
+    {
+      "kind": "action",
+      "id": "s2.action",
+      "forSlide": "s2"
+    },
+    {
+      "kind": "question",
+      "id": "s2.question",
+      "forSlide": "s2"
+    },
+    {
+      "kind": "answer",
+      "id": "s2.answer",
+      "forSlide": "s2"
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T2b",
+      "point": "T2b",
+      "after": "s2.answer"
+    },
+    {
+      "kind": "slide",
+      "id": "s3",
+      "layout": [
+        {
+          "kind": "title",
+          "id": "s3.title",
+          "text": "How we will protect our 13 sites"
+        },
+        {
+          "kind": "image",
+          "id": "s3.img1",
+          "assetKey": "s3-network-diagram.svg",
+          "alt": "Network diagram: head office with the main data centre in the middle; 12 warehouse icons around it, each joined to head office by a line; a firewall shield at every site; one line from head office to a cloud labelled Internet; a laptop icon labelled Remote staff joined to head office by a dotted line",
+          "_note": "Rendered for the VLM run as content/vlm-drafts/v1.3/s3.png; use the same image in the study."
+        },
+        {
+          "kind": "bullet",
+          "id": "s3.b1",
+          "text": "A firewall at every site keeps warehouse machines apart from office computers"
+        },
+        {
+          "kind": "bullet",
+          "id": "s3.b2",
+          "text": "All 12 warehouses connect to our data centre at head office"
+        },
+        {
+          "kind": "bullet",
+          "id": "s3.b3",
+          "text": "One internet connection, at head office, watched day and night"
+        },
+        {
+          "kind": "bullet",
+          "id": "s3.b4",
+          "text": "Staff at home or on the road use secure remote access"
+        }
+      ],
+      "narration": {
+        "id": "s3.narration",
+        "voice": "ciso",
+        "text": "Here is how we solve it. Picture our head office in the middle of this diagram. Our main data centre sits there, and all twelve warehouses connect to it. At every site, we put a firewall. Think of a firewall as a locked door with a guard. It decides what may come in and go out, and it keeps the warehouse machines apart from the office computers. So if one computer is infected, the problem stays in that room. We keep one connection to the internet, at head office, and our security team watches it day and night. People who work from home connect through secure remote access, after we have checked who they are."
+      },
+      "checker": {
+        "status": "flagged",
+        "markings": [
+          {
+            "id": "s3.m1",
+            "targetIds": [
+              "s3.img1",
+              "s3.b2",
+              "s3.b3"
+            ],
+            "appearAtMs": 9000,
+            "anchorText": "and all twelve warehouses connect to it",
+            "shape": "box",
+            "label": "Head office is a single point of failure",
+            "detail": "All 12 warehouses depend on one data centre and one internet connection, both at head office, with no second link or backup site shown.",
+            "vlmRun": "v1.3",
+            "_source": "VLM run v1.3; label verbatim, detail edited as logged in content/vlm-drafts/v1.3/selection.md",
+            "_whyWrong": "Each warehouse keeps a local copy of its scanning system and runs on its own for days if the link drops; a head-office outage slows the company, it does not stop it."
+          }
+        ]
+      },
+      "routineQuestion": {
+        "id": "s3.question.routine",
+        "voice": "chair",
+        "text": "Thank you, Daniel. Before we move on, can you tell us why you chose this design?"
+      },
+      "participantQuestions": {
+        "explain": {
+          "id": "s3.question.explain",
+          "voice": "member",
+          "text": "Daniel, could you explain why all the warehouses connect through head office?"
+        },
+        "challenge": {
+          "id": "s3.question.challenge",
+          "voice": "member",
+          "text": "My checker flags this slide: \"Head office is a single point of failure.\" What do you say to that?"
+        }
+      },
+      "answers": {
+        "mode": "joined",
+        "opening": {
+          "id": "s3.answer.part1",
+          "voice": "ciso",
+          "text": "This design is the right one for us."
+        },
+        "reasonBody": {
+          "id": "s3.answer.part2",
+          "voice": "ciso",
+          "text": "Each warehouse keeps a local copy of its scanning system and can run on its own for days if the link drops. When the link returns, it catches up, so a problem at head office slows us down but does not stop us."
+        },
+        "closing": {
+          "id": "s3.answer.part3",
+          "voice": "ciso",
+          "text": "That is the plan I recommend."
+        },
+        "padDenialToReason": true,
+        "_note": "Short denial plus silence (v1.4 default for slide 3; decide after listening to TTS samples, v1.4 13.3 item 3). Alternative: mode 'whole' with the full-length denial: 'This design is the right one for us. I have thought this design through with great care, and I am fully confident in every part of it. It is the design I would choose again for this company tomorrow, and I stand completely behind it today. That is the plan I recommend.'"
+      },
+      "template": "image-right"
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T3a",
+      "point": "T3a",
+      "after": "s3"
+    },
+    {
+      "kind": "action",
+      "id": "s3.action",
+      "forSlide": "s3"
+    },
+    {
+      "kind": "question",
+      "id": "s3.question",
+      "forSlide": "s3"
+    },
+    {
+      "kind": "answer",
+      "id": "s3.answer",
+      "forSlide": "s3"
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T3b",
+      "point": "T3b",
+      "after": "s3.answer"
+    },
+    {
+      "kind": "slide",
+      "id": "s4",
+      "layout": [
+        {
+          "kind": "title",
+          "id": "s4.title",
+          "text": "What the $2.4 million pays for"
+        },
+        {
+          "kind": "number",
+          "id": "s4.num1",
+          "value": "$780,000",
+          "caption": "Firewalls for 13 sites, with 3 years of support"
+        },
+        {
+          "kind": "number",
+          "id": "s4.num2",
+          "value": "$960,000",
+          "caption": "24-hour monitoring of our network, 2 years"
+        },
+        {
+          "kind": "number",
+          "id": "s4.num3",
+          "value": "$310,000",
+          "caption": "Secure remote access for 1,400 staff"
+        },
+        {
+          "kind": "number",
+          "id": "s4.num4",
+          "value": "$350,000",
+          "caption": "Installation and staff training"
+        },
+        {
+          "kind": "number",
+          "id": "s4.num5",
+          "value": "$2,400,000",
+          "caption": "Total"
+        }
+      ],
+      "narration": {
+        "id": "s4.narration",
+        "voice": "ciso",
+        "text": "Now to the money. The firewalls for all thirteen sites, with three years of support, cost seven hundred and eighty thousand dollars. The largest line is round-the-clock monitoring for two years: nine hundred and sixty thousand dollars. For that, a team of specialists watches our network every hour of every day and can close a door within minutes. Secure remote access for all fourteen hundred staff costs three hundred and ten thousand dollars. And installation and staff training cost three hundred and fifty thousand dollars. Most break-ins start with a fake email, so training our people is some of the best value on this page. Together, that is two point four million dollars."
+      },
+      "checker": {
+        "status": "flagged",
+        "markings": [
+          {
+            "id": "s4.m1",
+            "targetIds": [
+              "s4.num1"
+            ],
+            "appearAtMs": 6500,
+            "anchorText": "seven hundred and eighty thousand dollars",
+            "shape": "box",
+            "label": "Firewall cost per site looks high",
+            "detail": "$780,000 across 13 sites is about $60,000 per site including support, which is high for typical warehouse-sized sites.",
+            "vlmRun": "v1.3",
+            "_source": "VLM run v1.3; label verbatim, detail edited as logged in content/vlm-drafts/v1.3/selection.md",
+            "_whyWrong": "Each warehouse runs hundreds of scanners and needs a warehouse-grade unit; the price covers three years of support and next-day replacement at every site."
+          }
+        ]
+      },
+      "routineQuestion": {
+        "id": "s4.question.routine",
+        "voice": "chair",
+        "text": "Thank you, Daniel. Before we move on, can you tell us why you chose to spend the money this way?"
+      },
+      "participantQuestions": {
+        "explain": {
+          "id": "s4.question.explain",
+          "voice": "member",
+          "text": "Daniel, could you explain why the firewalls cost seven hundred and eighty thousand dollars?"
+        },
+        "challenge": {
+          "id": "s4.question.challenge",
+          "voice": "member",
+          "text": "My checker flags this slide: \"Firewall cost per site looks high.\" What do you say to that?"
+        }
+      },
+      "answers": {
+        "mode": "whole",
+        "reason": {
+          "id": "s4.answer.a",
+          "voice": "ciso",
+          "text": "This is the right way to spend the money. Take the firewalls: each warehouse runs hundreds of scanners day and night, so it needs a much larger unit than a typical site. The price also covers three years of support and next-day replacement at every site. That is the plan I recommend."
+        },
+        "denial": {
+          "id": "s4.answer.b",
+          "voice": "ciso",
+          "text": "This is the right way to spend the money. I have gone over every line of this budget myself, and I am confident in each one of them. I would not ask the board for a dollar more, or for a dollar less, than this today. That is the plan I recommend."
+        },
+        "padDenialToReason": false,
+        "_note": "Full-length denial (v1.4 recommendation for this slide). Alternative: the short denial 'This is the right way to spend the money. That is the plan I recommend.' with padDenialToReason true. Line ids are neutral; the server picks the answer by the session's denial slide."
+      },
+      "template": "numbers",
+      "_layoutNote": "Simple cost table, one row per line, total in bold; each row split into caption and value."
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T4a",
+      "point": "T4a",
+      "after": "s4"
+    },
+    {
+      "kind": "action",
+      "id": "s4.action",
+      "forSlide": "s4"
+    },
+    {
+      "kind": "question",
+      "id": "s4.question",
+      "forSlide": "s4"
+    },
+    {
+      "kind": "answer",
+      "id": "s4.answer",
+      "forSlide": "s4"
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T4b",
+      "point": "T4b",
+      "after": "s4.answer"
+    },
+    {
+      "kind": "slide",
+      "id": "s5",
+      "layout": [
+        {
+          "kind": "title",
+          "id": "s5.title",
+          "text": "The decision today"
+        },
+        {
+          "kind": "number",
+          "id": "s5.num1",
+          "value": "$2.4 million",
+          "caption": "for approval today"
+        },
+        {
+          "kind": "bullet",
+          "id": "s5.b1",
+          "text": "Firewalls at all 13 sites, 24-hour monitoring, secure remote access and staff training"
+        },
+        {
+          "kind": "bullet",
+          "id": "s5.b2",
+          "text": "Ready in 8 months, before our insurance renews in 10 months"
+        },
+        {
+          "kind": "bullet",
+          "id": "s5.b3",
+          "text": "If we wait: a higher premium or no cover, and our largest customer's contract at risk"
+        }
+      ],
+      "narration": {
+        "id": "s5.narration",
+        "voice": "ciso",
+        "text": "Let me bring this together. I am asking the board to approve two point four million dollars today. With it, every one of our thirteen sites gets a firewall, specialists watch our network around the clock, and every member of staff learns to spot a fake email. The work takes eight months, so we are ready before our insurance renews in ten months. If we wait, we face a much higher premium, or no cover at all, and the contract with our largest customer is at risk. I am confident this is the right plan for this company, the right size, at the right time. Thank you."
+      },
+      "checker": {
+        "status": "noIssues",
+        "appearAtMs": 8000,
+        "_open": "1.18"
+      }
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T5",
+      "point": "T5",
+      "after": "s5"
+    },
+    {
+      "kind": "budget",
+      "id": "budget",
+      "prompt": "Daniel Hale asks the board to approve $2.4 million for the protection plan. Our insurance renewal and our largest customer's contract depend on this protection. How do you vote?",
+      "options": [
+        {
+          "id": "approve",
+          "label": "Approve the request"
+        },
+        {
+          "id": "reject",
+          "label": "Reject the request"
+        }
+      ],
+      "confidence": {
+        "label": "How sure are you?",
+        "scale": {
+          "min": 0,
+          "max": 10,
+          "minLabel": "Not sure at all",
+          "maxLabel": "Completely sure"
+        }
+      },
+      "_note": "1.5, 2.12: 30 s (timing.formWindowMs); nothing preselected."
+    },
+    {
+      "kind": "background",
+      "id": "background",
+      "intro": "As part of the study we collect the following data. You can choose \"Prefer not to say\" for any question.",
+      "preferNotToSayLabel": "Prefer not to say",
+      "items": [
+        {
+          "kind": "single",
+          "id": "field",
+          "label": "What is your main field of expertise?",
+          "options": [
+            {
+              "id": "field.business",
+              "label": "Business and management"
+            },
+            {
+              "id": "field.finance",
+              "label": "Finance or accounting"
+            },
+            {
+              "id": "field.law",
+              "label": "Law"
+            },
+            {
+              "id": "field.it",
+              "label": "Information technology"
+            },
+            {
+              "id": "field.cyber",
+              "label": "Cybersecurity"
+            },
+            {
+              "id": "field.engineering",
+              "label": "Engineering"
+            },
+            {
+              "id": "field.health",
+              "label": "Health care or medicine"
+            },
+            {
+              "id": "field.education",
+              "label": "Education"
+            },
+            {
+              "id": "field.naturalSciences",
+              "label": "Natural sciences"
+            },
+            {
+              "id": "field.socialSciences",
+              "label": "Social sciences or humanities"
+            },
+            {
+              "id": "field.arts",
+              "label": "Arts, media or design"
+            },
+            {
+              "id": "field.government",
+              "label": "Government or public service"
+            },
+            {
+              "id": "field.studentNoField",
+              "label": "Student, no field yet"
+            },
+            {
+              "id": "field.other",
+              "label": "Other (please specify)"
+            }
+          ],
+          "otherOptionId": "field.other"
+        },
+        {
+          "kind": "country",
+          "id": "country",
+          "label": "In which country do you live?",
+          "_note": "Country list (ISO 3166)"
+        },
+        {
+          "kind": "single",
+          "id": "age",
+          "label": "What is your age?",
+          "options": [
+            {
+              "id": "age.a18",
+              "label": "18 to 24"
+            },
+            {
+              "id": "age.a25",
+              "label": "25 to 34"
+            },
+            {
+              "id": "age.a35",
+              "label": "35 to 44"
+            },
+            {
+              "id": "age.a45",
+              "label": "45 to 54"
+            },
+            {
+              "id": "age.a55",
+              "label": "55 to 64"
+            },
+            {
+              "id": "age.a65",
+              "label": "65 or older"
+            }
+          ]
+        },
+        {
+          "kind": "single",
+          "id": "jobLevel",
+          "label": "What is your current job level?",
+          "options": [
+            {
+              "id": "jobLevel.student",
+              "label": "Student"
+            },
+            {
+              "id": "jobLevel.employee",
+              "label": "Employee"
+            },
+            {
+              "id": "jobLevel.leadership",
+              "label": "Leadership"
+            },
+            {
+              "id": "jobLevel.cLevel",
+              "label": "C-Level"
+            }
+          ]
+        },
+        {
+          "kind": "single",
+          "id": "education",
+          "label": "What is the highest level of education you have completed?",
+          "options": [
+            {
+              "id": "education.secondary",
+              "label": "Secondary school or less"
+            },
+            {
+              "id": "education.college",
+              "label": "College diploma or trade certificate"
+            },
+            {
+              "id": "education.bachelor",
+              "label": "Bachelor's degree"
+            },
+            {
+              "id": "education.master",
+              "label": "Master's degree"
+            },
+            {
+              "id": "education.doctorate",
+              "label": "Doctorate"
+            },
+            {
+              "id": "education.other",
+              "label": "Other"
+            }
+          ]
+        },
+        {
+          "kind": "scale",
+          "id": "cyberKnowledge",
+          "label": "How would you rate your own knowledge of cybersecurity?",
+          "scale": {
+            "min": 1,
+            "max": 5,
+            "minLabel": "None",
+            "maxLabel": "Expert",
+            "pointLabels": {
+              "2": "Basic",
+              "3": "Some",
+              "4": "Good"
+            }
+          },
+          "_note": "Planned moderator of H1 and H2 (1.14)."
+        },
+        {
+          "kind": "single",
+          "id": "aiUse",
+          "label": "How often do you use AI tools such as chatbots or writing assistants?",
+          "options": [
+            {
+              "id": "aiUse.never",
+              "label": "Never"
+            },
+            {
+              "id": "aiUse.lessMonthly",
+              "label": "Less than once a month"
+            },
+            {
+              "id": "aiUse.monthly",
+              "label": "About once a month"
+            },
+            {
+              "id": "aiUse.weekly",
+              "label": "About once a week"
+            },
+            {
+              "id": "aiUse.severalWeekly",
+              "label": "Several times a week"
+            },
+            {
+              "id": "aiUse.daily",
+              "label": "Every day"
+            }
+          ]
+        },
+        {
+          "kind": "honeypot",
+          "id": "hp",
+          "label": "Hidden honeypot field, must stay empty",
+          "_note": "2.3: hidden from people; flags only."
+        }
+      ],
+      "_note": "1.9, 2.12, 2.14: seven items after the budget, 30 s, 'Prefer not to say' added by the renderer to every answerable item."
+    },
+    {
+      "kind": "debrief",
+      "id": "debrief",
+      "paragraphs": {
+        "both": [
+          "Thank you for taking part.",
+          "Here is what this study was about. None of the five slides had a real issue. The plan, the costs and the figures were all correct for this company.",
+          "Some participants saw an AI slide checker during the meeting, and others did not. The study measures how flags from an AI checker affect how much people without expert knowledge trust the presenter. It also looks at how the presenter's answers change that trust.",
+          "The company, the people and the meeting are fictional."
+        ],
+        "checker": [
+          "You were in the group with the checker. The checker was a simulated AI tool. Its flags were drafted by an AI content checker from images of the slides and fixed in advance, so every participant in your group saw the same flags. Every flag was wrong for this company."
+        ],
+        "neutral": [
+          "You were in the group without the checker. In the other group, a simulated AI checker flagged slides 2, 3 and 4. The flags were fixed in advance, and every flag was wrong for this company."
+        ],
+        "end": [
+          "If you want to withdraw your data, send this code to [CONTACT NAME, EMAIL].",
+          "[ETHICS, DATA KEEPING AND WITHDRAWAL TEXT, placeholder until the SFU ethics form arrives]"
+        ],
+        "_note": "Flag-drafting sentence true since the VLM run v1.3 (content/vlm-drafts/v1.3/)."
+      },
+      "doNotDiscuss": "Please do not discuss this study with anyone while we are still recruiting participants.",
+      "sessionCodeLabel": "Your session code is",
+      "_pending": "v1.3 writes the code inside one sentence: 'Your session code is [SESSION CODE]. If you want to withdraw your data, send this code to [CONTACT NAME, EMAIL].' The schema shows sessionCodeLabel plus the code; the second sentence is carried as the first 'end' paragraph. The renderer must show the code before that paragraph, or the schema needs a session-code template string."
+    }
+  ]
+}

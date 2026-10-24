@@ -1,0 +1,4 @@
+project_id        = "REPLACE-study-dev" # OPEN Q
+region            = "northamerica-northeast1"
+github_repository = "REPLACE-owner/REPLACE-repo"
+# state_bucket_name = ""                # default <project_id>-tfstate

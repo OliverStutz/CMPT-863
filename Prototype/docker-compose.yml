@@ -1,0 +1,18 @@
+# Local development (02 - Architecture.md section 14): the Firestore emulator
+# only. The API runs on the host with `go run` (see `make dev`), on port 8080,
+# so the emulator is published on host port 8081.
+# DECISION: section 14 gives the emulator port 8080, which the API uses.
+services:
+  firestore:
+    image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
+    command: >
+      gcloud emulators firestore start
+      --host-port=0.0.0.0:8080
+      --project=demo-study
+    ports:
+      - "8081:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/ || exit 1"]
+      interval: 3s
+      timeout: 2s
+      retries: 40

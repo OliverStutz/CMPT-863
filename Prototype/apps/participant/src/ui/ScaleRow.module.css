@@ -1,0 +1,88 @@
+.fieldset {
+  border: 0;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  min-width: 0;
+}
+.legend {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.6rem;
+  padding: 0;
+}
+.row {
+  display: flex;
+}
+.antonymRow {
+  display: grid;
+  grid-template-columns: 9rem max-content 9rem;
+  justify-content: start;
+  align-items: center;
+  gap: 0.75rem;
+}
+.pole {
+  font-size: 1.05rem;
+}
+.poleLeft {
+  text-align: right;
+}
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.option {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+.face {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  padding: 0 0.5rem;
+  border: 2px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+.option:hover .face {
+  border-color: var(--navy);
+}
+.option input:checked + .face {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+  font-weight: 700;
+}
+.option input:focus-visible + .face {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.fieldset:disabled .option {
+  cursor: default;
+  opacity: 0.6;
+}
+.extra .face {
+  font-size: 0.95rem;
+}
+.pointLabel {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  min-height: 1em;
+}
+.ends {
+  display: flex;
+  justify-content: space-between;
+  max-width: calc(11 * 3.15rem);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 0.4rem;
+}

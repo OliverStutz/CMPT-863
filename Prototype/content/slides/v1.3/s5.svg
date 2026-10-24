@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" font-family="Inter, Helvetica, Arial, sans-serif">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<rect width="1920" height="150" fill="#14325A"/>
+<rect y="150" width="1920" height="6" fill="#D9822B"/>
+<text id="s5.title" x="80" y="97" font-size="58" font-weight="700" fill="#FFFFFF">The decision today</text>
+<g id="brand"><rect x="1556" y="62" width="22" height="22" fill="#D9822B"/><text x="1840" y="81" font-size="26" font-weight="600" fill="#FFFFFF" text-anchor="end" letter-spacing="0.5">Meridian Logistics</text></g>
+<line x1="80" y1="1012" x2="1840" y2="1012" stroke="#C9D2DE" stroke-width="2"/>
+<text id="slide-number" x="1840" y="1050" font-size="24" fill="#5F6B7A" text-anchor="end">5</text>
+<g id="s5.num1"><rect x="80" y="230" width="1760" height="200" fill="#14325A"/><rect x="80" y="230" width="14" height="200" fill="#D9822B"/><text x="150" y="358" font-size="80" fill="#FFFFFF"><tspan font-weight="700">$2.4 million</tspan> for approval today</text></g>
+<g id="s5.b1"><rect x="80" y="516.2" width="14" height="14" fill="#D9822B"/>
+<text x="124" y="540" font-size="40" fill="#1F2933"><tspan x="124" dy="0">Firewalls at all 13 sites, 24-hour monitoring, secure remote access and staff training</tspan></text></g>
+<g id="s5.b2"><rect x="80" y="620.2" width="14" height="14" fill="#D9822B"/>
+<text x="124" y="644" font-size="40" fill="#1F2933"><tspan x="124" dy="0">Ready in 8 months, before our insurance renews in 10 months</tspan></text></g>
+<g id="s5.b3"><rect x="80" y="724.2" width="14" height="14" fill="#D9822B"/>
+<text x="124" y="748" font-size="40" fill="#1F2933"><tspan x="124" dy="0">If we wait: a higher premium or no cover, and our largest customer's contract at risk</tspan></text></g>
+</svg>

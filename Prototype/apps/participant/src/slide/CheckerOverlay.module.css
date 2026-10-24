@@ -1,0 +1,87 @@
+.marks {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+.draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 0.6s ease-out forwards;
+}
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+.panel {
+  background: #ffffff;
+  color: #1f2933;
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  padding: 18px 22px;
+  font-family: Inter, Helvetica, Arial, sans-serif;
+}
+.panelTitle {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #14325a;
+  letter-spacing: 0.01em;
+}
+.idle {
+  margin: 10px 0 0;
+  font-size: 18px;
+  color: #3e4c59;
+}
+.noIssues {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 2px;
+  font-size: 21px;
+  font-weight: 600;
+  animation: fade 0.4s ease-out;
+}
+.callout {
+  margin-top: 14px;
+  border-left: 6px solid;
+  padding: 4px 0 4px 12px;
+  animation: fade 0.4s ease-out;
+}
+.calloutLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.icon {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+.calloutDetail {
+  margin: 8px 0 0;
+  font-size: 18px;
+  line-height: 1.4;
+  color: #1f2933;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .noIssues,
+  .callout {
+    animation: none;
+  }
+}

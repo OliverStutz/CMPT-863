@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" font-family="Inter, Helvetica, Arial, sans-serif">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<rect width="1920" height="150" fill="#14325A"/>
+<rect y="150" width="1920" height="6" fill="#D9822B"/>
+<text id="s1.title" x="80" y="97" font-size="58" font-weight="700" fill="#FFFFFF">Where we stand today</text>
+<g id="brand"><rect x="1556" y="62" width="22" height="22" fill="#D9822B"/><text x="1840" y="81" font-size="26" font-weight="600" fill="#FFFFFF" text-anchor="end" letter-spacing="0.5">Meridian Logistics</text></g>
+<line x1="80" y1="1012" x2="1840" y2="1012" stroke="#C9D2DE" stroke-width="2"/>
+<text id="slide-number" x="1840" y="1050" font-size="24" fill="#5F6B7A" text-anchor="end">1</text>
+<g id="s1.b1"><rect x="80" y="267.04" width="14" height="14" fill="#D9822B"/>
+<text x="124" y="290" font-size="38" fill="#1F2933"><tspan x="124" dy="0">Our 12 warehouses and head office run on one</tspan><tspan x="124" dy="52">network: orders, scanners, trucks and payroll</tspan></text></g>
+<g id="s1.b2"><rect x="80" y="405.04" width="14" height="14" fill="#D9822B"/>
+<text x="124" y="428" font-size="38" fill="#1F2933"><tspan x="124" dy="0">This year we stopped two attempted break-ins into that</tspan><tspan x="124" dy="52">network</tspan></text></g>
+<g id="s1.b3"><rect x="80" y="543.04" width="14" height="14" fill="#D9822B"/>
+<text x="124" y="566" font-size="38" fill="#1F2933"><tspan x="124" dy="0">Attackers are getting better</tspan></text></g>
+<g id="s1.b4"><rect x="80" y="629.04" width="14" height="14" fill="#D9822B"/>
+<text x="124" y="652" font-size="38" fill="#1F2933"><tspan x="124" dy="0">Our insurer and our largest customer now expect</tspan><tspan x="124" dy="52">stronger protection</tspan></text></g>
+<g id="s1.num1"><rect x="1220" y="250" width="620" height="360" fill="#EEF2F7"/><rect x="1220" y="250" width="10" height="360" fill="#D9822B"/><text x="1270" y="400" font-size="80" font-weight="700" fill="#14325A">$2.4 million:</text><text x="1270" y="480" font-size="40" fill="#1F2933"><tspan x="1270" dy="0">budget request for approval</tspan><tspan x="1270" dy="54">today</tspan></text></g>
+</svg>

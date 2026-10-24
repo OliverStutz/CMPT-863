@@ -1,0 +1,130 @@
+# Pull request checks (architecture 13). Steps for parts that do not exist yet are
+# skipped, so this passes while the backend and apps are still being built.
+name: ci
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  secrets-scan:
+    name: Credential pattern scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      # Fails if any tracked file looks like it holds a credential. .example files,
+      # Markdown docs and this workflow (which names the patterns) are excluded.
+      - name: Scan for credential patterns
+        run: |
+          set -u
+          pattern='-----BEGIN|"refresh_token"|ya29\.|AIza[0-9A-Za-z_-]{35}|"private_key"'
+          if git ls-files -z \
+              | grep -zv -E '\.example$|\.md$|^docs/|^\.github/workflows/ci\.yml$' \
+              | xargs -0 -r grep -I -n -E -e "$pattern" --; then
+            echo "::error::Possible credential found (see matches above). Remove it and rotate it."
+            exit 1
+          fi
+          echo "No credential patterns found."
+
+  go:
+    name: Go vet and test (services/api)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Detect backend
+        id: detect
+        run: |
+          if [ -f services/api/go.mod ]; then echo "present=true" >> "$GITHUB_OUTPUT"; else echo "present=false" >> "$GITHUB_OUTPUT"; fi
+
+      - uses: actions/setup-go@v6
+        if: steps.detect.outputs.present == 'true'
+        with:
+          go-version-file: services/api/go.mod
+          cache-dependency-path: services/api/go.sum
+
+      # The go:embed directories must exist; the real bundles are built in the web job.
+      - name: Placeholder SPA bundles
+        if: steps.detect.outputs.present == 'true'
+        run: |
+          for app in participant admin; do
+            mkdir -p "services/api/web/$app"
+            [ -f "services/api/web/$app/index.html" ] || echo '<!doctype html><title>placeholder</title>' > "services/api/web/$app/index.html"
+          done
+
+      - name: go vet
+        if: steps.detect.outputs.present == 'true'
+        working-directory: services/api
+        env:
+          GOWORK: "off"
+        run: go vet ./...
+
+      - name: go test
+        if: steps.detect.outputs.present == 'true'
+        working-directory: services/api
+        env:
+          GOWORK: "off"
+        run: go test ./...
+
+  web:
+    name: npm build and test (apps/${{ matrix.app }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [participant, admin]
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Detect app
+        id: detect
+        run: |
+          if [ -f "apps/${{ matrix.app }}/package.json" ]; then echo "present=true" >> "$GITHUB_OUTPUT"; else echo "present=false" >> "$GITHUB_OUTPUT"; fi
+
+      - uses: actions/setup-node@v5
+        if: steps.detect.outputs.present == 'true'
+        with:
+          node-version: "26"
+
+      - name: Install
+        if: steps.detect.outputs.present == 'true'
+        working-directory: apps/${{ matrix.app }}
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+
+      - name: Build
+        if: steps.detect.outputs.present == 'true'
+        working-directory: apps/${{ matrix.app }}
+        run: npm run build
+
+      - name: Test
+        if: steps.detect.outputs.present == 'true'
+        working-directory: apps/${{ matrix.app }}
+        run: npm test --if-present
+
+  terraform:
+    name: Terraform fmt and validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.15.9"
+
+      - name: terraform fmt -check
+        run: terraform fmt -check -recursive infra/terraform
+
+      # DECISION: section 13 also asks for plan on dev and prod posted as a PR comment.
+      # That needs a GCP project and the ci-terraform-plan account, which do not exist
+      # yet; only fmt and validate run until then.
+      - name: terraform validate (envs/dev, envs/prod, bootstrap)
+        run: |
+          for d in infra/terraform/envs/dev infra/terraform/envs/prod infra/terraform/bootstrap; do
+            echo "== $d"
+            terraform -chdir="$d" init -backend=false -input=false
+            terraform -chdir="$d" validate
+          done

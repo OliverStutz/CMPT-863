@@ -1,0 +1,33 @@
+# dependencies and builds
+node_modules/
+dist/
+services/api/web/participant/
+services/api/web/admin/
+*.log
+# generated audio (manifest.json is committed)
+content/audio/**/*.mp3
+# terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars.local
+# local env and secrets
+.env
+.env.*
+*.pem
+# editors and OS
+.DS_Store
+.vscode/
+.idea/
+# go
+services/api/bin/
+coverage.out
+# playwright
+e2e/test-results/
+e2e/playwright-report/
+# terraform: variable and backend files are committed (private repo, no secret values in them);
+# state files and provider caches stay local, bootstrap state is kept safe outside git
+infra/terraform/bootstrap/terraform.tfstate*
+# local secrets for this deployment never enter the repo
+secrets/
+*.secret

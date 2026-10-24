@@ -1,0 +1,28 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3rem 1.5rem;
+  box-sizing: border-box;
+}
+.card {
+  width: 100%;
+  max-width: 760px;
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(20, 50, 90, 0.08);
+  padding: 2.25rem 2.5rem;
+  box-sizing: border-box;
+}
+.wide {
+  max-width: 980px;
+}
+.title {
+  font-size: 1.6rem;
+  margin: 0 0 1.25rem;
+  color: var(--navy);
+}
+.title:focus {
+  outline: none;
+}

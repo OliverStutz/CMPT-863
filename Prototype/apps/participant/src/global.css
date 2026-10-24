@@ -1,0 +1,84 @@
+:root {
+  --navy: #14325a;
+  --text: #1f2933;
+  --text-muted: #4a5563;
+  --surface: #ffffff;
+  --page: #eef1f5;
+  --border: #c9d2de;
+  --border-strong: #8592a3;
+  --track: #e3e8ef;
+  --focus: #1a73e8;
+  --warn: #b5470b;
+  --disabled-bg: #c3cad4;
+  --disabled-text: #33404f;
+  color-scheme: light;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--page);
+  color: var(--text);
+  font-family: Inter, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+}
+button,
+input,
+select {
+  font-family: inherit;
+}
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.center-message {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+}
+.center-message h1 {
+  font-size: 1.5rem;
+  color: var(--navy);
+  max-width: 34rem;
+}
+.link-text {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  word-break: break-all;
+  user-select: all;
+}
+.error-banner {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background: #fff4ec;
+  color: #5a2306;
+  border: 2px solid var(--warn);
+  border-radius: 10px;
+  padding: 0.75rem 1rem 0.75rem 1.25rem;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+  max-width: 90vw;
+}

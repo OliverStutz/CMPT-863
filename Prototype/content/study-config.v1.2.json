@@ -1,0 +1,1202 @@
+{
+  "version": "1.2.0",
+  "locale": "en",
+  "_status": "Content v1.2, 2026-10-23, from Prototype/03 - Study Content v1.2.md, encoded to content/schema/study-config.schema.json. OPEN points are not decided; defaults follow Prototype/01 and v1.1. Flags are placeholders until the VLM drafting run.",
+  "_scenario": {
+    "company": "Kestrel Bay Logistics (fictional), freight and warehousing, western Canada, head office and main data centre in the Vancouver area, 12 warehouses, 1,400 staff, about $480 million revenue a year",
+    "budgetRequest": {
+      "amount": 2400000,
+      "currency": "CAD",
+      "display": "$2.4 million",
+      "shownOn": [
+        "s1",
+        "s3",
+        "s5"
+      ],
+      "dependsOn": "Cyber insurance renewal in 10 months and the largest customer's new contract"
+    },
+    "ciso": "Daniel Hale, male (C-9)",
+    "chair": "Margaret Lin, female",
+    "denialSlides": [
+      "s2",
+      "s3",
+      "s4"
+    ],
+    "_denialRule": "Balanced within each group, assigned server-side (Architecture 5.5)",
+    "_confirm": "All facts are listed for confirmation in v1.2 table 13.1 (R-5).",
+    "_scene": "Decided 2026-10-23 (OPEN K): still composite with light animation (boardroom image, CISO portrait that lights up while speaking, slide rendered live, highlight overlay in the checker group). No video.",
+    "_slideCount": "Decided 2026-10-23: number of slides and flagged slides configurable; five slides with flags on 2 to 4 is the default (C-20: more slides need more VLM flags, routine questions and answers)."
+  },
+  "timing": {
+    "postAudioViewMs": 10000,
+    "postAnswerViewMs": 0,
+    "_open_postAnswerViewMs": "C-4 / FO-6: v1.1 default 0 ms; Architecture default 10 s",
+    "ratingWindowMs": 15000,
+    "actionWindowMs": 15000,
+    "_open_actionWindowMs": "OPEN C: 15 s; checker timeout -> chair asks, recorded as timed out (C-15); neutral timeout recorded as timed out, no option (finding 7)",
+    "participantQuestionShowMs": 3500,
+    "_open_participantQuestionShowMs": "OPEN D",
+    "formWindowMs": null,
+    "_open_formWindowMs": "R-11: budget and background untimed",
+    "linePauseMs": 600,
+    "audioEndToleranceMs": 1500,
+    "latencyAllowanceMs": 3000,
+    "abandonAfterMs": 1800000,
+    "_source": "linePauseMs, audioEndToleranceMs, latencyAllowanceMs, abandonAfterMs: Architecture 4.1 defaults (FO-4)",
+    "msPerWordEstimate": 400
+  },
+  "voices": {
+    "ciso": {
+      "provider": "google-tts",
+      "name": "TBD",
+      "languageCode": "en-US",
+      "_open": "OPEN L; C-19: en-CA if available"
+    },
+    "chair": {
+      "provider": "google-tts",
+      "name": "TBD",
+      "languageCode": "en-US",
+      "_open": "OPEN L: clearly different from the CISO; C-19"
+    },
+    "participant": null,
+    "_open_participant": "OPEN D: needed only if participantQuestionMode is 'voiced'"
+  },
+  "options": {
+    "ratingAfterUnflaggedSlides": true,
+    "_decided_ratingAfterUnflaggedSlides": "Decided 2026-10-23: a rating after every presentation slide (OPEN B closed)",
+    "checkerPanelOnOpening": "idle",
+    "_open_panelOnOpening": "OPEN A remainder / C-21: what the checker shows during the opening (default: nothing)",
+    "participantQuestionMode": "textBubble",
+    "_open_participantQuestionMode": "OPEN D",
+    "backgroundPosition": "end",
+    "_decided_backgroundPosition": "Decided 2026-10-23: all seven items at the end, after the budget decision (OPEN F closed)",
+    "flagReview": {
+      "enabled": true,
+      "groups": [
+        "checker"
+      ],
+      "_open": "OPEN G"
+    },
+    "ratingTimeoutPolicy": "recordPartial",
+    "_open_ratingTimeoutPolicy": "OPEN H",
+    "deviceGate": {
+      "minWidthPx": 1024,
+      "allowPhones": false,
+      "_open": "OPEN R"
+    },
+    "attentionChecks": {
+      "audioWord": true,
+      "honeypot": true,
+      "_open": "OPEN U"
+    },
+    "allocationAt": "deviceGatePassed",
+    "_open_allocationAt": "FO-7 / R-2",
+    "allocationScope": "global",
+    "_open_allocationScope": "FO-1",
+    "checkerDisplay": "overlay",
+    "_open_display": "FO-2 / C-21: highlight overlay decided (OPEN K); where the label and note appear stays open",
+    "resumePolicy": "skipToPostView",
+    "_open_resumePolicy": "FO-3"
+  },
+  "labels": {
+    "panelTitle": "Slide checker",
+    "noIssues": "No issues found",
+    "_open_noIssues": "Abstract v8 wording; Oliver has not decided between this and a supporting label (v8 change file)",
+    "panelIdle": "",
+    "_open_panelIdle": "C-3: empty panel before a flag or label",
+    "ratingSubmit": "Next",
+    "timeLeft": "Time left",
+    "continue": "Continue"
+  },
+  "colors": {
+    "flag": "#E8A33D",
+    "noIssues": "#5B8C6A"
+  },
+  "consent": {
+    "version": "0-placeholder",
+    "pdfAssetKey": "consent-placeholder.pdf",
+    "checkboxLabel": "[PLACEHOLDER: checkbox text from the ethics form, see OPEN M]",
+    "acceptLabel": "I accept the terms and would like to participate in the study",
+    "_open": "OPEN M: consent PDF and checkbox text from the ethics form"
+  },
+  "setup": {
+    "instruction": "Please turn on your sound. Press Play and listen. Then choose the word you heard.",
+    "audioCheck": {
+      "clip": {
+        "id": "setup.audioTest",
+        "voice": "chair",
+        "text": "This is a short sound check. If you can hear this clearly, the word to choose is lantern."
+      },
+      "options": [
+        {
+          "id": "river",
+          "label": "river"
+        },
+        {
+          "id": "lantern",
+          "label": "lantern"
+        },
+        {
+          "id": "pencil",
+          "label": "pencil"
+        },
+        {
+          "id": "garden",
+          "label": "garden"
+        }
+      ],
+      "correctOptionId": "lantern",
+      "onWrong": "That was not the word in the clip. Please check your sound and try once more.",
+      "maxAttempts": 2,
+      "_open_maxAttempts": "C-6 / FO-5: v1.1 proposes 2 attempts then log and continue; Architecture proposed 3",
+      "heardLabel": "I can hear it"
+    },
+    "exampleScene": {
+      "layout": [
+        {
+          "kind": "title",
+          "id": "ex.title",
+          "text": "Board meeting, agenda"
+        },
+        {
+          "kind": "bullet",
+          "id": "ex.b1",
+          "text": "1. Minutes of the last meeting"
+        },
+        {
+          "kind": "bullet",
+          "id": "ex.b2",
+          "text": "2. Quarterly results"
+        },
+        {
+          "kind": "bullet",
+          "id": "ex.b3",
+          "text": "3. New warehouse lease"
+        },
+        {
+          "kind": "bullet",
+          "id": "ex.b4",
+          "text": "4. Protection of our network"
+        }
+      ],
+      "lines": [
+        {
+          "id": "setup.example",
+          "voice": "chair",
+          "text": "Welcome to the board meeting of Kestrel Bay Logistics. This is a short example of how the meeting will look and sound. The slides appear on the screen, and you will hear each speaker."
+        }
+      ],
+      "_note": "Playback check, same for both groups."
+    }
+  },
+  "rating": {
+    "instruction": "How do you see Daniel Hale right now? Go with your first impression.",
+    "_open": "OPEN I: all four on 0 to 10 (default) or the three METI items on 7 points. OPEN H: partial on timeout. FO-16: fixed order.",
+    "items": [
+      {
+        "id": "trust",
+        "label": "How much do you trust Daniel Hale right now?",
+        "scale": {
+          "min": 0,
+          "max": 10,
+          "minLabel": "Not at all",
+          "maxLabel": "Completely"
+        }
+      },
+      {
+        "id": "competence",
+        "label": "How competent is Daniel Hale?",
+        "scale": {
+          "min": 0,
+          "max": 10,
+          "minLabel": "Not competent at all",
+          "maxLabel": "Very competent"
+        },
+        "_meti": "expertise item competent / incompetent (Hendriks et al. 2015, Table 1 p. 6)"
+      },
+      {
+        "id": "benevolence",
+        "label": "How much does Daniel Hale care about the company's interests?",
+        "scale": {
+          "min": 0,
+          "max": 10,
+          "minLabel": "Not at all",
+          "maxLabel": "Very much"
+        },
+        "_meti": "after the benevolence description (p. 16); alternative METI item 'considerate'",
+        "_open": "C-5"
+      },
+      {
+        "id": "integrity",
+        "label": "How honest is Daniel Hale?",
+        "scale": {
+          "min": 0,
+          "max": 10,
+          "minLabel": "Not honest at all",
+          "maxLabel": "Very honest"
+        },
+        "_meti": "integrity item honest / dishonest (Table 1 p. 6)"
+      }
+    ]
+  },
+  "actions": {
+    "checker": {
+      "prompt": "What do you do now?",
+      "note": "If you say nothing, the chair asks a question.",
+      "options": [
+        {
+          "id": "nothing",
+          "label": "Say nothing"
+        },
+        {
+          "id": "explain",
+          "label": "Ask Daniel to explain"
+        },
+        {
+          "id": "challenge",
+          "label": "Challenge Daniel with the checker's finding"
+        }
+      ],
+      "timeoutMapsTo": "nothing",
+      "_note": "Timeout stored as actionId null, timedOut true, effectiveAction nothing (C-15). Proposal: show the exact question under the two speaking options in small type."
+    },
+    "neutral": {
+      "prompt": "Do you have a question about this slide?",
+      "note": "The chair will now ask a question.",
+      "options": [
+        {
+          "id": "hasQuestion",
+          "label": "Yes"
+        },
+        {
+          "id": "noQuestion",
+          "label": "No"
+        }
+      ],
+      "_note": "Timeout stored as timed out with no option; counts as missing for H4a (finding 7)."
+    }
+  },
+  "scenes": [
+    {
+      "kind": "opening",
+      "id": "opening",
+      "intro": {
+        "both": [
+          "You are a member of the board of Kestrel Bay Logistics.",
+          "Today the company's head of security asks the board to approve a budget. Listen to the presentation.",
+          "During the meeting you will rate the presenter several times, and at the end you will vote on the budget."
+        ],
+        "checker": [
+          "During this meeting, a checker reads each slide and marks anything it finds."
+        ],
+        "_note": "Role instruction screen decided 2026-10-23 (no separate checker screen); wording is a proposal. On screen only, button Continue. The checker sentence is shown after the second line of 'both' (v1.2 section 1); C-22: confirm wording (alternative: 'A checker on your tablet reads each slide and marks anything it finds.'). Neutral group: 'both' only.",
+        "_pending": "v1.2 places the checker sentence after the second line of the role instruction; GroupParagraphs shows 'both' then the group part, so it would appear after the third line. Schema or compiler needs a position for the group part, or accept it at the end."
+      },
+      "profileCard": {
+        "name": "Daniel Hale",
+        "role": "Chief Information Security Officer, Kestrel Bay Logistics",
+        "lines": [
+          "Head of security at Kestrel Bay Logistics for 6 years",
+          "12 years before that protecting the networks of a national bank and a large hospital group",
+          "Led the response to two attempted break-ins this year, both stopped before any harm",
+          "Holds the main professional certifications in his field"
+        ],
+        "showFromLineId": "opening.chair.2",
+        "_open": "R-6: profile read aloud by the chair with this card on screen (proposal)."
+      },
+      "lines": [
+        {
+          "id": "opening.chair.1",
+          "voice": "chair",
+          "text": "Good morning, everyone, and thank you for being here. Let us move to item four on our agenda: the protection of our network."
+        },
+        {
+          "id": "opening.chair.2",
+          "voice": "chair",
+          "text": "Presenting today is Daniel Hale, our Chief Information Security Officer. Daniel has led our security for six years. Before he joined us, he spent twelve years protecting the networks of a national bank and a large hospital group. This year he led our response to two attempted break-ins, and both were stopped before any harm was done. He holds the main professional certifications in his field."
+        },
+        {
+          "id": "opening.chair.3",
+          "voice": "chair",
+          "text": "Daniel is asking the board for two point four million dollars to strengthen the protection of our warehouses and our head office. Our insurer and our largest customer both expect this protection to be in place within the year. We will hear his five slides and ask our questions along the way. The board will decide on the budget today."
+        },
+        {
+          "id": "opening.chair.4",
+          "voice": "chair",
+          "text": "Daniel, the floor is yours."
+        },
+        {
+          "id": "opening.ciso.5",
+          "voice": "ciso",
+          "text": "Thank you, Margaret. Good morning, everyone.",
+          "_open": "R-6: CISO greeting before T0 (proposal)"
+        }
+      ]
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T0",
+      "point": "T0",
+      "after": "opening"
+    },
+    {
+      "kind": "slide",
+      "id": "s1",
+      "layout": [
+        {
+          "kind": "title",
+          "id": "s1.title",
+          "text": "Why we are here today"
+        },
+        {
+          "kind": "number",
+          "id": "s1.num1",
+          "value": "$2.4 million",
+          "caption": "budget request for approval today"
+        },
+        {
+          "kind": "bullet",
+          "id": "s1.b1",
+          "text": "Our 12 warehouses and head office run on one network: orders, scanners, trucks and payroll"
+        },
+        {
+          "kind": "bullet",
+          "id": "s1.b2",
+          "text": "This year we stopped two attempted break-ins into that network"
+        },
+        {
+          "kind": "bullet",
+          "id": "s1.b3",
+          "text": "Our insurer requires stronger protection before renewal in 10 months"
+        },
+        {
+          "kind": "bullet",
+          "id": "s1.b4",
+          "text": "Our largest customer requires the same in its new contract"
+        }
+      ],
+      "_layoutNote": "s1.num1 is split into value and caption from the v1.1 text '$2.4 million: budget request for approval today'.",
+      "narration": {
+        "id": "s1.narration",
+        "voice": "ciso",
+        "text": "I will keep this short and clear, because I am asking you for a decision today. Everything we do runs on one network. Orders come in, the scanners in our twelve warehouses track every pallet, our trucks get their routes, and our fourteen hundred people get paid. If that network stops, the company stops. This year, we stopped two attempted break-ins into that network. Both were caught early, and no harm was done. But attackers are getting better, and we need to stay ahead of them. Two outside parties have also told us what they expect. Our insurer will renew our cyber insurance in ten months only if stronger protection is in place. And our largest customer has written the same requirement into its new contract. So today, I am asking for two point four million dollars to put that protection in place. On the next four slides, I will show you what we will build, what it costs, and when it will be ready."
+      },
+      "checker": {
+        "status": "noIssues",
+        "appearAtMs": 8000,
+        "_open": "C-3: 'No issues found' at 8 s; empty panel before that"
+      }
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T1",
+      "point": "T1",
+      "after": "s1",
+      "optionalBy": "ratingAfterUnflaggedSlides"
+    },
+    {
+      "kind": "slide",
+      "id": "s2",
+      "layout": [
+        {
+          "kind": "title",
+          "id": "s2.title",
+          "text": "How we will protect our 13 sites"
+        },
+        {
+          "kind": "image",
+          "id": "s2.img1",
+          "assetKey": "s2-network-diagram.svg",
+          "alt": "Network diagram: head office with the main data centre in the middle; 12 warehouse icons around it, each joined to head office by a line; a firewall shield at every site; one line from head office to a cloud labelled Internet; a laptop icon labelled Remote staff joined to head office by a dotted line",
+          "_pending": "Asset not built yet (finding 64); must exist before the VLM drafting run."
+        },
+        {
+          "kind": "bullet",
+          "id": "s2.b1",
+          "text": "A firewall at every site keeps warehouse machines apart from office computers"
+        },
+        {
+          "kind": "bullet",
+          "id": "s2.b2",
+          "text": "All 12 warehouses connect to our data centre at head office"
+        },
+        {
+          "kind": "bullet",
+          "id": "s2.b3",
+          "text": "One internet connection, at head office, watched day and night"
+        },
+        {
+          "kind": "bullet",
+          "id": "s2.b4",
+          "text": "Staff at home or on the road use secure remote access"
+        }
+      ],
+      "narration": {
+        "id": "s2.narration",
+        "voice": "ciso",
+        "text": "Let me show you how the network will look. Picture our head office in the middle of this diagram. Our main data centre sits there. All twelve warehouses connect to that data centre. That is the line you see from each warehouse to the centre. At every site, we put a firewall. Think of a firewall as a locked door with a guard. It decides what may come in and go out, and it keeps the warehouse machines apart from the office computers. So if one computer is infected, the problem stays in that room. Then we have one connection to the internet, at head office, and our security team watches it day and night. Finally, people who work from home or on the road connect through secure remote access. They get in only after we have checked who they are."
+      },
+      "checker": {
+        "status": "flagged",
+        "markings": [
+          {
+            "id": "s2.m1",
+            "targetIds": [
+              "s2.b2",
+              "s2.img1"
+            ],
+            "appearAtMs": 10000,
+            "anchorText": "All twelve warehouses connect",
+            "shape": "box",
+            "label": "Architecture likely wrong",
+            "detail": "All 12 warehouses connect through head office, while common practice is to connect each site straight to cloud services.",
+            "_placeholder": "PLACEHOLDER until the VLM drafting run (v1.1 section 4, C-14): flag text written by the content author, not drafted by a VLM.",
+            "_whyWrong": "The rule assumes the systems live in the cloud; Kestrel Bay's warehouse systems run in its own data centre at head office.",
+            "_note": "Narration estimate at 150 words per minute; re-set from real audio (or an SSML mark) after TTS."
+          }
+        ]
+      },
+      "routineQuestion": {
+        "id": "s2.question.routine",
+        "voice": "chair",
+        "text": "Thank you, Daniel. Before we move on, can you tell us why you chose this design?",
+        "_open": "R-4 / C-18 default: generic justification question. Alternative (v1): 'Thank you, Daniel. Before we move on, could you say a little more about how the warehouses connect?'"
+      },
+      "participantQuestions": {
+        "explain": {
+          "id": "s2.question.explain",
+          "voice": "participant",
+          "text": "Could you explain why all the warehouses connect through head office?"
+        },
+        "challenge": {
+          "id": "s2.question.challenge",
+          "voice": "participant",
+          "text": "My checker flags this slide: \"Architecture likely wrong.\" What do you say to that?"
+        }
+      },
+      "answers": {
+        "mode": "joined",
+        "opening": {
+          "id": "s2.answer.part1",
+          "voice": "ciso",
+          "text": "This design is the right one for us."
+        },
+        "reasonBody": {
+          "id": "s2.answer.part2",
+          "voice": "ciso",
+          "text": "Our warehouse systems run in our own data centre at head office, not in the cloud, so every scan goes there anyway. A direct link to the cloud at each warehouse would only add twelve more doors to guard."
+        },
+        "closing": {
+          "id": "s2.answer.part3",
+          "voice": "ciso",
+          "text": "That is the plan I recommend."
+        },
+        "_note": "Mode 'joined' (Architecture 4.1, finding 6): tools/tts builds the full answer from part1 + part2 + part3 and the short answer from part1 + part3, so the shared sentences are the same audio in both. Line ids are neutral; which answer a participant hears is chosen by the server (denial slide, Architecture 5.5) and served under a hashed audio name. Alternative: mode 'whole'."
+      },
+      "_limitation": "C-17: diagram and narration place the main data centre at head office, which is half of the reason."
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T2a",
+      "point": "T2a",
+      "after": "s2"
+    },
+    {
+      "kind": "action",
+      "id": "s2.action",
+      "forSlide": "s2"
+    },
+    {
+      "kind": "question",
+      "id": "s2.question",
+      "forSlide": "s2"
+    },
+    {
+      "kind": "answer",
+      "id": "s2.answer",
+      "forSlide": "s2"
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T2b",
+      "point": "T2b",
+      "after": "s2.answer"
+    },
+    {
+      "kind": "slide",
+      "id": "s3",
+      "layout": [
+        {
+          "kind": "title",
+          "id": "s3.title",
+          "text": "What the $2.4 million pays for"
+        },
+        {
+          "kind": "number",
+          "id": "s3.num1",
+          "value": "$780,000",
+          "caption": "Firewalls for 13 sites, with 3 years of support"
+        },
+        {
+          "kind": "number",
+          "id": "s3.num2",
+          "value": "$960,000",
+          "caption": "24-hour monitoring of our network, 2 years"
+        },
+        {
+          "kind": "number",
+          "id": "s3.num3",
+          "value": "$310,000",
+          "caption": "Secure remote access for 1,400 staff"
+        },
+        {
+          "kind": "number",
+          "id": "s3.num4",
+          "value": "$350,000",
+          "caption": "Installation and staff training"
+        },
+        {
+          "kind": "number",
+          "id": "s3.num5",
+          "value": "$2,400,000",
+          "caption": "Total"
+        }
+      ],
+      "narration": {
+        "id": "s3.narration",
+        "voice": "ciso",
+        "text": "Now to the money, and where the two point four million dollars goes. The first line is the firewalls for all thirteen sites, with three years of support: seven hundred and eighty thousand dollars. The largest line is round-the-clock monitoring for two years: nine hundred and sixty thousand dollars. For that, a team of specialists watches our network every hour of every day, and they can close a door within minutes if something looks wrong. We could not build that team ourselves for this price. Next is secure remote access for all fourteen hundred staff: three hundred and ten thousand dollars. And finally, installation and staff training: three hundred and fifty thousand dollars. Most break-ins start with a fake email, so training our people is some of the best value on this page. Together, that is two point four million dollars."
+      },
+      "checker": {
+        "status": "flagged",
+        "markings": [
+          {
+            "id": "s3.m1",
+            "targetIds": [
+              "s3.num1"
+            ],
+            "appearAtMs": 11000,
+            "anchorText": "seven hundred and eighty thousand dollars",
+            "shape": "box",
+            "label": "Firewalls likely too expensive, cheaper ones available",
+            "detail": "Firewalls for small offices cost about $5,000 each, so 13 units should cost about $65,000, not $780,000.",
+            "_placeholder": "PLACEHOLDER until the VLM drafting run (v1.1 section 4, C-14): flag text written by the content author, not drafted by a VLM.",
+            "_source": "Label is Oliver's wording from his prompt (finding 8); no length limit (C-8 open).",
+            "_whyWrong": "Compares with office firewalls; a warehouse with hundreds of scanners needs a larger model, and the price includes support and next-day replacement."
+          }
+        ]
+      },
+      "routineQuestion": {
+        "id": "s3.question.routine",
+        "voice": "chair",
+        "text": "Thank you, Daniel. Before we move on, can you tell us why you chose to spend the money this way?",
+        "_open": "R-4 / C-18 default. Alternative (v1): 'Thank you, Daniel. The firewalls are a large line. Could you say a little more about that cost?'"
+      },
+      "participantQuestions": {
+        "explain": {
+          "id": "s3.question.explain",
+          "voice": "participant",
+          "text": "Could you explain why the firewalls cost $780,000?"
+        },
+        "challenge": {
+          "id": "s3.question.challenge",
+          "voice": "participant",
+          "text": "My checker flags this slide: \"Firewalls likely too expensive, cheaper ones available.\" What do you say to that?"
+        }
+      },
+      "answers": {
+        "mode": "joined",
+        "opening": {
+          "id": "s3.answer.part1",
+          "voice": "ciso",
+          "text": "This is the right way to spend the money."
+        },
+        "reasonBody": {
+          "id": "s3.answer.part2",
+          "voice": "ciso",
+          "text": "Take the firewalls: an office model would not cope with our warehouses, where hundreds of scanners run day and night. The price also covers next-day replacement at every site, so a warehouse is never left unprotected."
+        },
+        "closing": {
+          "id": "s3.answer.part3",
+          "voice": "ciso",
+          "text": "That is the plan I recommend."
+        },
+        "_note": "Mode 'joined' (Architecture 4.1, finding 6): tools/tts builds the full answer from part1 + part2 + part3 and the short answer from part1 + part3, so the shared sentences are the same audio in both. Line ids are neutral; which answer a participant hears is chosen by the server (denial slide, Architecture 5.5) and served under a hashed audio name. Alternative: mode 'whole'."
+      },
+      "template": "numbers",
+      "_layoutNote": "Shown as a simple cost table, one row per number block, total in bold. Each v1.1 row is split into caption (text before the colon) and value (amount)."
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T3a",
+      "point": "T3a",
+      "after": "s3"
+    },
+    {
+      "kind": "action",
+      "id": "s3.action",
+      "forSlide": "s3"
+    },
+    {
+      "kind": "question",
+      "id": "s3.question",
+      "forSlide": "s3"
+    },
+    {
+      "kind": "answer",
+      "id": "s3.answer",
+      "forSlide": "s3"
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T3b",
+      "point": "T3b",
+      "after": "s3.answer"
+    },
+    {
+      "kind": "slide",
+      "id": "s4",
+      "layout": [
+        {
+          "kind": "title",
+          "id": "s4.title",
+          "text": "Ready in 8 months, before the insurance renewal"
+        },
+        {
+          "kind": "chart",
+          "id": "s4.chart1",
+          "chartType": "timeline",
+          "data": {
+            "axis": {
+              "min": 1,
+              "max": 10
+            },
+            "series": [],
+            "markers": [
+              {
+                "id": "s4.mk.ready",
+                "at": 8,
+                "label": "Ready"
+              },
+              {
+                "id": "s4.mk.renewal",
+                "at": 10,
+                "label": "Insurance renewal"
+              }
+            ]
+          },
+          "alt": "Milestone line, months 1 to 10 on the horizontal axis, with two markers only: month 8 labelled Ready, month 10 labelled Insurance renewal. No phase bars",
+          "caption": "Schedule: phase 1, months 1 to 2; phase 2, months 3 to 7; phase 3, months 5 to 8",
+          "_pending": "v1.1 has this schedule line as its own block s4.note1 (kind 'note', small type, foot of slide). The schema has no note block, so it is carried as the chart caption. Schema extension needed: a small-type note block, or a caption style and position. The renderer must show it in small type and must not draw phase bars (finding 3, C-16)."
+        },
+        {
+          "kind": "bullet",
+          "id": "s4.b1",
+          "text": "Phase 1, design and ordering: 2 months"
+        },
+        {
+          "kind": "bullet",
+          "id": "s4.b2",
+          "text": "Phase 2, firewalls installed at all 13 sites: 5 months"
+        },
+        {
+          "kind": "bullet",
+          "id": "s4.b3",
+          "text": "Phase 3, monitoring set up and staff trained: 4 months"
+        },
+        {
+          "kind": "number",
+          "id": "s4.num1",
+          "value": "Ready in 8 months, renewal in 10 months"
+        },
+        {
+          "kind": "number",
+          "id": "s4.num2",
+          "value": "about $1.2 million in lost shipments",
+          "caption": "One day of stopped warehouses"
+        }
+      ],
+      "narration": {
+        "id": "s4.narration",
+        "voice": "ciso",
+        "text": "So when will this be ready? The work comes in three phases. Phase one, design and ordering, takes two months. Phase two, installing the firewalls at all thirteen sites, takes five months. Phase three, setting up the monitoring and training our staff, takes four months. Altogether, we are ready in eight months. Our insurance renewal is in ten months, so that gives us two months of margin. Why does the timing matter? Because the risk is real, and it is expensive. If our warehouses stop for a single day, we lose about one point two million dollars in shipments. That is half of this request, gone in one day. And an attack rarely stops things for only one day. If we start today, we are protected well before the renewal. If we wait another quarter, we miss it."
+      },
+      "checker": {
+        "status": "flagged",
+        "markings": [
+          {
+            "id": "s4.m1",
+            "targetIds": [
+              "s4.b1",
+              "s4.b2",
+              "s4.b3",
+              "s4.num1"
+            ],
+            "appearAtMs": 18000,
+            "anchorText": "Altogether, we are ready in eight months",
+            "shape": "box",
+            "label": "Numbers do not add up",
+            "detail": "The three phases add up to 11 months, but the slide says the work is done in 8 months.",
+            "_placeholder": "PLACEHOLDER until the VLM drafting run (v1.1 section 4, C-14): flag text written by the content author, not drafted by a VLM.",
+            "_whyWrong": "Correct sum, but assumes the phases run one after another; phase 3 starts in month 5 while phase 2 runs until month 7."
+          }
+        ]
+      },
+      "routineQuestion": {
+        "id": "s4.question.routine",
+        "voice": "chair",
+        "text": "Thank you, Daniel. Before we move on, can you tell us why you chose this timeline?",
+        "_open": "R-4 / C-18 default. Alternative (v1): 'Thank you, Daniel. Could you say a little more about how the eight months come together?'"
+      },
+      "participantQuestions": {
+        "explain": {
+          "id": "s4.question.explain",
+          "voice": "participant",
+          "text": "Could you explain how the three phases fit into eight months?"
+        },
+        "challenge": {
+          "id": "s4.question.challenge",
+          "voice": "participant",
+          "text": "My checker flags this slide: \"Numbers do not add up.\" What do you say to that?"
+        }
+      },
+      "answers": {
+        "mode": "joined",
+        "opening": {
+          "id": "s4.answer.part1",
+          "voice": "ciso",
+          "text": "Eight months is the right timeline for us."
+        },
+        "reasonBody": {
+          "id": "s4.answer.part2",
+          "voice": "ciso",
+          "text": "Phase three starts while phase two is still running, with a different team. Our own team begins the monitoring in month five, while our network partner is still installing the firewalls."
+        },
+        "closing": {
+          "id": "s4.answer.part3",
+          "voice": "ciso",
+          "text": "That is the plan I recommend."
+        },
+        "_note": "Mode 'joined' (Architecture 4.1, finding 6): tools/tts builds the full answer from part1 + part2 + part3 and the short answer from part1 + part3, so the shared sentences are the same audio in both. Line ids are neutral; which answer a participant hears is chosen by the server (denial slide, Architecture 5.5) and served under a hashed audio name. Alternative: mode 'whole'."
+      },
+      "_limitation": "C-16: a participant who reads the small-type schedule can still work out the overlap."
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T4a",
+      "point": "T4a",
+      "after": "s4"
+    },
+    {
+      "kind": "action",
+      "id": "s4.action",
+      "forSlide": "s4"
+    },
+    {
+      "kind": "question",
+      "id": "s4.question",
+      "forSlide": "s4"
+    },
+    {
+      "kind": "answer",
+      "id": "s4.answer",
+      "forSlide": "s4"
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T4b",
+      "point": "T4b",
+      "after": "s4.answer"
+    },
+    {
+      "kind": "slide",
+      "id": "s5",
+      "layout": [
+        {
+          "kind": "title",
+          "id": "s5.title",
+          "text": "The decision today"
+        },
+        {
+          "kind": "number",
+          "id": "s5.num1",
+          "value": "$2.4 million",
+          "caption": "for approval today"
+        },
+        {
+          "kind": "bullet",
+          "id": "s5.b1",
+          "text": "A firewall at all 13 sites and one watched internet connection"
+        },
+        {
+          "kind": "bullet",
+          "id": "s5.b2",
+          "text": "24-hour monitoring of our network for two years"
+        },
+        {
+          "kind": "bullet",
+          "id": "s5.b3",
+          "text": "Secure remote access and training for all staff"
+        },
+        {
+          "kind": "bullet",
+          "id": "s5.b4",
+          "text": "Ready in 8 months, before our insurance renewal"
+        }
+      ],
+      "narration": {
+        "id": "s5.narration",
+        "voice": "ciso",
+        "text": "Let me bring this together. Every one of our thirteen sites gets a firewall, and we keep a single, watched connection to the internet. Specialists monitor our network around the clock for two years. Everyone who works away from the office connects securely, and all staff learn to spot fake emails. The whole plan costs two point four million dollars, and it is ready in eight months, before our insurance renewal. If we wait, we face a much higher insurance premium, or no cover at all, and the contract with our largest customer is at risk. I am confident this is the right plan for this company: the right size, at the right time. So I am asking the board to approve two point four million dollars today. Thank you."
+      },
+      "checker": {
+        "status": "noIssues",
+        "appearAtMs": 8000,
+        "_open": "C-3"
+      }
+    },
+    {
+      "kind": "rating",
+      "id": "rating.T5",
+      "point": "T5",
+      "after": "s5",
+      "optionalBy": "ratingAfterUnflaggedSlides"
+    },
+    {
+      "kind": "budget",
+      "id": "budget",
+      "_open": "OPEN E default; untimed (R-11, timing.formWindowMs null)",
+      "prompt": "Daniel Hale asks the board to approve $2.4 million for the protection plan. Our insurance renewal and our largest customer's contract depend on this protection. How do you vote?",
+      "options": [
+        {
+          "id": "approveFull",
+          "label": "Approve the full $2.4 million"
+        },
+        {
+          "id": "approveReduced",
+          "label": "Approve a reduced amount",
+          "followUp": {
+            "label": "What amount would you approve?",
+            "input": "currency",
+            "min": 0,
+            "max": 2400000,
+            "step": 100000
+          }
+        },
+        {
+          "id": "defer",
+          "label": "Defer the decision to a later meeting"
+        },
+        {
+          "id": "reject",
+          "label": "Reject the request"
+        }
+      ],
+      "confidence": {
+        "label": "How sure are you of your vote?",
+        "scale": {
+          "min": 0,
+          "max": 10,
+          "minLabel": "Not sure at all",
+          "maxLabel": "Completely sure"
+        }
+      }
+    },
+    {
+      "kind": "background",
+      "id": "background",
+      "_decided": "Decided 2026-10-23: all seven items at the end, after the budget decision, in Oliver's order (OPEN F closed). C-10: 'Prefer not to say' and skipping are ethics additions. R-8: moderator scales open.",
+      "intro": "Finally, a few questions about you. They help us describe who took part. You can skip any question.",
+      "items": [
+        {
+          "kind": "single",
+          "id": "field",
+          "label": "What is your main field of expertise?",
+          "otherOptionId": "field.other",
+          "options": [
+            {
+              "id": "field.business",
+              "label": "Business and management"
+            },
+            {
+              "id": "field.finance",
+              "label": "Finance or accounting"
+            },
+            {
+              "id": "field.law",
+              "label": "Law"
+            },
+            {
+              "id": "field.it",
+              "label": "Information technology"
+            },
+            {
+              "id": "field.cyber",
+              "label": "Cybersecurity"
+            },
+            {
+              "id": "field.engineering",
+              "label": "Engineering"
+            },
+            {
+              "id": "field.health",
+              "label": "Health care or medicine"
+            },
+            {
+              "id": "field.education",
+              "label": "Education"
+            },
+            {
+              "id": "field.naturalSciences",
+              "label": "Natural sciences"
+            },
+            {
+              "id": "field.socialSciences",
+              "label": "Social sciences or humanities"
+            },
+            {
+              "id": "field.arts",
+              "label": "Arts, media or design"
+            },
+            {
+              "id": "field.government",
+              "label": "Government or public service"
+            },
+            {
+              "id": "field.studentNoField",
+              "label": "Student, no field yet"
+            },
+            {
+              "id": "field.other",
+              "label": "Other (please specify)"
+            },
+            {
+              "id": "field.preferNot",
+              "label": "Prefer not to say"
+            }
+          ]
+        },
+        {
+          "kind": "country",
+          "id": "country",
+          "label": "In which country do you live?",
+          "extraOptions": [
+            {
+              "id": "country.preferNot",
+              "label": "Prefer not to say"
+            }
+          ],
+          "_note": "Country list (ISO 3166)"
+        },
+        {
+          "kind": "single",
+          "id": "age",
+          "label": "What is your age?",
+          "options": [
+            {
+              "id": "age.a18",
+              "label": "18 to 24"
+            },
+            {
+              "id": "age.a25",
+              "label": "25 to 34"
+            },
+            {
+              "id": "age.a35",
+              "label": "35 to 44"
+            },
+            {
+              "id": "age.a45",
+              "label": "45 to 54"
+            },
+            {
+              "id": "age.a55",
+              "label": "55 to 64"
+            },
+            {
+              "id": "age.a65",
+              "label": "65 or older"
+            },
+            {
+              "id": "age.preferNot",
+              "label": "Prefer not to say"
+            }
+          ]
+        },
+        {
+          "kind": "single",
+          "id": "jobLevel",
+          "label": "What is your current job level?",
+          "options": [
+            {
+              "id": "jobLevel.student",
+              "label": "Student"
+            },
+            {
+              "id": "jobLevel.employee",
+              "label": "Employee"
+            },
+            {
+              "id": "jobLevel.leadership",
+              "label": "Leadership"
+            },
+            {
+              "id": "jobLevel.cLevel",
+              "label": "C-Level"
+            },
+            {
+              "id": "jobLevel.preferNot",
+              "label": "Prefer not to say"
+            }
+          ]
+        },
+        {
+          "kind": "single",
+          "id": "education",
+          "label": "What is the highest level of education you have completed?",
+          "options": [
+            {
+              "id": "education.secondary",
+              "label": "Secondary school or less"
+            },
+            {
+              "id": "education.college",
+              "label": "College diploma or trade certificate"
+            },
+            {
+              "id": "education.bachelor",
+              "label": "Bachelor's degree"
+            },
+            {
+              "id": "education.master",
+              "label": "Master's degree"
+            },
+            {
+              "id": "education.doctorate",
+              "label": "Doctorate"
+            },
+            {
+              "id": "education.other",
+              "label": "Other"
+            },
+            {
+              "id": "education.preferNot",
+              "label": "Prefer not to say"
+            }
+          ]
+        },
+        {
+          "kind": "scale",
+          "id": "cyberKnowledge",
+          "label": "How would you rate your own knowledge of cybersecurity?",
+          "scale": {
+            "min": 1,
+            "max": 5,
+            "minLabel": "None",
+            "maxLabel": "Expert",
+            "pointLabels": {
+              "2": "Basic",
+              "3": "Moderate",
+              "4": "Good"
+            }
+          },
+          "_open": "R-8: alternative 0 to 10. Planned moderator (Abstract v8)."
+        },
+        {
+          "kind": "single",
+          "id": "aiUse",
+          "label": "How often do you use AI tools such as chatbots or writing assistants?",
+          "options": [
+            {
+              "id": "aiUse.never",
+              "label": "Never"
+            },
+            {
+              "id": "aiUse.lessMonthly",
+              "label": "Less than once a month"
+            },
+            {
+              "id": "aiUse.monthly",
+              "label": "About once a month"
+            },
+            {
+              "id": "aiUse.weekly",
+              "label": "About once a week"
+            },
+            {
+              "id": "aiUse.severalWeekly",
+              "label": "Several times a week"
+            },
+            {
+              "id": "aiUse.daily",
+              "label": "Every day"
+            }
+          ],
+          "_open": "R-8. Planned moderator (Abstract v8)."
+        },
+        {
+          "kind": "honeypot",
+          "id": "hp",
+          "label": "Hidden honeypot field, must stay empty",
+          "_note": "OPEN U. Hidden from people. A plainer label (for example a generic form word) would hide its purpose from bots better; to decide."
+        }
+      ]
+    },
+    {
+      "kind": "flagReview",
+      "id": "review",
+      "_open": "OPEN G default: included, checker group only (options.flagReview). Alternative: add 'Not sure'.",
+      "intro": "During the meeting, your checker flagged three slides. For each flag, do you think it was correct?",
+      "response": {
+        "type": "binary",
+        "options": [
+          {
+            "id": "correct",
+            "label": "Correct"
+          },
+          {
+            "id": "incorrect",
+            "label": "Incorrect"
+          }
+        ]
+      },
+      "items": [
+        {
+          "markingId": "s2.m1"
+        },
+        {
+          "markingId": "s3.m1"
+        },
+        {
+          "markingId": "s4.m1"
+        }
+      ],
+      "_note": "Labels default to the marking labels and change with them after the VLM run. Each row shows a small image of the slide with its marking."
+    },
+    {
+      "kind": "debrief",
+      "id": "debrief",
+      "showSessionCode": true,
+      "_source_showSessionCode": "Architecture default (FO-15), not in v1.1.",
+      "paragraphs": {
+        "both": [
+          "Thank you for taking part.",
+          "Here is what this study was about. None of the five slides had a real issue. The plan, the costs and the timeline were all correct for this company.",
+          "Some participants saw an AI slide checker during the meeting, and others did not. The study measures how flags from an AI checker affect how much people without expert knowledge trust the presenter. It also looks at how the presenter's answers change that trust.",
+          "The company, the people and the meeting are fictional."
+        ],
+        "checker": [
+          "You were in the group with the checker. The flags you saw were fixed in advance, so every participant in your group saw the same flags. Every flag was wrong for this company."
+        ],
+        "neutral": [
+          "You were in the group without the checker. In the other group, a checker flagged slides 2, 3 and 4. The flags were fixed in advance, and every flag was wrong for this company."
+        ],
+        "end": [
+          "If you have questions about the study, please contact [CONTACT NAME, EMAIL].",
+          "[ETHICS AND DATA WITHDRAWAL TEXT, see OPEN M]"
+        ],
+        "_placeholder_debrief": "Fallback paragraph (v1.1 section 10). After the VLM drafting run, the middle sentence becomes: 'The flags you saw were drafted with a real AI tool and then fixed in advance, so every participant in your group saw the same flags.' Not true before the run (finding 1)."
+      }
+    }
+  ]
+}

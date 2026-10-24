@@ -1,0 +1,26 @@
+.countdown {
+  margin: 0 0 1.25rem;
+}
+.text {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+.text strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.track {
+  height: 6px;
+  background: var(--track);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.bar {
+  height: 100%;
+  background: var(--navy);
+  transition: width 0.2s linear;
+}
+.low {
+  background: var(--warn);
+}

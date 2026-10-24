@@ -1,0 +1,1115 @@
+{
+  "version": "1.0.0",
+  "_status": "Draft v1, 2026-10-23. Content from Prototype/03 - Study Content v1.md. OPEN points are not decided; defaults follow Prototype/01.",
+  "timing": {
+    "postAudioViewMs": 10000,
+    "ratingWindowMs": 15000,
+    "actionWindowMs": 15000,
+    "_open_actionWindowMs": "OPEN C: proposed 15 s; on timeout record none and treat as say nothing",
+    "postAnswerViewMs": 0,
+    "_open_postAnswerViewMs": "Further open point 4: view time between answer audio and rating",
+    "questionTextMs": 3500,
+    "_open_questionTextMs": "OPEN D: participant question shown as text for 3 to 4 s",
+    "msPerWordEstimate": 400
+  },
+  "voices": {
+    "ciso": {
+      "name": "TBD",
+      "provider": "google-tts",
+      "languageCode": "en-US",
+      "_open": "OPEN L"
+    },
+    "chair": {
+      "name": "TBD",
+      "provider": "google-tts",
+      "languageCode": "en-US",
+      "_open": "OPEN L: clearly different from the CISO"
+    },
+    "participant": {
+      "name": null,
+      "_open": "OPEN D: only if participant questions are voiced"
+    }
+  },
+  "labels": {
+    "noIssueLabel": "No issues found",
+    "_open_noIssueLabel": "Abstract v8 wording; Oliver has not decided between this and a supporting label (v8 change file)",
+    "panelTitle": "Slide checker",
+    "panelIdleLabel": "",
+    "_open_panelIdleLabel": "Further open point 3: what the panel shows before a flag or label appears",
+    "ratingSubmit": "Next",
+    "timeLeft": "Time left"
+  },
+  "colors": {
+    "flag": "#E8A33D",
+    "noIssue": "#5B8C6A",
+    "_note": "Colour tokens; flag colour is configurable"
+  },
+  "denialRotation": {
+    "slides": [
+      "s2",
+      "s3",
+      "s4"
+    ],
+    "rule": "balanced within each group, assigned server-side at session creation"
+  },
+  "ratingItems": [
+    {
+      "id": "trust",
+      "text": "How much do you trust Daniel Hale right now?",
+      "min": 0,
+      "max": 10,
+      "anchors": {
+        "0": "Not at all",
+        "10": "Completely"
+      }
+    },
+    {
+      "id": "competence",
+      "text": "How competent is Daniel Hale?",
+      "min": 0,
+      "max": 10,
+      "anchors": {
+        "0": "Not competent at all",
+        "10": "Very competent"
+      },
+      "meti": "expertise: incompetent / competent"
+    },
+    {
+      "id": "benevolence",
+      "text": "How responsible is Daniel Hale?",
+      "min": 0,
+      "max": 10,
+      "anchors": {
+        "0": "Not responsible at all",
+        "10": "Very responsible"
+      },
+      "meti": "benevolence: irresponsible / responsible"
+    },
+    {
+      "id": "integrity",
+      "text": "How honest is Daniel Hale?",
+      "min": 0,
+      "max": 10,
+      "anchors": {
+        "0": "Not honest at all",
+        "10": "Very honest"
+      },
+      "meti": "integrity: dishonest / honest"
+    }
+  ],
+  "ratingScreen": {
+    "instruction": "How do you see Daniel Hale right now? Go with your first impression.",
+    "_open": "OPEN I: all four on 0 to 10 (default) or the three METI items on 7 points; OPEN H: partial ratings on timeout"
+  },
+  "actions": {
+    "checker": {
+      "prompt": "What do you do now?",
+      "options": [
+        {
+          "id": "none",
+          "text": "Say nothing"
+        },
+        {
+          "id": "explain",
+          "text": "Ask Daniel to explain",
+          "showsQuestion": "participantQuestions.explain"
+        },
+        {
+          "id": "challenge",
+          "text": "Challenge Daniel with the checker's finding",
+          "showsQuestion": "participantQuestions.challenge"
+        }
+      ],
+      "note": "If you say nothing, the chair asks a question."
+    },
+    "neutral": {
+      "prompt": "Do you have a question about this slide?",
+      "options": [
+        {
+          "id": "yes",
+          "text": "Yes"
+        },
+        {
+          "id": "no",
+          "text": "No"
+        }
+      ],
+      "note": "The chair will now ask a question."
+    }
+  },
+  "scenario": {
+    "company": {
+      "name": "Kestrel Bay Logistics",
+      "fictional": true,
+      "description": "Freight and warehousing company in western Canada: head office and main data centre in the Vancouver area, 12 warehouses, 1,400 staff, about $480 million revenue a year"
+    },
+    "meeting": "Quarterly board meeting, agenda item 4: protection of our network",
+    "budgetRequest": {
+      "amount": 2400000,
+      "currency": "CAD",
+      "display": "$2.4 million",
+      "shownOn": [
+        "s1",
+        "s3",
+        "s5"
+      ],
+      "dependsOn": "Renewal of the company's cyber insurance in 10 months, and the new contract with its largest customer; both require this protection"
+    },
+    "ciso": {
+      "name": "Daniel Hale",
+      "role": "Chief Information Security Officer",
+      "pronoun": "he",
+      "profile": "Presenting today is Daniel Hale, our Chief Information Security Officer. Daniel has led our security for six years. Before he joined us, he spent twelve years protecting the networks of a national bank and a large hospital group. This year he led our response to two attempted break-ins, and both were stopped before any harm was done. He holds the main professional certifications in his field.",
+      "profileDelivery": "read by the chair in the opening scene, with a profile card on screen"
+    },
+    "chair": {
+      "name": "Margaret Lin",
+      "role": "Chair of the board",
+      "pronoun": "she"
+    }
+  },
+  "scenes": [
+    {
+      "id": "audioTest",
+      "type": "audioTest",
+      "groups": "both",
+      "instruction": "Please turn on your sound. Press Play and listen. Then choose the word you heard.",
+      "clip": {
+        "text": "This is a short sound check. If you can hear this clearly, the word to choose is lantern.",
+        "audioKey": "setup.audioTest",
+        "voice": "chair",
+        "durationMs": null
+      },
+      "correctOption": "lantern",
+      "options": [
+        "river",
+        "lantern",
+        "pencil",
+        "garden"
+      ],
+      "onWrong": "That was not the word in the clip. Please check your sound and try once more.",
+      "maxAttempts": 2,
+      "exampleScene": {
+        "text": "Welcome to the board meeting of Kestrel Bay Logistics. This is a short example of how the meeting will look and sound. The slides appear on the screen, and you will hear each speaker.",
+        "audioKey": "setup.example",
+        "voice": "chair",
+        "durationMs": null,
+        "slide": [
+          {
+            "id": "ex.title",
+            "kind": "title",
+            "text": "Board meeting, agenda"
+          },
+          {
+            "id": "ex.b1",
+            "kind": "bullet",
+            "text": "1. Minutes of the last meeting"
+          },
+          {
+            "id": "ex.b2",
+            "kind": "bullet",
+            "text": "2. Quarterly results"
+          },
+          {
+            "id": "ex.b3",
+            "kind": "bullet",
+            "text": "3. New warehouse lease"
+          },
+          {
+            "id": "ex.b4",
+            "kind": "bullet",
+            "text": "4. Protection of our network"
+          }
+        ],
+        "checkerPanel": {
+          "groups": "checker",
+          "state": "idle",
+          "_open": "OPEN A"
+        }
+      },
+      "_open": "OPEN U (attention check) and OPEN A (example scene)"
+    },
+    {
+      "id": "checkerIntro",
+      "type": "checkerIntro",
+      "groups": "checker",
+      "text": [
+        "In this meeting you wear smart glasses with a slide checker. The checker is an AI tool.",
+        "While the presenter speaks, it looks at each slide through the camera in your glasses.",
+        "If it sees a possible issue, it marks that part of the slide and shows a short note in the checker panel.",
+        "If it sees none, the panel shows: No issues found."
+      ],
+      "button": "Continue",
+      "_open": "OPEN A: separate text screen shown after the example scene"
+    },
+    {
+      "id": "opening",
+      "type": "opening",
+      "groups": "both",
+      "introText": [
+        "You are a member of the board of Kestrel Bay Logistics.",
+        "Today the company's head of security asks the board to approve a budget. Listen to the presentation.",
+        "After some slides you will rate the presenter, and at the end you will vote on the budget."
+      ],
+      "_introNote": "Role instruction for both groups: a proposal, see further open point 1",
+      "profileCard": {
+        "name": "Daniel Hale",
+        "role": "Chief Information Security Officer, Kestrel Bay Logistics",
+        "lines": [
+          "Head of security at Kestrel Bay Logistics for 6 years",
+          "12 years before that protecting the networks of a national bank and a large hospital group",
+          "Led the response to two attempted break-ins this year, both stopped before any harm",
+          "Holds the main professional certifications in his field"
+        ],
+        "_note": "Shown while the chair reads the profile"
+      },
+      "lines": [
+        {
+          "speaker": "chair",
+          "text": "Good morning, everyone, and thank you for being here. Let us move to item four on our agenda: the protection of our network.",
+          "audioKey": "opening.chair.1",
+          "voice": "chair",
+          "durationMs": null
+        },
+        {
+          "speaker": "chair",
+          "text": "Presenting today is Daniel Hale, our Chief Information Security Officer. Daniel has led our security for six years. Before he joined us, he spent twelve years protecting the networks of a national bank and a large hospital group. This year he led our response to two attempted break-ins, and both were stopped before any harm was done. He holds the main professional certifications in his field.",
+          "audioKey": "opening.chair.2",
+          "voice": "chair",
+          "durationMs": null
+        },
+        {
+          "speaker": "chair",
+          "text": "Daniel is asking the board for two point four million dollars to strengthen the protection of our warehouses and our head office. Our insurer and our largest customer both expect this protection to be in place within the year. We will hear his five slides and ask our questions along the way. The board will decide on the budget today.",
+          "audioKey": "opening.chair.3",
+          "voice": "chair",
+          "durationMs": null
+        },
+        {
+          "speaker": "chair",
+          "text": "Daniel, the floor is yours.",
+          "audioKey": "opening.chair.4",
+          "voice": "chair",
+          "durationMs": null
+        },
+        {
+          "speaker": "ciso",
+          "text": "Thank you, Margaret. Good morning, everyone.",
+          "audioKey": "opening.ciso.5",
+          "voice": "ciso",
+          "durationMs": null
+        }
+      ],
+      "panel": {
+        "groups": "checker",
+        "state": "idle",
+        "_open": "OPEN A: idle panel (no label) during the opening"
+      },
+      "marking": null
+    },
+    {
+      "id": "rating.T0",
+      "type": "rating",
+      "groups": "both",
+      "ratingKey": "T0",
+      "after": "opening",
+      "items": "ratingItems",
+      "windowMs": "timing.ratingWindowMs"
+    },
+    {
+      "id": "s1",
+      "type": "slide",
+      "groups": "both",
+      "title": "Why we are here today",
+      "layout": [
+        {
+          "id": "s1.title",
+          "kind": "title",
+          "text": "Why we are here today"
+        },
+        {
+          "id": "s1.num1",
+          "kind": "number",
+          "text": "$2.4 million: budget request for approval today"
+        },
+        {
+          "id": "s1.b1",
+          "kind": "bullet",
+          "text": "Our 12 warehouses and head office run on one network: orders, scanners, trucks and payroll"
+        },
+        {
+          "id": "s1.b2",
+          "kind": "bullet",
+          "text": "This year we stopped two attempted break-ins into that network"
+        },
+        {
+          "id": "s1.b3",
+          "kind": "bullet",
+          "text": "Our insurer requires stronger protection before renewal in 10 months"
+        },
+        {
+          "id": "s1.b4",
+          "kind": "bullet",
+          "text": "Our largest customer requires the same in its new contract"
+        }
+      ],
+      "narration": {
+        "text": "I will keep this short and clear, because I am asking you for a decision today. Everything we do runs on one network. Orders come in, the scanners in our twelve warehouses track every pallet, our trucks get their routes, and our fourteen hundred people get paid. If that network stops, the company stops. This year, we stopped two attempted break-ins into that network. Both were caught early, and no harm was done. But attackers are getting better, and we need to stay ahead of them. Two outside parties have also told us what they expect. Our insurer will renew our cyber insurance in ten months only if stronger protection is in place. And our largest customer has written the same requirement into its new contract. So today, I am asking for two point four million dollars to put that protection in place. On the next four slides, I will show you what we will build, what it costs, and when it will be ready.",
+        "audioKey": "s1.narration",
+        "voice": "ciso",
+        "durationMs": null
+      },
+      "panel": {
+        "groups": "checker",
+        "state": "noIssue",
+        "appearAtMs": 8000,
+        "_open": "Further open point 3: when the no-issue label appears on slides 1 and 5"
+      },
+      "marking": null
+    },
+    {
+      "id": "rating.T1",
+      "type": "rating",
+      "groups": "both",
+      "ratingKey": "T1",
+      "after": "s1",
+      "items": "ratingItems",
+      "windowMs": "timing.ratingWindowMs",
+      "_open": "OPEN B: rating after slide 1"
+    },
+    {
+      "id": "s2",
+      "type": "slide",
+      "groups": "both",
+      "title": "How we will protect our 13 sites",
+      "layout": [
+        {
+          "id": "s2.title",
+          "kind": "title",
+          "text": "How we will protect our 13 sites"
+        },
+        {
+          "id": "s2.img1",
+          "kind": "image",
+          "text": "Network diagram: head office with the main data centre in the middle; 12 warehouse icons around it, each joined to head office by a line; a firewall shield at every site; one line from head office to a cloud labelled Internet; a laptop icon labelled Remote staff joined to head office by a dotted line"
+        },
+        {
+          "id": "s2.b1",
+          "kind": "bullet",
+          "text": "A firewall at every site keeps warehouse machines apart from office computers"
+        },
+        {
+          "id": "s2.b2",
+          "kind": "bullet",
+          "text": "All 12 warehouses connect to our data centre at head office"
+        },
+        {
+          "id": "s2.b3",
+          "kind": "bullet",
+          "text": "One internet connection, at head office, watched day and night"
+        },
+        {
+          "id": "s2.b4",
+          "kind": "bullet",
+          "text": "Staff at home or on the road use secure remote access"
+        }
+      ],
+      "narration": {
+        "text": "Let me show you how the network will look. Picture our head office in the middle of this diagram. Our main data centre sits there. All twelve warehouses connect to that data centre. That is the line you see from each warehouse to the centre. At every site, we put a firewall. Think of a firewall as a locked door with a guard. It decides what may come in and go out, and it keeps the warehouse machines apart from the office computers. So if one computer is infected, the problem stays in that room. Then we have one connection to the internet, at head office, and our security team watches it day and night. Finally, people who work from home or on the road connect through secure remote access. They get in only after we have checked who they are. This is a simple, proven design, and it fits the way we work.",
+        "audioKey": "s2.narration",
+        "voice": "ciso",
+        "durationMs": null
+      },
+      "panel": {
+        "groups": "checker",
+        "state": "flag"
+      },
+      "marking": {
+        "groups": "checker",
+        "targetIds": [
+          "s2.b2",
+          "s2.img1"
+        ],
+        "appearAtMs": 10000,
+        "anchorText": "All twelve warehouses connect",
+        "color": "flag",
+        "label": "Architecture likely wrong",
+        "detail": "All 12 warehouses route through head office, while common practice is to connect each site directly to the cloud.",
+        "_note": "appearAtMs estimated at 150 words per minute from anchorText; re-time after TTS"
+      },
+      "routineQuestion": {
+        "text": "Thank you, Daniel. Before we move on, could you say a little more about how the warehouses connect?",
+        "audioKey": "s2.question.routine",
+        "voice": "chair",
+        "durationMs": null
+      },
+      "participantQuestions": {
+        "explain": {
+          "text": "Could you explain why all the warehouses connect through head office?",
+          "audioKey": "s2.question.explain",
+          "durationMs": null
+        },
+        "challenge": {
+          "text": "My checker flags this slide: \"Architecture likely wrong.\" What do you say to that?",
+          "audioKey": "s2.question.challenge",
+          "durationMs": null
+        },
+        "_open": "OPEN D: shown as text in a speech bubble by default; audioKey reserved in case it is voiced"
+      },
+      "answers": {
+        "reason": {
+          "text": "This design is the right one for us. Our warehouse systems run in our own data centre at head office, not in the cloud, so every scan goes there anyway. A direct link at each warehouse would only add twelve more doors to guard. We have looked at this carefully, and it stays as planned.",
+          "audioKey": "s2.answer.reason",
+          "voice": "ciso",
+          "durationMs": null
+        },
+        "denial": {
+          "text": "This design is the right one for us. We have looked at this carefully, and it stays as planned.",
+          "audioKey": "s2.answer.denial",
+          "voice": "ciso",
+          "durationMs": null
+        }
+      }
+    },
+    {
+      "id": "rating.T2a",
+      "type": "rating",
+      "groups": "both",
+      "ratingKey": "T2a",
+      "after": "s2 (flag)",
+      "items": "ratingItems",
+      "windowMs": "timing.ratingWindowMs"
+    },
+    {
+      "id": "s2.action.checker",
+      "type": "action",
+      "groups": "checker",
+      "slideRef": "s2",
+      "variant": "checker",
+      "windowMs": "timing.actionWindowMs",
+      "timeoutChoice": "none"
+    },
+    {
+      "id": "s2.action.neutral",
+      "type": "action",
+      "groups": "neutral",
+      "slideRef": "s2",
+      "variant": "neutral",
+      "windowMs": "timing.actionWindowMs",
+      "timeoutChoice": "none"
+    },
+    {
+      "id": "s2.question",
+      "type": "question",
+      "groups": "both",
+      "slideRef": "s2",
+      "rule": "checker group: explain or challenge shows the participant's question; say nothing or timeout plays the chair's routine question. neutral group: always the chair's routine question",
+      "questionTextMs": "timing.questionTextMs"
+    },
+    {
+      "id": "s2.answer",
+      "type": "answer",
+      "groups": "both",
+      "slideRef": "s2",
+      "rule": "plays answers.denial if this slide is the session's denialSlide, else answers.reason"
+    },
+    {
+      "id": "rating.T2b",
+      "type": "rating",
+      "groups": "both",
+      "ratingKey": "T2b",
+      "after": "s2 (answer)",
+      "items": "ratingItems",
+      "windowMs": "timing.ratingWindowMs"
+    },
+    {
+      "id": "s3",
+      "type": "slide",
+      "groups": "both",
+      "title": "What the $2.4 million pays for",
+      "layout": [
+        {
+          "id": "s3.title",
+          "kind": "title",
+          "text": "What the $2.4 million pays for"
+        },
+        {
+          "id": "s3.num1",
+          "kind": "number",
+          "text": "Firewalls for 13 sites, with 3 years of support: $780,000"
+        },
+        {
+          "id": "s3.num2",
+          "kind": "number",
+          "text": "24-hour monitoring of our network, 2 years: $960,000"
+        },
+        {
+          "id": "s3.num3",
+          "kind": "number",
+          "text": "Secure remote access for 1,400 staff: $310,000"
+        },
+        {
+          "id": "s3.num4",
+          "kind": "number",
+          "text": "Installation and staff training: $350,000"
+        },
+        {
+          "id": "s3.num5",
+          "kind": "number",
+          "text": "Total: $2,400,000"
+        }
+      ],
+      "narration": {
+        "text": "Now to the money, and where the two point four million dollars goes. The first line is the firewalls for all thirteen sites, with three years of support: seven hundred and eighty thousand dollars. The largest line is round-the-clock monitoring for two years: nine hundred and sixty thousand dollars. For that, a team of specialists watches our network every hour of every day, and they can close a door within minutes if something looks wrong. We could not build that team ourselves for this price. Next is secure remote access for all fourteen hundred staff: three hundred and ten thousand dollars. And finally, installation and staff training: three hundred and fifty thousand dollars. Most break-ins start with a fake email, so training our people is some of the best value on this page. Together, that is two point four million dollars. Our finance team has checked every line, and each one is backed by a written quote from a supplier.",
+        "audioKey": "s3.narration",
+        "voice": "ciso",
+        "durationMs": null
+      },
+      "panel": {
+        "groups": "checker",
+        "state": "flag"
+      },
+      "marking": {
+        "groups": "checker",
+        "targetIds": [
+          "s3.num1"
+        ],
+        "appearAtMs": 11000,
+        "anchorText": "seven hundred and eighty thousand dollars",
+        "color": "flag",
+        "label": "Firewalls likely overpriced, cheaper ones available",
+        "detail": "Firewalls for small offices cost about $5,000 each, so 13 units should cost about $65,000, not $780,000.",
+        "_note": "appearAtMs estimated at 150 words per minute from anchorText; re-time after TTS"
+      },
+      "routineQuestion": {
+        "text": "Thank you, Daniel. The firewalls are a large line. Could you say a little more about that cost?",
+        "audioKey": "s3.question.routine",
+        "voice": "chair",
+        "durationMs": null
+      },
+      "participantQuestions": {
+        "explain": {
+          "text": "Could you explain why the firewalls cost $780,000?",
+          "audioKey": "s3.question.explain",
+          "durationMs": null
+        },
+        "challenge": {
+          "text": "My checker flags this slide: \"Firewalls likely overpriced, cheaper ones available.\" What do you say to that?",
+          "audioKey": "s3.question.challenge",
+          "durationMs": null
+        },
+        "_open": "OPEN D: shown as text in a speech bubble by default; audioKey reserved in case it is voiced"
+      },
+      "answers": {
+        "reason": {
+          "text": "These firewalls are the right ones for us. An office model would not cope with our warehouses, where hundreds of scanners run day and night. The price also covers next-day replacement at every site, so a warehouse is never left unprotected. We have looked at this carefully, and it stays as planned.",
+          "audioKey": "s3.answer.reason",
+          "voice": "ciso",
+          "durationMs": null
+        },
+        "denial": {
+          "text": "These firewalls are the right ones for us. We have looked at this carefully, and it stays as planned.",
+          "audioKey": "s3.answer.denial",
+          "voice": "ciso",
+          "durationMs": null
+        }
+      }
+    },
+    {
+      "id": "rating.T3a",
+      "type": "rating",
+      "groups": "both",
+      "ratingKey": "T3a",
+      "after": "s3 (flag)",
+      "items": "ratingItems",
+      "windowMs": "timing.ratingWindowMs"
+    },
+    {
+      "id": "s3.action.checker",
+      "type": "action",
+      "groups": "checker",
+      "slideRef": "s3",
+      "variant": "checker",
+      "windowMs": "timing.actionWindowMs",
+      "timeoutChoice": "none"
+    },
+    {
+      "id": "s3.action.neutral",
+      "type": "action",
+      "groups": "neutral",
+      "slideRef": "s3",
+      "variant": "neutral",
+      "windowMs": "timing.actionWindowMs",
+      "timeoutChoice": "none"
+    },
+    {
+      "id": "s3.question",
+      "type": "question",
+      "groups": "both",
+      "slideRef": "s3",
+      "rule": "checker group: explain or challenge shows the participant's question; say nothing or timeout plays the chair's routine question. neutral group: always the chair's routine question",
+      "questionTextMs": "timing.questionTextMs"
+    },
+    {
+      "id": "s3.answer",
+      "type": "answer",
+      "groups": "both",
+      "slideRef": "s3",
+      "rule": "plays answers.denial if this slide is the session's denialSlide, else answers.reason"
+    },
+    {
+      "id": "rating.T3b",
+      "type": "rating",
+      "groups": "both",
+      "ratingKey": "T3b",
+      "after": "s3 (answer)",
+      "items": "ratingItems",
+      "windowMs": "timing.ratingWindowMs"
+    },
+    {
+      "id": "s4",
+      "type": "slide",
+      "groups": "both",
+      "title": "Ready in 8 months, before the insurance renewal",
+      "layout": [
+        {
+          "id": "s4.title",
+          "kind": "title",
+          "text": "Ready in 8 months, before the insurance renewal"
+        },
+        {
+          "id": "s4.chart1",
+          "kind": "chart",
+          "text": "Timeline chart, months 1 to 10 on the horizontal axis: Phase 1 bar over months 1 to 2; Phase 2 bar over months 3 to 7; Phase 3 bar over months 5 to 8; a dashed line at month 8 labelled Ready; a dashed line at month 10 labelled Insurance renewal"
+        },
+        {
+          "id": "s4.b1",
+          "kind": "bullet",
+          "text": "Phase 1, design and ordering: 2 months"
+        },
+        {
+          "id": "s4.b2",
+          "kind": "bullet",
+          "text": "Phase 2, firewalls installed at all 13 sites: 5 months"
+        },
+        {
+          "id": "s4.b3",
+          "kind": "bullet",
+          "text": "Phase 3, monitoring set up and staff trained: 4 months"
+        },
+        {
+          "id": "s4.num1",
+          "kind": "number",
+          "text": "Ready in 8 months, renewal in 10 months"
+        },
+        {
+          "id": "s4.num2",
+          "kind": "number",
+          "text": "One day of stopped warehouses: about $1.2 million in lost shipments"
+        }
+      ],
+      "narration": {
+        "text": "So when will this be ready? The work comes in three phases. Phase one, design and ordering, takes two months. Phase two, installing the firewalls at all thirteen sites, takes five months. Phase three, setting up the monitoring and training our staff, takes four months. You can see all three on the chart. Altogether, we are ready in eight months. Our insurance renewal is in ten months, so that gives us two months of margin. Why does the timing matter? Because the risk is real, and it is expensive. If our warehouses stop for a single day, we lose about one point two million dollars in shipments. That is half of this request, gone in one day. And an attack rarely stops things for only one day. If we start today, we are protected well before the renewal. If we wait another quarter, we miss it.",
+        "audioKey": "s4.narration",
+        "voice": "ciso",
+        "durationMs": null
+      },
+      "panel": {
+        "groups": "checker",
+        "state": "flag"
+      },
+      "marking": {
+        "groups": "checker",
+        "targetIds": [
+          "s4.b1",
+          "s4.b2",
+          "s4.b3",
+          "s4.num1"
+        ],
+        "appearAtMs": 21000,
+        "anchorText": "Altogether, we are ready in eight months",
+        "color": "flag",
+        "label": "Numbers do not add up",
+        "detail": "The three phases add up to 11 months, but the slide says the work is done in 8 months.",
+        "_note": "appearAtMs estimated at 150 words per minute from anchorText; re-time after TTS"
+      },
+      "routineQuestion": {
+        "text": "Thank you, Daniel. Could you say a little more about how the eight months come together?",
+        "audioKey": "s4.question.routine",
+        "voice": "chair",
+        "durationMs": null
+      },
+      "participantQuestions": {
+        "explain": {
+          "text": "Could you explain how the three phases fit into eight months?",
+          "audioKey": "s4.question.explain",
+          "durationMs": null
+        },
+        "challenge": {
+          "text": "My checker flags this slide: \"Numbers do not add up.\" What do you say to that?",
+          "audioKey": "s4.question.challenge",
+          "durationMs": null
+        },
+        "_open": "OPEN D: shown as text in a speech bubble by default; audioKey reserved in case it is voiced"
+      },
+      "answers": {
+        "reason": {
+          "text": "The eight months are correct. Phases two and three run at the same time, with different teams. Our network partner installs the firewalls while our own team sets up the monitoring. That is why the bars overlap on the chart. We have looked at this carefully, and it stays as planned.",
+          "audioKey": "s4.answer.reason",
+          "voice": "ciso",
+          "durationMs": null
+        },
+        "denial": {
+          "text": "The eight months are correct. We have looked at this carefully, and it stays as planned.",
+          "audioKey": "s4.answer.denial",
+          "voice": "ciso",
+          "durationMs": null
+        }
+      }
+    },
+    {
+      "id": "rating.T4a",
+      "type": "rating",
+      "groups": "both",
+      "ratingKey": "T4a",
+      "after": "s4 (flag)",
+      "items": "ratingItems",
+      "windowMs": "timing.ratingWindowMs"
+    },
+    {
+      "id": "s4.action.checker",
+      "type": "action",
+      "groups": "checker",
+      "slideRef": "s4",
+      "variant": "checker",
+      "windowMs": "timing.actionWindowMs",
+      "timeoutChoice": "none"
+    },
+    {
+      "id": "s4.action.neutral",
+      "type": "action",
+      "groups": "neutral",
+      "slideRef": "s4",
+      "variant": "neutral",
+      "windowMs": "timing.actionWindowMs",
+      "timeoutChoice": "none"
+    },
+    {
+      "id": "s4.question",
+      "type": "question",
+      "groups": "both",
+      "slideRef": "s4",
+      "rule": "checker group: explain or challenge shows the participant's question; say nothing or timeout plays the chair's routine question. neutral group: always the chair's routine question",
+      "questionTextMs": "timing.questionTextMs"
+    },
+    {
+      "id": "s4.answer",
+      "type": "answer",
+      "groups": "both",
+      "slideRef": "s4",
+      "rule": "plays answers.denial if this slide is the session's denialSlide, else answers.reason"
+    },
+    {
+      "id": "rating.T4b",
+      "type": "rating",
+      "groups": "both",
+      "ratingKey": "T4b",
+      "after": "s4 (answer)",
+      "items": "ratingItems",
+      "windowMs": "timing.ratingWindowMs"
+    },
+    {
+      "id": "s5",
+      "type": "slide",
+      "groups": "both",
+      "title": "The decision today",
+      "layout": [
+        {
+          "id": "s5.title",
+          "kind": "title",
+          "text": "The decision today"
+        },
+        {
+          "id": "s5.num1",
+          "kind": "number",
+          "text": "$2.4 million for approval today"
+        },
+        {
+          "id": "s5.b1",
+          "kind": "bullet",
+          "text": "A firewall at all 13 sites and one watched internet connection"
+        },
+        {
+          "id": "s5.b2",
+          "kind": "bullet",
+          "text": "24-hour monitoring of our network for two years"
+        },
+        {
+          "id": "s5.b3",
+          "kind": "bullet",
+          "text": "Secure remote access and training for all staff"
+        },
+        {
+          "id": "s5.b4",
+          "kind": "bullet",
+          "text": "Ready in 8 months, before our insurance renewal"
+        }
+      ],
+      "narration": {
+        "text": "Let me bring this together. Every one of our thirteen sites gets a firewall, and we keep a single, watched connection to the internet. Specialists monitor our network around the clock for two years. Everyone who works away from the office connects securely, and all staff learn to spot fake emails. The whole plan costs two point four million dollars, and it is ready in eight months, before our insurance renewal. If we wait, we face a much higher insurance premium, or no cover at all, and the contract with our largest customer is at risk. I am confident this is the right plan for this company: the right size, at the right time. So I am asking the board to approve two point four million dollars today. Thank you.",
+        "audioKey": "s5.narration",
+        "voice": "ciso",
+        "durationMs": null
+      },
+      "panel": {
+        "groups": "checker",
+        "state": "noIssue",
+        "appearAtMs": 8000,
+        "_open": "Further open point 3: when the no-issue label appears on slides 1 and 5"
+      },
+      "marking": null
+    },
+    {
+      "id": "rating.T5",
+      "type": "rating",
+      "groups": "both",
+      "ratingKey": "T5",
+      "after": "s5",
+      "items": "ratingItems",
+      "windowMs": "timing.ratingWindowMs",
+      "_open": "OPEN B: rating after slide 5"
+    },
+    {
+      "id": "budget",
+      "type": "budget",
+      "groups": "both",
+      "prompt": "Daniel Hale asks the board to approve $2.4 million for the protection plan. How do you vote?",
+      "options": [
+        {
+          "id": "approveFull",
+          "text": "Approve the full $2.4 million"
+        },
+        {
+          "id": "approveReduced",
+          "text": "Approve a reduced amount",
+          "followUp": {
+            "text": "What amount would you approve?",
+            "kind": "currency",
+            "min": 0,
+            "max": 2400000,
+            "step": 100000
+          }
+        },
+        {
+          "id": "defer",
+          "text": "Defer the decision to a later meeting"
+        },
+        {
+          "id": "reject",
+          "text": "Reject the request"
+        }
+      ],
+      "confidence": {
+        "text": "How sure are you of your vote?",
+        "min": 0,
+        "max": 10,
+        "anchors": {
+          "0": "Not sure at all",
+          "10": "Completely sure"
+        }
+      },
+      "windowMs": null,
+      "alternatives": [
+        "Approve / Reject only",
+        "Approve / Reject plus the 0 to 10 confidence",
+        "Slider from $0 to $2.4 million in steps of $100,000"
+      ],
+      "_open": "OPEN E: response format; untimed by default"
+    },
+    {
+      "id": "background",
+      "type": "background",
+      "groups": "both",
+      "intro": "Finally, a few questions about you. They help us compare groups. You can skip any question.",
+      "items": [
+        {
+          "id": "field",
+          "text": "What is your main field of expertise?",
+          "kind": "single",
+          "source": "Oliver",
+          "options": [
+            "Business and management",
+            "Finance or accounting",
+            "Law",
+            "Information technology",
+            "Cybersecurity",
+            "Engineering",
+            "Health care or medicine",
+            "Education",
+            "Natural sciences",
+            "Social sciences or humanities",
+            "Arts, media or design",
+            "Government or public service",
+            "Student, no field yet",
+            "Other (please specify)",
+            "Prefer not to say"
+          ]
+        },
+        {
+          "id": "jobLevel",
+          "text": "What is your current job level?",
+          "kind": "single",
+          "source": "Oliver",
+          "options": [
+            "Student",
+            "Employee",
+            "Leadership",
+            "C-Level",
+            "Prefer not to say"
+          ]
+        },
+        {
+          "id": "education",
+          "text": "What is the highest level of education you have completed?",
+          "kind": "single",
+          "source": "Abstract v8",
+          "options": [
+            "Secondary school or less",
+            "College diploma or trade certificate",
+            "Bachelor's degree",
+            "Master's degree",
+            "Doctorate",
+            "Other",
+            "Prefer not to say"
+          ]
+        },
+        {
+          "id": "ageGroup",
+          "text": "What is your age?",
+          "kind": "single",
+          "source": "Oliver and Abstract v8",
+          "options": [
+            "18 to 24",
+            "25 to 34",
+            "35 to 44",
+            "45 to 54",
+            "55 to 64",
+            "65 or older",
+            "Prefer not to say"
+          ]
+        },
+        {
+          "id": "country",
+          "text": "In which country do you live?",
+          "kind": "countryList",
+          "source": "Oliver",
+          "options": [
+            "ISO 3166 country list",
+            "Prefer not to say"
+          ]
+        },
+        {
+          "id": "cyberKnowledge",
+          "text": "How would you rate your own knowledge of cybersecurity?",
+          "kind": "scale",
+          "source": "Abstract v8 (moderator)",
+          "min": 1,
+          "max": 5,
+          "anchors": {
+            "1": "None",
+            "2": "Basic",
+            "3": "Moderate",
+            "4": "Good",
+            "5": "Expert"
+          },
+          "_open": "1 to 5 (default) or 0 to 10"
+        },
+        {
+          "id": "aiUse",
+          "text": "How often do you use AI tools such as chatbots or writing assistants?",
+          "kind": "single",
+          "source": "Abstract v8 (moderator)",
+          "options": [
+            "Never",
+            "Less than once a month",
+            "About once a month",
+            "About once a week",
+            "Several times a week",
+            "Every day"
+          ]
+        },
+        {
+          "id": "website",
+          "text": "Leave this field empty",
+          "kind": "honeypot",
+          "hidden": true,
+          "_open": "OPEN U"
+        }
+      ],
+      "_open": "OPEN F: all items after the budget decision by default; alternative: field, country, age, job level right after consent"
+    },
+    {
+      "id": "flagReview",
+      "type": "flagReview",
+      "groups": "checker",
+      "enabled": true,
+      "intro": "During the meeting, your checker flagged three slides. For each flag, do you think it was correct?",
+      "items": [
+        {
+          "slideRef": "s2",
+          "label": "Architecture likely wrong",
+          "options": [
+            "Correct",
+            "Incorrect"
+          ]
+        },
+        {
+          "slideRef": "s3",
+          "label": "Firewalls likely overpriced, cheaper ones available",
+          "options": [
+            "Correct",
+            "Incorrect"
+          ]
+        },
+        {
+          "slideRef": "s4",
+          "label": "Numbers do not add up",
+          "options": [
+            "Correct",
+            "Incorrect"
+          ]
+        }
+      ],
+      "alternativeOptions": [
+        "Correct",
+        "Incorrect",
+        "Not sure"
+      ],
+      "_open": "OPEN G: optional screen, checker group only"
+    },
+    {
+      "id": "debrief",
+      "type": "debrief",
+      "groups": "both",
+      "paragraphs": {
+        "both": [
+          "Thank you for taking part.",
+          "Here is what this study was about. None of the five slides had a real issue. The plan, the costs and the timeline were all correct for this company.",
+          "Some participants saw an AI slide checker during the meeting, and others did not. The study measures how flags from an AI checker affect how much people without expert knowledge trust the presenter. It also looks at how the presenter's answers change that trust.",
+          "The company, the people and the meeting are fictional."
+        ],
+        "checker": [
+          "You were in the group with the checker. The flags you saw were drafted with a real AI tool and then fixed in advance, so every participant in your group saw the same flags. Every flag was wrong for this company."
+        ],
+        "neutral": [
+          "You were in the group without the checker. In the other group, a checker flagged slides 2, 3 and 4. The flags were fixed in advance, and every flag was wrong for this company."
+        ],
+        "end": [
+          "If you have questions about the study, please contact [CONTACT NAME, EMAIL].",
+          "[ETHICS AND DATA WITHDRAWAL TEXT, see OPEN M]"
+        ]
+      },
+      "_order": "both[0..3], then the group paragraph, then end"
+    }
+  ]
+}

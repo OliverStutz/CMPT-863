@@ -1,0 +1,194 @@
+.outer {
+  position: fixed;
+  inset: 0;
+  background: #14171d;
+  overflow: hidden;
+}
+.stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: 50% 50%;
+  font-family: Inter, Helvetica, Arial, sans-serif;
+}
+.room {
+  position: absolute;
+  inset: 0;
+  width: 1600px;
+  height: 900px;
+  object-fit: cover;
+}
+.screenFrame {
+  position: absolute;
+  background: #0c0e12;
+  border-radius: 6px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.55);
+}
+.screen {
+  position: absolute;
+  background: #ffffff;
+  overflow: hidden;
+}
+.panelSlot {
+  position: absolute;
+  left: 1160px;
+  top: 36px;
+  width: 400px;
+}
+.table {
+  position: absolute;
+  left: 0;
+  top: 812px;
+  width: 1600px;
+  height: 88px;
+  background: linear-gradient(#5a4130, #3e2c20);
+  box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.5);
+}
+.portrait {
+  position: absolute;
+  margin: 0;
+  text-align: center;
+  color: #f4f6f8;
+  font-size: 20px;
+  font-weight: 600;
+}
+.portrait figcaption {
+  white-space: nowrap;
+  margin-top: 8px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+.portraitImage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  transition: box-shadow 0.4s, border-color 0.4s, filter 0.4s;
+  filter: brightness(0.85);
+}
+.portraitImage svg,
+.portraitImage img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+.speaking .portraitImage {
+  border-color: #f2c879;
+  box-shadow: 0 0 0 4px rgba(242, 200, 121, 0.35), 0 0 36px rgba(242, 200, 121, 0.55);
+  filter: none;
+}
+.speakingBars {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+  height: 26px;
+}
+.speakingBars i {
+  display: block;
+  width: 6px;
+  background: #f2c879;
+  border-radius: 2px;
+  animation: bar 0.9s ease-in-out infinite;
+}
+.speakingBars i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.speakingBars i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes bar {
+  0%,
+  100% {
+    height: 6px;
+  }
+  50% {
+    height: 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .speakingBars i {
+    animation: none;
+    height: 16px;
+  }
+}
+.ciso {
+  left: 1230px;
+  top: 470px;
+  width: 260px;
+}
+.chair {
+  left: 120px;
+  top: 660px;
+  width: 140px;
+}
+.member {
+  left: 330px;
+  top: 660px;
+  width: 140px;
+}
+.controls {
+  position: absolute;
+  left: 560px;
+  top: 676px;
+  width: 560px;
+  min-height: 110px;
+  background: rgba(255, 255, 255, 0.96);
+  color: #1f2933;
+  border-radius: 10px;
+  padding: 16px 22px;
+  box-sizing: border-box;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.controls:empty {
+  display: none;
+}
+.profileCard {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 820px;
+  background: #ffffff;
+  color: #1f2933;
+  border-radius: 12px;
+  border-top: 10px solid #14325a;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  padding: 28px 34px;
+  box-sizing: border-box;
+}
+.profileCardOver {
+  top: auto;
+  bottom: 24px;
+  transform: translateX(-50%);
+}
+.profileHead {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+}
+.profileName {
+  font-size: 34px;
+  font-weight: 700;
+  color: #14325a;
+}
+.profileRole {
+  font-size: 22px;
+  margin-top: 4px;
+}
+.profileLines {
+  margin: 22px 0 0;
+  padding-left: 26px;
+  font-size: 22px;
+  line-height: 1.45;
+}
+.profileLines li {
+  margin-bottom: 8px;
+}

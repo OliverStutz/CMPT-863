@@ -1,0 +1,1681 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/study-config.schema.json",
+  "title": "StudyConfig",
+  "description": "Equivalent of the StudyConfig TypeScript types in packages/shared (Prototype/02 - Architecture.md section 4.1). Keys starting with '_' are author notes, allowed at every level and ignored by all tools. Rules that need more than one field (flagged slides, ids, audioKey pattern in resolved configs, asset names) are checked by tools/content-lint (section 4.2).",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "locale": {
+      "const": "en"
+    },
+    "timing": {
+      "$ref": "#/$defs/Timing"
+    },
+    "voices": {
+      "$ref": "#/$defs/Voices"
+    },
+    "options": {
+      "$ref": "#/$defs/StudyOptions"
+    },
+    "labels": {
+      "$ref": "#/$defs/Labels"
+    },
+    "colors": {
+      "$ref": "#/$defs/Colors"
+    },
+    "consent": {
+      "$ref": "#/$defs/ConsentSpec"
+    },
+    "setup": {
+      "$ref": "#/$defs/SetupSpec"
+    },
+    "rating": {
+      "$ref": "#/$defs/RatingSpec"
+    },
+    "actions": {
+      "$ref": "#/$defs/ActionSpec"
+    },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Scene"
+      },
+      "minItems": 1
+    }
+  },
+  "patternProperties": {
+    "^_": true
+  },
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "locale",
+    "timing",
+    "voices",
+    "options",
+    "labels",
+    "colors",
+    "consent",
+    "setup",
+    "rating",
+    "actions",
+    "scenes"
+  ],
+  "$defs": {
+    "Ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "Id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "Hex": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$"
+    },
+    "Group": {
+      "enum": [
+        "checker",
+        "neutral"
+      ]
+    },
+    "Span": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "text"
+      ]
+    },
+    "RichText": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Span"
+          },
+          "minItems": 1
+        }
+      ]
+    },
+    "Choice": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "label": {
+          "type": "string"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label"
+      ]
+    },
+    "Timing": {
+      "type": "object",
+      "properties": {
+        "postAudioViewMs": {
+          "$ref": "#/$defs/Ms"
+        },
+        "postAnswerViewMs": {
+          "$ref": "#/$defs/Ms"
+        },
+        "ratingWindowMs": {
+          "$ref": "#/$defs/Ms"
+        },
+        "actionWindowMs": {
+          "$ref": "#/$defs/Ms"
+        },
+        "formWindowMs": {
+          "$ref": "#/$defs/Ms"
+        },
+        "linePauseMs": {
+          "$ref": "#/$defs/Ms"
+        },
+        "audioEndToleranceMs": {
+          "$ref": "#/$defs/Ms"
+        },
+        "latencyAllowanceMs": {
+          "$ref": "#/$defs/Ms"
+        },
+        "abandonAfterMs": {
+          "$ref": "#/$defs/Ms"
+        },
+        "msPerWordEstimate": {
+          "$ref": "#/$defs/Ms"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "postAudioViewMs",
+        "postAnswerViewMs",
+        "ratingWindowMs",
+        "actionWindowMs",
+        "formWindowMs",
+        "linePauseMs",
+        "audioEndToleranceMs",
+        "latencyAllowanceMs",
+        "abandonAfterMs"
+      ]
+    },
+    "VoiceSpec": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "const": "google-tts"
+        },
+        "name": {
+          "type": "string"
+        },
+        "languageCode": {
+          "const": "en-US"
+        },
+        "speakingRate": {
+          "type": "number"
+        },
+        "pitch": {
+          "type": "number"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "name",
+        "languageCode"
+      ]
+    },
+    "Voices": {
+      "type": "object",
+      "properties": {
+        "ciso": {
+          "$ref": "#/$defs/VoiceSpec"
+        },
+        "chair": {
+          "$ref": "#/$defs/VoiceSpec"
+        },
+        "member": {
+          "$ref": "#/$defs/VoiceSpec"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "ciso",
+        "chair",
+        "member"
+      ]
+    },
+    "StudyOptions": {
+      "type": "object",
+      "properties": {
+        "deviceGate": {
+          "type": "object",
+          "properties": {
+            "minWidthPx": {
+              "type": "number"
+            },
+            "allowPhones": {
+              "type": "boolean"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "minWidthPx",
+            "allowPhones"
+          ]
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "deviceGate"
+      ]
+    },
+    "Labels": {
+      "type": "object",
+      "properties": {
+        "panelTitle": {
+          "type": "string"
+        },
+        "noIssues": {
+          "type": "string"
+        },
+        "panelIdle": {
+          "type": "string"
+        },
+        "ratingSubmit": {
+          "type": "string"
+        },
+        "timeLeft": {
+          "type": "string"
+        },
+        "continue": {
+          "type": "string"
+        },
+        "playTestSound": {
+          "type": "string"
+        },
+        "replayTestSound": {
+          "type": "string"
+        },
+        "startMeeting": {
+          "type": "string"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "panelTitle",
+        "noIssues",
+        "panelIdle",
+        "ratingSubmit",
+        "timeLeft",
+        "continue",
+        "playTestSound",
+        "replayTestSound",
+        "startMeeting"
+      ]
+    },
+    "Colors": {
+      "type": "object",
+      "properties": {
+        "flag": {
+          "$ref": "#/$defs/Hex"
+        },
+        "noIssues": {
+          "$ref": "#/$defs/Hex"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "flag",
+        "noIssues"
+      ]
+    },
+    "ConsentSpec": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "pdfAssetKey": {
+          "type": "string"
+        },
+        "checkboxLabel": {
+          "type": "string"
+        },
+        "acceptLabel": {
+          "type": "string"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "pdfAssetKey",
+        "checkboxLabel",
+        "acceptLabel"
+      ]
+    },
+    "AudioLine": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "voice": {
+          "enum": [
+            "ciso",
+            "chair",
+            "member"
+          ]
+        },
+        "text": {
+          "type": "string"
+        },
+        "ssml": {
+          "type": "string"
+        },
+        "audioKey": {
+          "type": "string"
+        },
+        "durationMs": {
+          "$ref": "#/$defs/Ms"
+        },
+        "marks": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/Ms"
+          }
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "voice",
+        "text"
+      ]
+    },
+    "LayoutTemplate": {
+      "enum": [
+        "auto",
+        "title-bullets",
+        "numbers",
+        "image-right",
+        "chart"
+      ]
+    },
+    "ChartData": {
+      "type": "object",
+      "properties": {
+        "axis": {
+          "type": "object",
+          "properties": {
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            },
+            "label": {
+              "type": "string"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "min",
+            "max"
+          ]
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/Id"
+              },
+              "label": {
+                "type": "string"
+              },
+              "value": {
+                "type": "number"
+              },
+              "start": {
+                "type": "number"
+              },
+              "end": {
+                "type": "number"
+              },
+              "points": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
+            },
+            "patternProperties": {
+              "^_": true
+            },
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "label"
+            ]
+          }
+        },
+        "markers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/Id"
+              },
+              "at": {
+                "type": "number"
+              },
+              "label": {
+                "type": "string"
+              }
+            },
+            "patternProperties": {
+              "^_": true
+            },
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "at",
+              "label"
+            ]
+          }
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "axis",
+        "series"
+      ]
+    },
+    "Block": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "title"
+            },
+            "id": {
+              "$ref": "#/$defs/Id"
+            },
+            "text": {
+              "$ref": "#/$defs/RichText"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "id",
+            "text"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "bullet"
+            },
+            "id": {
+              "$ref": "#/$defs/Id"
+            },
+            "text": {
+              "$ref": "#/$defs/RichText"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "id",
+            "text"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "number"
+            },
+            "id": {
+              "$ref": "#/$defs/Id"
+            },
+            "value": {
+              "$ref": "#/$defs/RichText"
+            },
+            "caption": {
+              "$ref": "#/$defs/RichText"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "id",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "image"
+            },
+            "id": {
+              "$ref": "#/$defs/Id"
+            },
+            "assetKey": {
+              "type": "string"
+            },
+            "alt": {
+              "type": "string"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "id",
+            "assetKey",
+            "alt"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "chart"
+            },
+            "id": {
+              "$ref": "#/$defs/Id"
+            },
+            "chartType": {
+              "enum": [
+                "bar",
+                "line",
+                "timeline"
+              ]
+            },
+            "data": {
+              "$ref": "#/$defs/ChartData"
+            },
+            "alt": {
+              "type": "string"
+            },
+            "caption": {
+              "$ref": "#/$defs/RichText"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "id",
+            "chartType",
+            "data",
+            "alt"
+          ]
+        }
+      ]
+    },
+    "Layout": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Block"
+      },
+      "minItems": 1
+    },
+    "Marking": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "targetIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Id"
+          },
+          "minItems": 1
+        },
+        "bbox": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "items": false,
+          "minItems": 4
+        },
+        "appearAtMark": {
+          "type": "string"
+        },
+        "appearAtMs": {
+          "$ref": "#/$defs/Ms"
+        },
+        "anchorText": {
+          "type": "string"
+        },
+        "color": {
+          "$ref": "#/$defs/Hex"
+        },
+        "shape": {
+          "enum": [
+            "box",
+            "underline",
+            "circle"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "detail": {
+          "type": "string"
+        },
+        "vlmRun": {
+          "type": "string"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "targetIds",
+        "shape",
+        "label",
+        "detail"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "appearAtMark"
+          ]
+        },
+        {
+          "required": [
+            "appearAtMs"
+          ]
+        }
+      ]
+    },
+    "CheckerPanel": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "noIssues"
+            },
+            "appearAtMark": {
+              "type": "string"
+            },
+            "appearAtMs": {
+              "$ref": "#/$defs/Ms"
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "status"
+          ],
+          "anyOf": [
+            {
+              "required": [
+                "appearAtMark"
+              ]
+            },
+            {
+              "required": [
+                "appearAtMs"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "flagged"
+            },
+            "markings": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Marking"
+              },
+              "minItems": 1
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "markings"
+          ]
+        }
+      ]
+    },
+    "Answers": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "const": "whole"
+            },
+            "reason": {
+              "$ref": "#/$defs/AudioLine"
+            },
+            "denial": {
+              "$ref": "#/$defs/AudioLine"
+            },
+            "padDenialToReason": {
+              "type": "boolean"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "reason",
+            "denial"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "const": "joined"
+            },
+            "opening": {
+              "$ref": "#/$defs/AudioLine"
+            },
+            "reasonBody": {
+              "$ref": "#/$defs/AudioLine"
+            },
+            "closing": {
+              "$ref": "#/$defs/AudioLine"
+            },
+            "padDenialToReason": {
+              "type": "boolean"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "opening",
+            "reasonBody",
+            "closing"
+          ]
+        }
+      ]
+    },
+    "ScaleSpec": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "minLabel": {
+          "type": "string"
+        },
+        "maxLabel": {
+          "type": "string"
+        },
+        "pointLabels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "max",
+        "minLabel",
+        "maxLabel"
+      ]
+    },
+    "AudioCheck": {
+      "type": "object",
+      "properties": {
+        "clip": {
+          "$ref": "#/$defs/AudioLine"
+        },
+        "prompt": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          },
+          "minItems": 1
+        },
+        "correctOptionId": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "clip",
+        "prompt",
+        "options",
+        "correctOptionId"
+      ]
+    },
+    "SetupSpec": {
+      "type": "object",
+      "properties": {
+        "instruction": {
+          "type": "string"
+        },
+        "audioCheck": {
+          "$ref": "#/$defs/AudioCheck"
+        },
+        "exampleScene": {
+          "type": "object",
+          "properties": {
+            "template": {
+              "$ref": "#/$defs/LayoutTemplate"
+            },
+            "layout": {
+              "$ref": "#/$defs/Layout"
+            },
+            "lines": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/AudioLine"
+              },
+              "minItems": 1
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "layout",
+            "lines"
+          ]
+        },
+        "preStartText": {
+          "type": "object",
+          "properties": {
+            "both": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "checker": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "both",
+            "checker"
+          ]
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "instruction",
+        "audioCheck",
+        "exampleScene",
+        "preStartText"
+      ]
+    },
+    "ProfileCard": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "portraitKey": {
+          "type": "string"
+        },
+        "showFromLineId": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "role",
+        "lines",
+        "showFromLineId"
+      ]
+    },
+    "OpeningScene": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "opening"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "template": {
+          "$ref": "#/$defs/LayoutTemplate"
+        },
+        "layout": {
+          "$ref": "#/$defs/Layout"
+        },
+        "profileCard": {
+          "$ref": "#/$defs/ProfileCard"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AudioLine"
+          },
+          "minItems": 1
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id",
+        "profileCard",
+        "lines"
+      ]
+    },
+    "SlideScene": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "slide"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "template": {
+          "$ref": "#/$defs/LayoutTemplate"
+        },
+        "layout": {
+          "$ref": "#/$defs/Layout"
+        },
+        "narration": {
+          "$ref": "#/$defs/AudioLine"
+        },
+        "checker": {
+          "$ref": "#/$defs/CheckerPanel"
+        },
+        "routineQuestion": {
+          "$ref": "#/$defs/AudioLine"
+        },
+        "participantQuestions": {
+          "type": "object",
+          "properties": {
+            "explain": {
+              "$ref": "#/$defs/AudioLine"
+            },
+            "challenge": {
+              "$ref": "#/$defs/AudioLine"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "explain",
+            "challenge"
+          ]
+        },
+        "answers": {
+          "$ref": "#/$defs/Answers"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id",
+        "layout",
+        "narration",
+        "checker"
+      ]
+    },
+    "RatingPoint": {
+      "type": "string",
+      "pattern": "^T(0|[1-9][0-9]*[ab]?)$"
+    },
+    "RatingScene": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "rating"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "point": {
+          "$ref": "#/$defs/RatingPoint"
+        },
+        "after": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id",
+        "point",
+        "after"
+      ]
+    },
+    "ActionScene": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "action"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "forSlide": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id",
+        "forSlide"
+      ]
+    },
+    "QuestionScene": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "question"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "forSlide": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id",
+        "forSlide"
+      ]
+    },
+    "AnswerScene": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "answer"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "forSlide": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id",
+        "forSlide"
+      ]
+    },
+    "BudgetScene": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "budget"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "prompt": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          },
+          "minItems": 1
+        },
+        "confidence": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "scale": {
+              "$ref": "#/$defs/ScaleSpec"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "label",
+            "scale"
+          ]
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id",
+        "prompt",
+        "options",
+        "confidence"
+      ]
+    },
+    "BackgroundItem": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "single"
+            },
+            "id": {
+              "$ref": "#/$defs/Id"
+            },
+            "label": {
+              "type": "string"
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Choice"
+              },
+              "minItems": 1
+            },
+            "otherOptionId": {
+              "$ref": "#/$defs/Id"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "id",
+            "label",
+            "options"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "scale"
+            },
+            "id": {
+              "$ref": "#/$defs/Id"
+            },
+            "label": {
+              "type": "string"
+            },
+            "scale": {
+              "$ref": "#/$defs/ScaleSpec"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "id",
+            "label",
+            "scale"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "country"
+            },
+            "id": {
+              "$ref": "#/$defs/Id"
+            },
+            "label": {
+              "type": "string"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "id",
+            "label"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "honeypot"
+            },
+            "id": {
+              "$ref": "#/$defs/Id"
+            },
+            "label": {
+              "type": "string"
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "id",
+            "label"
+          ]
+        }
+      ]
+    },
+    "BackgroundScene": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "background"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "intro": {
+          "type": "string"
+        },
+        "preferNotToSayLabel": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BackgroundItem"
+          },
+          "minItems": 1
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id",
+        "intro",
+        "preferNotToSayLabel",
+        "items"
+      ]
+    },
+    "DebriefScene": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "debrief"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "paragraphs": {
+          "type": "object",
+          "properties": {
+            "both": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "checker": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "neutral": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "end": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "both",
+            "checker",
+            "neutral",
+            "end"
+          ]
+        },
+        "doNotDiscuss": {
+          "type": "string"
+        },
+        "sessionCodeLabel": {
+          "type": "string"
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id",
+        "paragraphs",
+        "doNotDiscuss",
+        "sessionCodeLabel"
+      ]
+    },
+    "Scene": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/OpeningScene"
+        },
+        {
+          "$ref": "#/$defs/SlideScene"
+        },
+        {
+          "$ref": "#/$defs/RatingScene"
+        },
+        {
+          "$ref": "#/$defs/ActionScene"
+        },
+        {
+          "$ref": "#/$defs/QuestionScene"
+        },
+        {
+          "$ref": "#/$defs/AnswerScene"
+        },
+        {
+          "$ref": "#/$defs/BudgetScene"
+        },
+        {
+          "$ref": "#/$defs/BackgroundScene"
+        },
+        {
+          "$ref": "#/$defs/DebriefScene"
+        }
+      ]
+    },
+    "RatingSpec": {
+      "type": "object",
+      "properties": {
+        "instruction": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "enum": [
+                  "trust",
+                  "competence",
+                  "benevolence",
+                  "integrity"
+                ]
+              },
+              "label": {
+                "type": "string"
+              },
+              "scale": {
+                "$ref": "#/$defs/ScaleSpec"
+              }
+            },
+            "patternProperties": {
+              "^_": true
+            },
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "scale"
+            ]
+          },
+          "minItems": 1
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "instruction",
+        "items"
+      ]
+    },
+    "ActionSpec": {
+      "type": "object",
+      "properties": {
+        "checker": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "enum": [
+                      "nothing",
+                      "explain",
+                      "challenge"
+                    ]
+                  },
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "patternProperties": {
+                  "^_": true
+                },
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "label"
+                ]
+              },
+              "minItems": 1
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "prompt",
+            "options"
+          ]
+        },
+        "neutral": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "enum": [
+                      "hasQuestion",
+                      "noQuestion"
+                    ]
+                  },
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "patternProperties": {
+                  "^_": true
+                },
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "label"
+                ]
+              },
+              "minItems": 1
+            }
+          },
+          "patternProperties": {
+            "^_": true
+          },
+          "additionalProperties": false,
+          "required": [
+            "prompt",
+            "options"
+          ]
+        }
+      },
+      "patternProperties": {
+        "^_": true
+      },
+      "additionalProperties": false,
+      "required": [
+        "checker",
+        "neutral"
+      ]
+    }
+  }
+}

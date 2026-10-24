@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" font-family="Inter, Helvetica, Arial, sans-serif">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<rect width="1920" height="150" fill="#14325A"/>
+<rect y="150" width="1920" height="6" fill="#D9822B"/>
+<text id="s2.title" x="80" y="97" font-size="58" font-weight="700" fill="#FFFFFF">The risk and what it would cost us</text>
+<g id="brand"><rect x="1556" y="62" width="22" height="22" fill="#D9822B"/><text x="1840" y="81" font-size="26" font-weight="600" fill="#FFFFFF" text-anchor="end" letter-spacing="0.5">Meridian Logistics</text></g>
+<line x1="80" y1="1012" x2="1840" y2="1012" stroke="#C9D2DE" stroke-width="2"/>
+<text id="slide-number" x="1840" y="1050" font-size="24" fill="#5F6B7A" text-anchor="end">2</text>
+<g id="s2.num1"><rect x="80" y="220" width="1760" height="118" fill="#EEF2F7"/><rect x="80" y="220" width="10" height="118" fill="#D9822B"/><text y="300" fill="#1F2933"><tspan x="130" font-size="64" font-weight="700" fill="#14325A">$1.2 million:</tspan><tspan x="640" font-size="40"> goods we ship each working day</tspan></text></g>
+<g id="s2.num2"><rect x="80" y="360" width="1760" height="118" fill="#EEF2F7"/><rect x="80" y="360" width="10" height="118" fill="#D9822B"/><text y="440" fill="#1F2933"><tspan x="130" font-size="64" font-weight="700" fill="#14325A">5 days:</tspan><tspan x="640" font-size="40"> how long a serious attack stops a company like ours</tspan></text></g>
+<g id="s2.num3"><rect x="80" y="500" width="1760" height="118" fill="#EEF2F7"/><rect x="80" y="500" width="10" height="118" fill="#D9822B"/><text y="580" fill="#1F2933"><tspan x="130" font-size="64" font-weight="700" fill="#14325A">$8 million:</tspan><tspan x="640" font-size="40"> cost to us of one serious attack</tspan></text></g>
+<g id="s2.b1"><rect x="80" y="697.04" width="14" height="14" fill="#D9822B"/>
+<text x="124" y="720" font-size="38" fill="#1F2933"><tspan x="124" dy="0">Our insurance renews in 10 months: without stronger protection, the premium rises or cover</tspan><tspan x="124" dy="52">ends</tspan></text></g>
+<g id="s2.b2"><rect x="80" y="835.04" width="14" height="14" fill="#D9822B"/>
+<text x="124" y="858" font-size="38" fill="#1F2933"><tspan x="124" dy="0">Our largest customer's new contract requires the same protection</tspan></text></g>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" font-family="Inter, Helvetica, Arial, sans-serif">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<rect width="1920" height="150" fill="#14325A"/>
+<rect y="150" width="1920" height="6" fill="#D9822B"/>
+<text id="s4.title" x="80" y="97" font-size="58" font-weight="700" fill="#FFFFFF">What the $2.4 million pays for</text>
+<g id="brand"><rect x="1556" y="62" width="22" height="22" fill="#D9822B"/><text x="1840" y="81" font-size="26" font-weight="600" fill="#FFFFFF" text-anchor="end" letter-spacing="0.5">Meridian Logistics</text></g>
+<line x1="80" y1="1012" x2="1840" y2="1012" stroke="#C9D2DE" stroke-width="2"/>
+<text id="slide-number" x="1840" y="1050" font-size="24" fill="#5F6B7A" text-anchor="end">4</text>
+<g id="s4.num1"><rect x="80" y="230" width="1760" height="126" fill="#F7F9FC"/><line x1="80" y1="356" x2="1840" y2="356" stroke="#C9D2DE" stroke-width="2"/><text y="307" font-size="44" fill="#1F2933"><tspan x="120">Firewalls for 13 sites, with 3 years of support:</tspan><tspan x="1800" text-anchor="end"> $780,000</tspan></text></g>
+<g id="s4.num2"><rect x="80" y="356" width="1760" height="126" fill="#FFFFFF"/><line x1="80" y1="482" x2="1840" y2="482" stroke="#C9D2DE" stroke-width="2"/><text y="433" font-size="44" fill="#1F2933"><tspan x="120">24-hour monitoring of our network, 2 years:</tspan><tspan x="1800" text-anchor="end"> $960,000</tspan></text></g>
+<g id="s4.num3"><rect x="80" y="482" width="1760" height="126" fill="#F7F9FC"/><line x1="80" y1="608" x2="1840" y2="608" stroke="#C9D2DE" stroke-width="2"/><text y="559" font-size="44" fill="#1F2933"><tspan x="120">Secure remote access for 1,400 staff:</tspan><tspan x="1800" text-anchor="end"> $310,000</tspan></text></g>
+<g id="s4.num4"><rect x="80" y="608" width="1760" height="126" fill="#FFFFFF"/><line x1="80" y1="734" x2="1840" y2="734" stroke="#C9D2DE" stroke-width="2"/><text y="685" font-size="44" fill="#1F2933"><tspan x="120">Installation and staff training:</tspan><tspan x="1800" text-anchor="end"> $350,000</tspan></text></g>
+<g id="s4.num5"><rect x="80" y="748" width="1760" height="126" fill="#EEF2F7"/><rect x="80" y="748" width="1760" height="5" fill="#14325A"/><text y="828" font-size="48" font-weight="700" fill="#14325A"><tspan x="120">Total:</tspan><tspan x="1800" text-anchor="end"> $2,400,000</tspan></text></g>
+</svg>
