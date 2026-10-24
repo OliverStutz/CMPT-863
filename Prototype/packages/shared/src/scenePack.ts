@@ -29,7 +29,9 @@ export interface PublicScenePack {
   locale?: "en";
   timing?: Partial<Timing>;
   options?: StudyOptions;
-  labels: Labels;
+  /** The checker panel's labels (panelTitle, panelIdle, noIssues) are not in the pack; they come with the overlay. */
+  labels: Omit<Labels, "panelTitle" | "panelIdle" | "noIssues"> & Partial<Pick<Labels, "panelTitle" | "panelIdle" | "noIssues">>;
+  /** Not in the pack (checker-only); kept optional for older packs. */
   colors?: Colors;
   consent: ConsentSpec;
   setup: PublicSetup;

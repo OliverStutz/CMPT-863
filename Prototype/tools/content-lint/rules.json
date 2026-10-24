@@ -1,0 +1,47 @@
+{
+  "_note": "Deny lists of section 4.2 in \"02 - Architecture.md\". Each entry is a Go regular expression matched against the text; (?i) makes it case-insensitive. Extend here; no code change is needed.",
+  "flagDeny": [
+    "(?i)\\b(dis)?honest(y|ly)?\\b",
+    "(?i)\\bli(e|es|ed|ar|ars)\\b",
+    "(?i)\\blying\\b",
+    "(?i)\\bdecei(t|ve|ved|ving)\\b",
+    "(?i)\\bdecept(ion|ive)\\b",
+    "(?i)\\bmislead(s|ing)?\\b",
+    "(?i)\\bmisled\\b",
+    "(?i)\\b(un)?truth(s|ful|fully|fulness)?\\b",
+    "(?i)\\buntrue\\b",
+    "(?i)\\b(dis)?trust(s|ed|worthy)?\\b",
+    "(?i)\\bhid(e|es|ing|den)\\b",
+    "(?i)\\bconceal(s|ed|ing)?\\b",
+    "(?i)\\bconfiden(ce|t|tly)\\b",
+    "(?i)\\baccura(cy|te|tely)\\b",
+    "(?i)\\bprobab(ility|le|ly)\\b",
+    "(?i)\\bcertain(ty)?\\b",
+    "(?i)likely to be (correct|right|wrong)",
+    "\\d+(\\.\\d+)?\\s*%",
+    "(?i)\\d+(\\.\\d+)?\\s*per\\s?cent\\b",
+    "(?i)\\bper\\s?cent(age)?\\b"
+  ],
+  "cisoDeny": [
+    "\\bAI\\b",
+    "\\bA\\.I\\.",
+    "(?i)artificial intelligence",
+    "(?i)\\bAI model",
+    "(?i)\\blanguage models?\\b",
+    "(?i)\\bLLMs?\\b",
+    "(?i)chat\\s?gpt",
+    "(?i)\\balgorithm(s|ic)?\\b",
+    "(?i)machine learning",
+    "(?i)\\bcheckers?\\b"
+  ],
+  "checkerTextDeny": [
+    "\\bAI\\b",
+    "\\bA\\.I\\.",
+    "(?i)artificial intelligence",
+    "(?i)\\bLLMs?\\b",
+    "(?i)\\blanguage models?\\b",
+    "(?i)machine learning"
+  ],
+  "noIssuesLabel": "No issues found",
+  "abstractV8": { "slides": 5, "flagged": [2, 3, 4] }
+}

@@ -90,9 +90,9 @@ export function BoardroomScene(p: Props) {
             <CheckerPanel
               overlay={p.overlay}
               clockMs={p.clockMs}
-              title={pack.labels.panelTitle}
-              idleText={pack.labels.panelIdle}
-              noIssuesColor={pack.colors?.noIssues ?? "#5B8C6A"}
+              title={p.overlay.title ?? pack.labels.panelTitle ?? ""}
+              idleText={p.overlay.idleText ?? pack.labels.panelIdle ?? ""}
+              noIssuesColor={p.overlay.noIssuesColor ?? pack.colors?.noIssues ?? "#5B8C6A"}
             />
           </div>
         )}

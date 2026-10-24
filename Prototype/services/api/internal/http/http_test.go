@@ -595,6 +595,10 @@ func TestAssetAllowlist(t *testing.T) {
 		"/assets/audio/1.4.0/manifest.json",
 		"/assets/%2e%2e/go.mod",
 		"/a/study-config.v1.4.json",
+		// A client that normalises "/assets/../services/api/go.mod" asks for
+		// this; the SPA fallback must not answer a file path with index.html.
+		"/services/api/go.mod",
+		"/study-config.v1.4.json",
 	} {
 		if w := e.do("GET", path, nil); w.Code != 404 {
 			t.Errorf("%s: %d", path, w.Code)
@@ -648,6 +652,11 @@ func TestParticipantResponsesLeakNothing(t *testing.T) {
 	p := e.newParticipant("abc234")
 	w := e.do("GET", "/assets/scenes/1.4.0.json", nil)
 	p.bodies = append(p.bodies, w.Body.String())
+	// The public pack is the same for both groups, so it names no checker
+	// (panel labels and colours travel with the overlay).
+	if regexp.MustCompile(`(?i)checker|panelTitle|"colors"`).MatchString(w.Body.String()) {
+		t.Error("the public scene pack mentions the checker panel")
+	}
 	p.walk("challenge", nil)
 	s, _ := e.st.GetSession(context.Background(), p.id)
 	if s.Group != "checker" || s.Status != domain.StatusFinished {

@@ -35,9 +35,18 @@ export interface ResolvedMarking {
   detail: string;
 }
 
+/**
+ * The panel texts travel with the overlay (server DECISION): labels.panelTitle, labels.panelIdle and the
+ * noIssues colour are checker-only, so the public scene pack no longer carries them.
+ */
+export interface OverlayPanelTexts {
+  title?: string;
+  idleText?: string;
+  noIssuesColor?: Hex;
+}
 export type StepOverlay =
-  | { status: "noIssues"; text: string; appearAtMs: number }
-  | { status: "flagged"; markings: ResolvedMarking[] };
+  | ({ status: "noIssues"; text: string; appearAtMs: number } & OverlayPanelTexts)
+  | ({ status: "flagged"; markings: ResolvedMarking[] } & OverlayPanelTexts);
 
 export interface StepOption {
   id: string;
@@ -77,6 +86,8 @@ export interface Step {
   // two optional fields when the server sends them, and no prompt otherwise. It never picks a text itself.
   prompt?: string;
   note?: string;
+  /** Server DECISION: a session the device gate blocked gets scene "done" with blocked: true. */
+  blocked?: boolean;
 }
 
 export interface Progress {

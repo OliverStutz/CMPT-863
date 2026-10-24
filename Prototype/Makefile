@@ -9,7 +9,7 @@ DEV_ENV := FIRESTORE_EMULATOR_HOST=$(EMULATOR_HOST) FIRESTORE_PROJECT_ID=demo-st
 	ADMIN_PASSWORD=dev ADMIN_ACCESS_KEY_VALUE=dev-gate-key ADMIN_SESSION_KEY_VALUE=dev-session-key \
 	SEED_RUN_CODE=devrun ALLOW_TEST_CONFIGS=true
 
-.PHONY: dev dev-memory emulator test test-emulator build build-web lint sweeper admin-password admin-key clean
+.PHONY: dev dev-memory emulator test test-emulator build build-web lint sweeper admin-password admin-key e2e clean
 
 ## dev: start the Firestore emulator, then run the API on :8080 against it
 dev: emulator
@@ -64,6 +64,13 @@ admin-password:
 ## admin-key: print a random 32-byte base64url key (admin gate key or session key)
 admin-key:
 	@cd $(API_DIR) && go run ./cmd/admintool key
+
+## e2e: build both SPAs, then run the Playwright flows (checker and neutral session, headless
+## Firefox) and the security checks against a fresh API on E2E_PORT (default 18080) with
+## throwaway secrets; set E2E_BASE_URL, E2E_GATE_KEY and E2E_ADMIN_PASSWORD to use a running API.
+## See e2e/README.md.
+e2e: build-web
+	./e2e/run.sh
 
 clean:
 	rm -rf $(API_DIR)/bin

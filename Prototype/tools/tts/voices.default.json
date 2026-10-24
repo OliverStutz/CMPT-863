@@ -1,0 +1,6 @@
+{
+  "_note": "Used by tools/tts for every role whose voice in the config is a placeholder (\"TBD\"). Recommended from the samples in content/audio/samples (decision 3.6); change a name here and rerun tools/tts to regenerate.",
+  "ciso": { "provider": "google-tts", "name": "en-US-Neural2-J", "languageCode": "en-US" },
+  "chair": { "provider": "google-tts", "name": "en-US-Neural2-F", "languageCode": "en-US" },
+  "member": { "provider": "google-tts", "name": "en-US-Neural2-E", "languageCode": "en-US" }
+}

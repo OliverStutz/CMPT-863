@@ -23,7 +23,7 @@ export function measureDevice(): DeviceInfo {
   const touch = (navigator.maxTouchPoints ?? 0) > 0 || "ontouchstart" in window;
   const coarse = typeof window.matchMedia === "function" && window.matchMedia("(pointer: coarse)").matches;
   const shortSide = Math.min(window.screen?.width ?? widthPx, window.screen?.height ?? heightPx);
-  return { widthPx, heightPx, touch, phone: coarse && shortSide < 600, landscape: widthPx >= heightPx };
+  return { widthPx, heightPx, touch, phone: coarse && shortSide < 600, landscape: widthPx > heightPx };
 }
 
 export function devicePasses(d: DeviceInfo, gate: { minWidthPx: number; allowPhones: boolean }): boolean {

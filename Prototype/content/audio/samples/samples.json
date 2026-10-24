@@ -1,0 +1,74 @@
+[
+  {
+    "role": "ciso",
+    "voice": "en-US-Neural2-J",
+    "file": "ciso-en-US-Neural2-J.mp3",
+    "text": "Thank you, Margaret. Good morning, everyone. I will keep this short, because I am asking you for a decision today.",
+    "durationMs": 6888,
+    "markMs": 2923
+  },
+  {
+    "role": "ciso",
+    "voice": "en-US-Neural2-D",
+    "file": "ciso-en-US-Neural2-D.mp3",
+    "text": "Thank you, Margaret. Good morning, everyone. I will keep this short, because I am asking you for a decision today.",
+    "durationMs": 6576,
+    "markMs": 2657
+  },
+  {
+    "role": "ciso",
+    "voice": "en-US-Wavenet-B",
+    "file": "ciso-en-US-Wavenet-B.mp3",
+    "text": "Thank you, Margaret. Good morning, everyone. I will keep this short, because I am asking you for a decision today.",
+    "durationMs": 7704,
+    "markMs": 3239
+  },
+  {
+    "role": "chair",
+    "voice": "en-US-Neural2-F",
+    "file": "chair-en-US-Neural2-F.mp3",
+    "text": "Good morning, everyone, and thank you for being here. Let us move to item four on our agenda: the protection of our network.",
+    "durationMs": 8016,
+    "markMs": 3296
+  },
+  {
+    "role": "chair",
+    "voice": "en-US-Neural2-H",
+    "file": "chair-en-US-Neural2-H.mp3",
+    "text": "Good morning, everyone, and thank you for being here. Let us move to item four on our agenda: the protection of our network.",
+    "durationMs": 7248,
+    "markMs": 2969
+  },
+  {
+    "role": "chair",
+    "voice": "en-US-Neural2-C",
+    "file": "chair-en-US-Neural2-C.mp3",
+    "text": "Good morning, everyone, and thank you for being here. Let us move to item four on our agenda: the protection of our network.",
+    "durationMs": 7776,
+    "markMs": 3153
+  },
+  {
+    "role": "member",
+    "voice": "en-US-Neural2-A",
+    "file": "member-en-US-Neural2-A.mp3",
+    "text": "Daniel, could you explain how you get to eight million dollars for one attack?",
+    "durationMs": 4824,
+    "markMs": 651
+  },
+  {
+    "role": "member",
+    "voice": "en-US-Neural2-I",
+    "file": "member-en-US-Neural2-I.mp3",
+    "text": "Daniel, could you explain how you get to eight million dollars for one attack?",
+    "durationMs": 4464,
+    "markMs": 760
+  },
+  {
+    "role": "member",
+    "voice": "en-US-Neural2-E",
+    "file": "member-en-US-Neural2-E.mp3",
+    "text": "Daniel, could you explain how you get to eight million dollars for one attack?",
+    "durationMs": 4800,
+    "markMs": 755
+  }
+]

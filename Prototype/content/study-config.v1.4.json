@@ -435,8 +435,8 @@
           "voice": "ciso",
           "text": "This is a fair picture of our risk. I have looked at these numbers very closely, and I am confident in every one of them. I would show this same picture to any board, and I stand behind it. That is the risk we face."
         },
-        "padDenialToReason": false,
-        "_note": "Full-length denial (v1.4 recommendation for this slide). Alternative: the short denial 'This is a fair picture of our risk. That is the risk we face.' with padDenialToReason true. Line ids are neutral; the server picks the answer by the session's denial slide."
+        "padDenialToReason": true,
+        "_note": "Full-length denial, padded with silence to the reason's length because TTS made it 2.6 s shorter (decision 1.22, 2026-10-24). Alternative: the short denial 'This is a fair picture of our risk. That is the risk we face.' with padDenialToReason true. Line ids are neutral; the server picks the answer by the session's denial slide."
       },
       "template": "numbers"
     },
@@ -689,8 +689,8 @@
           "voice": "ciso",
           "text": "This is the right way to spend the money. I have gone over every line of this budget myself, and I am confident in each one of them. I would not ask the board for a dollar more, or for a dollar less, than this today. That is the plan I recommend."
         },
-        "padDenialToReason": false,
-        "_note": "Full-length denial (v1.4 recommendation for this slide). Alternative: the short denial 'This is the right way to spend the money. That is the plan I recommend.' with padDenialToReason true. Line ids are neutral; the server picks the answer by the session's denial slide."
+        "padDenialToReason": true,
+        "_note": "Full-length denial, padded with silence to the reason's length because TTS made it 2.9 s shorter (decision 1.22, 2026-10-24). Alternative: the short denial 'This is the right way to spend the money. That is the plan I recommend.' with padDenialToReason true. Line ids are neutral; the server picks the answer by the session's denial slide."
       },
       "template": "numbers",
       "_layoutNote": "Simple cost table, one row per line, total in bold; each row split into caption and value."

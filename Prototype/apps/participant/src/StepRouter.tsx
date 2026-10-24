@@ -120,6 +120,11 @@ export function StepRouter({ api, pack, assetBaseUrl, code, initialStep, initial
     [api, pack, assetBaseUrl, code, progress, refresh, reportError, onBlocked, lastDebrief],
   );
 
+  // A session the device gate blocked comes back as "done" with blocked: true (server DECISION).
+  useEffect(() => {
+    if (step.blocked) onBlocked();
+  }, [step.blocked, onBlocked]);
+
   const Component = sceneComponentFor(step.scene);
   return (
     <StudyContext.Provider value={ctx}>

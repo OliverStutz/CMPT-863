@@ -45,6 +45,13 @@ type Overlay struct {
 	Text       string            `json:"text,omitempty"`
 	AppearAtMs *int64            `json:"appearAtMs,omitempty"`
 	Markings   []ResolvedMarking `json:"markings,omitempty"`
+	// DECISION: the panel texts (labels.panelTitle, labels.panelIdle) and the
+	// noIssues colour are checker-only (4.3: "no panel texts" in the public
+	// pack), so they travel with the overlay of a checker session's slide
+	// step and are removed from the public scene pack.
+	Title   string `json:"title,omitempty"`
+	Idle    string `json:"idleText,omitempty"`
+	OkColor string `json:"noIssuesColor,omitempty"`
 }
 
 // NewContent compiles the plan, resolves clips against the manifest (nil when
@@ -79,9 +86,10 @@ func NewContent(c *sc.StudyConfig, m *sc.Manifest, audioBase, silenceBase string
 				text = c.Labels.NoIssues
 			}
 			at := resolve(s.Checker.AppearAtMark, s.Checker.AppearAtMs, "noIssues panel")
-			ct.overlays[s.ID] = &Overlay{Status: sc.PanelNoIssues, Text: text, AppearAtMs: &at}
+			ct.overlays[s.ID] = &Overlay{Status: sc.PanelNoIssues, Text: text, AppearAtMs: &at,
+				Title: c.Labels.PanelTitle, Idle: c.Labels.PanelIdle, OkColor: c.Colors.NoIssues}
 		case sc.PanelFlagged:
-			ov := &Overlay{Status: sc.PanelFlagged}
+			ov := &Overlay{Status: sc.PanelFlagged, Title: c.Labels.PanelTitle, Idle: c.Labels.PanelIdle}
 			for _, mk := range s.Checker.Markings {
 				color := mk.Color
 				if color == "" {

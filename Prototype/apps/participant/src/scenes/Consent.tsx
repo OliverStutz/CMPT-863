@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import type { Step } from "@study/shared";
 import { useStudy } from "../study";
 import { Screen } from "../ui/Screen";
-import { CONSENT_PDF_URL } from "../assets";
+import { consentPdfUrl } from "../assets";
 import styles from "./scenes.module.css";
 
 export function Consent({ step: _step }: { step: Step }) {
@@ -14,6 +14,7 @@ export function Consent({ step: _step }: { step: Step }) {
   const [checked, setChecked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [pdf, setPdf] = useState<"checking" | "ok" | "missing">("checking");
+  const CONSENT_PDF_URL = consentPdfUrl(pack.consent.pdfAssetKey);
 
   useEffect(() => {
     let live = true;
@@ -26,7 +27,7 @@ export function Consent({ step: _step }: { step: Step }) {
     return () => {
       live = false;
     };
-  }, []);
+  }, [CONSENT_PDF_URL]);
 
   const accept = async () => {
     setBusy(true);

@@ -62,7 +62,7 @@ Other targets: `make test` (all tests; the Firestore store test is skipped witho
 
 | Route | What |
 |---|---|
-| `GET /`, `GET /s/{code}` and any other path | Participant SPA (`index.html` fallback; existing bundle files served as they are) |
+| `GET /`, `GET /s/{code}` and any other path | Participant SPA (`index.html` fallback; existing bundle files, under `/static/`, served as they are; a missing path with a file extension is `404`, not the SPA page) |
 | `GET /admin/...` | Admin SPA, behind the gate key |
 | `GET /assets/{path}` | Participant bundle files first, then the scene packs `scenes/<version>.json`, the dev silence clips, and the public content prefixes (see Security). `/a/{path}` is the same content handler under the document's path |
 | `GET /api/v1/healthz` | `{ "ok": true }` |
@@ -81,6 +81,8 @@ Request and response shapes follow section 8 of the architecture. Additions, eac
 - `assetBaseUrl` is `/assets/images/`; the consent PDF is served from `/assets/consent/<file>.pdf`.
 - `audio_problem` responses carry `continueInMs` next to the usual fields.
 - `progress.total` is `null` before allocation.
+- A checker overlay carries the panel texts `title` (`labels.panelTitle`), `idleText` (`labels.panelIdle`) and, on `noIssues`, `noIssuesColor`; the public scene pack no longer has `labels.panelTitle`, `labels.panelIdle`, `labels.noIssues` or `colors`, because they name the checker in a neutral session's pack.
+- `debrief.sessionCodeLabel` carries the config's label for the session code.
 - Background item values: `null`, `"preferNotToSay"`, an option id (with the "Other" text as `{ optionId, text }` or as a separate key `<itemId>.otherText`), an integer for a scale, a string for a country.
 - Missing `X-Study-Client` or `X-Study-Admin`, and a token for another session, answer `403` with code `forbidden`. Unknown admin records answer `404 not_found`; conflicts `409 conflict`.
 

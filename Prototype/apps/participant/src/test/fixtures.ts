@@ -32,8 +32,10 @@ export function packFromConfig(): PublicScenePack {
   return {
     version: cfg.version,
     options: cfg.options,
-    labels: cfg.labels,
-    colors: cfg.colors,
+    // As the server builds it: the checker panel's labels and the colours are not in the pack.
+    labels: Object.fromEntries(
+      Object.entries(cfg.labels).filter(([k]) => !["panelTitle", "panelIdle", "noIssues"].includes(k)),
+    ),
     consent: cfg.consent,
     setup: {
       instruction: cfg.setup.instruction,

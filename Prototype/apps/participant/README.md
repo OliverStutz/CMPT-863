@@ -47,13 +47,13 @@ The bundle's own files are written under `static/` (not Vite's default `assets/`
 | `debrief` | `scenes/Debrief.tsx` | Paragraphs, do-not-discuss sentence, session code; sends `finished` after 6 s |
 | `done` | `scenes/Debrief.tsx` (`Done`) | Keeps the debrief on screen, or a short closing line |
 
-The group is never sent to or inferred by the client. The checker panel renders only when a step carries `overlay`, and the action screen renders whatever options the step lists.
+The group is never sent to or inferred by the client. The checker panel renders only when a step carries `overlay`, with the panel title and idle text that the overlay carries (they are not in the public pack), and the action screen renders whatever options the step lists. A `done` step with `blocked: true` goes to `/s/:code/blocked`.
 
 ## Asset paths the app expects
 
 | Path | Source | If missing |
 |---|---|---|
-| `/assets/consent/placeholder.pdf` | consent PDF (placeholder until the SFU ethics form) | a box saying "The consent PDF goes here." |
+| `/assets/consent/<consent.pdfAssetKey>` | consent PDF (placeholder until the SFU ethics form) | a box saying "The consent PDF goes here." |
 | `/assets/images/boardroom.jpg` | boardroom background | a drawn plain room |
 | `/assets/images/ciso.png` | CISO portrait | a grey silhouette labelled "CISO" |
 | `/assets/images/chair.png` | chair portrait | a grey silhouette labelled "Chair" |

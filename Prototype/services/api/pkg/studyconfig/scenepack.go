@@ -9,7 +9,8 @@ import "encoding/json"
 // PublicScenePack builds the public scene pack of section 4.3 from a config:
 // only text that is the same for both groups and gives nothing away.
 //
-// Removed: actions (per-group options), every slide's checker panel, routine
+// Removed: actions (per-group options), the panel labels and colours, every
+// slide's checker panel, routine
 // question, participant questions and answers, setup.preStartText.checker,
 // the debrief scene, the voices, the audio check's clip and correct answer
 // (the clip text is the answer), and audio fields of every line (audio URLs
@@ -26,6 +27,14 @@ func PublicScenePack(c *StudyConfig) ([]byte, error) {
 	}
 	delete(m, "actions")
 	delete(m, "voices")
+	// The checker panel's texts and colours give the condition away; they
+	// come with the overlay of a checker session's slide step instead.
+	delete(m, "colors")
+	if labels, ok := m["labels"].(map[string]any); ok {
+		for _, k := range []string{"panelTitle", "panelIdle", "noIssues"} {
+			delete(labels, k)
+		}
+	}
 	if setup, ok := m["setup"].(map[string]any); ok {
 		if pst, ok := setup["preStartText"].(map[string]any); ok {
 			delete(pst, "checker")

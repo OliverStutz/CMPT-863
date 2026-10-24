@@ -37,11 +37,14 @@ func spaHandler(fsys fs.FS, prefix string) http.Handler {
 				http.ServeContent(w, r, path.Base(rel), time.Time{}, bytes.NewReader(b))
 				return
 			}
-			// A missing bundle file is a 404, not the SPA page.
-			if path.Ext(rel) == ".js" || path.Ext(rel) == ".css" || path.Ext(rel) == ".map" {
-				http.NotFound(w, r)
-				return
-			}
+		}
+		// A missing file is a 404, not the SPA page: SPA routes (/, /s/{code},
+		// /s/{code}/blocked, /admin/...) never end in a file extension, so
+		// e.g. /services/api/go.mod or /study-config.v1.4.json are not
+		// answered with index.html.
+		if path.Ext(rel) != "" && rel != "index.html" {
+			http.NotFound(w, r)
+			return
 		}
 		b := []byte(placeholderIndex)
 		if fsys != nil {

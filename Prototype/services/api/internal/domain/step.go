@@ -42,6 +42,9 @@ type Debrief struct {
 	Paragraphs   []string `json:"paragraphs"`
 	DoNotDiscuss string   `json:"doNotDiscuss"`
 	SessionCode  string   `json:"sessionCode"`
+	// DECISION: 8.1 has no label for the code; the config's debrief scene has
+	// sessionCodeLabel, which the client shows before the code.
+	SessionCodeLabel string `json:"sessionCodeLabel,omitempty"`
 }
 
 func msUntil(t *time.Time, now time.Time) *int64 {
@@ -123,7 +126,8 @@ func (ct *Content) Describe(s *Session, now time.Time, resumed bool) *Step {
 			}
 			paras = append(paras, db.Paragraphs.End...)
 		}
-		step.Debrief = &Debrief{Paragraphs: paras, DoNotDiscuss: db.DoNotDiscuss, SessionCode: SessionCode(s.ID)}
+		step.Debrief = &Debrief{Paragraphs: paras, DoNotDiscuss: db.DoNotDiscuss, SessionCode: SessionCode(s.ID),
+			SessionCodeLabel: db.SessionCodeLabel}
 	}
 
 	// Prefetch the next step's clip when it is already decided.
