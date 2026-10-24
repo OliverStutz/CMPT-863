@@ -1,6 +1,6 @@
 # Progress: prototype build and deployment
 
-Single place for the state of the prototype. Updated whenever a component, the deployment or the content changes. Last updated 2026-10-24, after the screenshot-walk fixes were rolled out as revision 5.
+Single place for the state of the prototype. Updated whenever a component, the deployment or the content changes. Last updated 2026-10-24. KNOWN REGRESSION on revision 5: with the real consent PDF now served, the consent checkbox cannot be ticked in the live Playwright run (Firefox PDF viewer in the iframe); a fix in `apps/participant/src/scenes/Consent.tsx` is in progress. Do not pilot on revision 5; roll out the fix first (resume steps 3 and 4).
 
 ## Status at a glance
 

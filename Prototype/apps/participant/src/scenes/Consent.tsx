@@ -39,30 +39,43 @@ export function Consent({ step: _step }: { step: Step }) {
     }
   };
 
+  // Layout: one fixed-height frame area (the same height while the PDF is checked, when it is shown and
+  // when the placeholder is shown), then the checkbox and the controls row. Nothing above the checkbox
+  // changes size when the PDF check finishes, so a click is never moved onto the PDF viewer, and the
+  // frame height leaves the checkbox and the button inside the window. The PDF scrolls inside its frame.
   return (
     <Screen title="Consent" titleHidden wide>
-      {pdf === "ok" ? (
-        <>
-          <iframe className={styles.pdfFrame} src={CONSENT_PDF_URL} title="Consent form" />
-          <p className={styles.muted}>
-            <a href={CONSENT_PDF_URL} target="_blank" rel="noopener" download>
-              Download the consent form (PDF)
-            </a>
-          </p>
-        </>
-      ) : (
-        <div className={styles.pdfPlaceholder} data-testid="consent-placeholder">
-          {pdf === "checking" ? "" : "The consent PDF goes here."}
+      <div className={styles.pdfArea} data-testid="consent-pdf-area">
+        {pdf === "ok" ? (
+          <iframe className={styles.pdfFrame} src={CONSENT_PDF_URL} title="Consent form" data-testid="consent-pdf" />
+        ) : (
+          <div className={styles.pdfPlaceholder} data-testid="consent-placeholder">
+            {pdf === "checking" ? "" : "The consent PDF goes here."}
+          </div>
+        )}
+      </div>
+      <div className={styles.consentControls}>
+        <label className={styles.checkboxRow}>
+          <input type="checkbox" checked={checked} onChange={(e) => setChecked(e.target.checked)} />
+          <span>{pack.consent.checkboxLabel}</span>
+        </label>
+        <div className={styles.actions}>
+          <button type="button" className={styles.primary} disabled={!checked || busy} onClick={accept}>
+            {pack.consent.acceptLabel}
+          </button>
+          <a
+            className={styles.muted}
+            href={CONSENT_PDF_URL}
+            target="_blank"
+            rel="noopener"
+            download
+            style={{ visibility: pdf === "ok" ? "visible" : "hidden" }}
+            aria-hidden={pdf === "ok" ? undefined : true}
+            tabIndex={pdf === "ok" ? undefined : -1}
+          >
+            Download the consent form (PDF)
+          </a>
         </div>
-      )}
-      <label className={styles.checkboxRow}>
-        <input type="checkbox" checked={checked} onChange={(e) => setChecked(e.target.checked)} />
-        <span>{pack.consent.checkboxLabel}</span>
-      </label>
-      <div className={styles.actions}>
-        <button type="button" className={styles.primary} disabled={!checked || busy} onClick={accept}>
-          {pack.consent.acceptLabel}
-        </button>
       </div>
     </Screen>
   );

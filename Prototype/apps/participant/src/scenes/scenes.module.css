@@ -89,10 +89,18 @@
   align-items: center;
   flex-wrap: wrap;
 }
+/* Consent: the PDF area has one fixed height in every state, sized so the checkbox and the button
+   below it stay inside the window (page and card padding plus the controls take about 300 px). */
+.pdfArea {
+  position: relative;
+  z-index: 0;
+  height: clamp(220px, calc(100vh - 320px), 640px);
+}
 .pdfFrame {
+  display: block;
   width: 100%;
-  height: 55vh;
-  min-height: 360px;
+  height: 100%;
+  box-sizing: border-box;
   border: 1px solid var(--border);
   border-radius: 6px;
   background: #f3f5f8;
@@ -101,14 +109,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40vh;
-  min-height: 260px;
+  height: 100%;
+  box-sizing: border-box;
   border: 3px dashed var(--border-strong);
   border-radius: 8px;
   color: var(--text-muted);
   font-size: 1.15rem;
   text-align: center;
   padding: 1rem;
+}
+.consentControls {
+  position: relative;
+  z-index: 1;
+}
+.consentControls .actions {
+  margin-top: 1rem;
 }
 .checkboxRow {
   display: flex;
@@ -120,6 +135,10 @@
   cursor: pointer;
 }
 .checkboxRow input {
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+  cursor: pointer;
   width: 1.35rem;
   height: 1.35rem;
   margin-top: 0.1rem;

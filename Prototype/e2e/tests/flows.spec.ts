@@ -221,7 +221,27 @@ async function runSession(browser: Browser, request: APIRequestContext, runCode:
         // The app sends device_checked, waits out the view and sends finished on its own.
         break;
       case "consent": {
-        await page.getByRole("checkbox").check();
+        const box = page.getByRole("checkbox");
+        await box.waitFor();
+        const before = await box.boundingBox();
+        // With the consent PDF present the viewer frame replaces the placeholder in the same area: the
+        // checkbox does not move, stays inside the window, and nothing covers it.
+        const pdfHead = await request.head(`/assets/consent/${encodeURIComponent(config.consent.pdfAssetKey)}`);
+        if (pdfHead.ok()) {
+          await expect(page.getByTestId("consent-pdf")).toBeVisible();
+          const after = await box.boundingBox();
+          expect(after, "consent checkbox did not move when the PDF frame appeared").toEqual(before);
+          const vp = page.viewportSize()!;
+          expect(after!.y + after!.height, "consent checkbox inside the window").toBeLessThanOrEqual(vp.height);
+          const btn = await page.getByRole("button", { name: config.consent.acceptLabel }).boundingBox();
+          expect(btn!.y + btn!.height, "accept button inside the window").toBeLessThanOrEqual(vp.height);
+          const hit = await box.evaluate((el) => {
+            const r = el.getBoundingClientRect();
+            return document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2) === el;
+          });
+          expect(hit, "nothing covers the consent checkbox").toBe(true);
+        }
+        await box.check();
         await page.getByRole("button", { name: config.consent.acceptLabel }).click();
         handled.add(key);
         break;

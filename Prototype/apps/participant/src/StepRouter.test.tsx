@@ -199,4 +199,33 @@ describe("StepRouter flow", () => {
     // Shown again, not newly: no marking_shown outside the slide step.
     expect(srv.events.filter((e) => e.type === "marking_shown")).toHaveLength(0);
   });
+
+  it("keeps the consent checkbox checkable when the PDF frame is shown, in the same frame area", async () => {
+    const realFetch = globalThis.fetch;
+    globalThis.fetch = (async (url: RequestInfo | URL, init?: RequestInit) => {
+      if (String(url).startsWith("/assets/consent/") && init?.method === "HEAD") {
+        return new Response(null, { status: 200, headers: { "Content-Type": "application/pdf" } });
+      }
+      return realFetch(url, init);
+    }) as typeof fetch;
+    try {
+      const srv = mockServer({ pack, first: step({ stepId: "p2", scene: "consent" }), onEvent: () => ({ body: {} }) });
+      render(<StudyRoute code="RUN1" onBlocked={() => undefined} api={new ApiClient({ fetch: srv.fetch })} />);
+      const area = await screen.findByTestId("consent-pdf-area");
+      const frame = await screen.findByTestId("consent-pdf");
+      // The frame replaces the placeholder inside the same area: the checkbox and button are not moved.
+      expect(area).toContainElement(frame);
+      expect(screen.queryByTestId("consent-placeholder")).toBeNull();
+      const box = screen.getByRole("checkbox");
+      const accept = screen.getByRole("button", { name: pack.consent.acceptLabel });
+      expect(area.compareDocumentPosition(box) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      expect(accept).toBeDisabled();
+      fireEvent.click(box);
+      expect(box).toBeChecked();
+      expect(accept).toBeEnabled();
+      expect(screen.getByRole("link", { name: /Download the consent form/ })).toBeVisible();
+    } finally {
+      globalThis.fetch = realFetch;
+    }
+  });
 });
