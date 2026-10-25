@@ -21,12 +21,13 @@
     "ratingWindowMs": 15000,
     "actionWindowMs": 15000,
     "formWindowMs": 30000,
+    "backgroundWindowMs": 0,
     "linePauseMs": 600,
     "audioEndToleranceMs": 1500,
     "latencyAllowanceMs": 3000,
     "abandonAfterMs": 1800000,
     "msPerWordEstimate": 400,
-    "_note": "Walk-through timing: real clips, 2 s views after audio and answers; all other windows as in v1.4.0."
+    "_note": "Walk-through timing: real clips, 2 s views after audio and answers; all other windows as in v1.4.0; background questions untimed (2026-10-25)."
   },
   "voices": {
     "ciso": {

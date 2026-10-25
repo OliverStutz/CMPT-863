@@ -361,6 +361,7 @@ Status 2026-10-24: all 53 points answered. Flags selected from the VLM run (see 
 **Recommendation:** untimed. Your prompt times the view and the ratings only.
 **Changes if decided later:** one parameter per screen.
 **Answer:** Timed: 30 s each for the budget vote and the background questions screen. On timeout keep partial answers, mark the rest missing, move on, as for ratings. (Oliver, 2026-10-24)
+**Revised:** The background questions screen has no time limit; 30 s is not enough to fill in the information. The budget vote keeps its 30 s. Config: `timing.backgroundWindowMs: 0` (absent means `formWindowMs`, as before). The abandon sweep (30 min without an event) still ends a session left open on that screen; its ratings and budget decision are complete by then and usable. (Oliver, 2026-10-25)
 
 ### 2.13 Admin status meanings [R-12] `CAN WAIT`
 **Question:** Your prompt lists Started, Ongoing, Finished. The architecture defines Started as "link opened, no slide audio yet", Ongoing as "after the first audio", plus Abandoned and Blocked. Is that what you want?

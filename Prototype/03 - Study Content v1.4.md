@@ -333,7 +333,7 @@ Nothing preselected.
 
 ## 9. Background questions [1.9, 1.14, 2.12, 2.14, 4.6]
 
-All seven after the budget decision, on one screen. 30 s, with a visible countdown; on timeout, answers given are kept and the rest marked missing. "Prefer not to say" on every item.
+All seven after the budget decision, on one screen. No time limit (Oliver, 2026-10-25; the earlier 30 s was too short to fill in); the screen stays until the participant presses Next. "Prefer not to say" on every item.
 
 **Intro:** As part of the study we collect the following data. You can choose "Prefer not to say" for any question.
 
@@ -458,7 +458,7 @@ Words counted by script; seconds at 150 words per minute. Real durations come fr
 | 14 | Action | 15 s; timeout: chair asks, stored as missing in both groups | decided [2.1] |
 | 15 | View after audio | 10 s after the opening, each slide and each answer | decided [1.8] |
 | 16 | Budget | Approve / Reject plus "How sure are you?" 0 to 10; 30 s | decided [1.5, 2.12] |
-| 17 | Background | Seven items at the end; 30 s; "Prefer not to say" on each; knowledge 1 to 5 (None, Basic, Some, Good, Expert); AI use six steps | decided [1.9, 1.14, 2.12, 2.14] |
+| 17 | Background | Seven items at the end; untimed since 2026-10-25; "Prefer not to say" on each; knowledge 1 to 5 (None, Basic, Some, Good, Expert); AI use six steps | decided [1.9, 1.14, 2.12, 2.14] |
 | 18 | Audio check | One answer, replayable clip, flag only | decided [2.4] |
 | 19 | Captions | None; screen-reader transcript only | decided [2.7] |
 | 20 | Checker | Highlight on the slide; "No issues found" on unflagged slides; sentence on the last setup screen | decided [1.1, 1.16, 4.2] |

@@ -40,6 +40,7 @@ type env struct {
 	st  *memory.Store
 	reg *configs.Registry
 	now time.Time
+	dir string // content dir the registry loads from
 }
 
 // newEnv builds a server over a content dir. With fast=true the dir is a temp
@@ -58,7 +59,7 @@ func newEnv(t *testing.T, fast bool) *env {
 		b, _ := json.Marshal(testutil.FastConfig("test-fast", 4, 2, 3))
 		_ = os.WriteFile(filepath.Join(dir, "study-config.test-fast.json"), b, 0o644)
 	}
-	e := &env{t: t, st: memory.New(), now: time.Date(2026, 11, 1, 10, 0, 0, 0, time.UTC)}
+	e := &env{t: t, st: memory.New(), now: time.Date(2026, 11, 1, 10, 0, 0, 0, time.UTC), dir: dir}
 	src := assets.Local{Root: dir}
 	e.reg = &configs.Registry{Source: src, Store: e.st, AllowTest: fast, AssetURLPrefix: "/assets/", Log: quiet}
 	if err := e.reg.Load(context.Background()); err != nil {
@@ -527,6 +528,62 @@ func TestAdminLoginRateLimit(t *testing.T) {
 	}
 	if w.Code != 429 {
 		t.Fatalf("%d", w.Code)
+	}
+}
+
+// The background screen has no deadline when timing.backgroundWindowMs is 0
+// (2.12 revised 2026-10-25): no closesInMs, no lazy timeout however long it
+// stays open, background_timeout refused, background_submitted accepted. The
+// budget screen keeps formWindowMs, and a config without the field keeps the
+// old behaviour.
+func TestBackgroundUntimed(t *testing.T) {
+	e := newEnv(t, true)
+	cfg := testutil.FastConfig("test-untimed", 4, 2, 3)
+	zero := sc.Ms(0)
+	cfg.Timing.BackgroundWindowMs = &zero
+	b, _ := json.Marshal(cfg)
+	if err := os.WriteFile(filepath.Join(e.dir, "study-config.test-untimed.json"), b, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := e.reg.Load(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	run := e.run("test-untimed")
+	p := e.newParticipant(run.Code)
+	p.walk("explain", func(st *domain.Step) bool { return st.Scene == domain.KindBudget })
+	if st := p.next(); st.Scene != domain.KindBudget || st.ClosesInMs == nil {
+		t.Fatalf("budget step keeps its window: %+v", st)
+	}
+	p.mustOK("budget_submitted", map[string]any{"optionId": nil, "confidence": 5})
+	st := p.next()
+	if st.Scene != domain.KindBackground {
+		t.Fatalf("at %s", st.Scene)
+	}
+	if st.ClosesInMs != nil {
+		t.Fatalf("untimed background has closesInMs %d", *st.ClosesInMs)
+	}
+	e.now = e.now.Add(10 * time.Minute)
+	if st := p.next(); st.Scene != domain.KindBackground {
+		t.Fatalf("after 10 minutes the screen moved on to %s", st.Scene)
+	}
+	if code, r := p.send("background_timeout", map[string]any{"partial": map[string]any{}, "hp": ""}); code == 200 || r.Error == nil || r.Error.Code != domain.ErrWrongState {
+		t.Fatalf("background_timeout on an untimed screen: %d %+v", code, r)
+	}
+	p.mustOK("background_submitted", map[string]any{"items": map[string]any{}, "hp": ""})
+	if st := p.next(); st.Scene != domain.KindDebrief {
+		t.Fatalf("after submit: %s", st.Scene)
+	}
+
+	// Without the field, the background screen is timed by formWindowMs as before.
+	r2 := &domain.Run{ID: "run-test-fast-2", Code: "abc235", Name: "Test", Source: "Test", ConfigVersion: "test-fast",
+		Status: domain.RunOpen, CreatedAt: e.now}
+	if err := e.st.CreateRun(context.Background(), r2); err != nil {
+		t.Fatal(err)
+	}
+	q := e.newParticipant(r2.Code)
+	q.walk("hasQuestion", func(st *domain.Step) bool { return st.Scene == domain.KindBackground }) // second consent: neutral group
+	if st := q.next(); st.ClosesInMs == nil {
+		t.Fatalf("background without backgroundWindowMs must keep formWindowMs: %+v", st)
 	}
 }
 

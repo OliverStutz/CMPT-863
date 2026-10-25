@@ -1,6 +1,7 @@
 // Background questions (1.9, 2.3, 2.12, 2.14; content v1.3 section 9): every answerable item with
-// "Prefer not to say" (added by the renderer), the hidden honeypot field, 30 s countdown;
-// background_submitted, or background_timeout with what was given.
+// "Prefer not to say" (added by the renderer), the hidden honeypot field; a countdown only when the
+// server sends closesInMs (timing.backgroundWindowMs > 0; since 2026-10-25 the screen is untimed, so
+// none is shown); background_submitted, or background_timeout with what was given.
 //
 // DECISION: section 5.3 does not fix the shape of `items`. It is sent as { [itemId]: value }, where the
 // value is the chosen option id (single), the number (scale), the ISO 3166-1 alpha-2 code (country), or

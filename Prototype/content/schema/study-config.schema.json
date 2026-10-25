@@ -153,6 +153,10 @@
         "formWindowMs": {
           "$ref": "#/$defs/Ms"
         },
+        "backgroundWindowMs": {
+          "$ref": "#/$defs/Ms",
+          "description": "Time limit of the background questions screen in ms. 0 means no time limit (Oliver, 2026-10-25). When absent, formWindowMs applies as before."
+        },
         "linePauseMs": {
           "$ref": "#/$defs/Ms"
         },

@@ -37,6 +37,8 @@ export interface Timing {
   ratingWindowMs: Ms;
   actionWindowMs: Ms;
   formWindowMs: Ms;
+  /** Background questions screen; 0 = no time limit (the default since 2026-10-25). Absent: formWindowMs. */
+  backgroundWindowMs?: Ms;
   linePauseMs: Ms;
   audioEndToleranceMs: Ms;
   latencyAllowanceMs: Ms;

@@ -133,8 +133,14 @@ func (r *run) enter(i int, at time.Time) {
 		}
 	case KindAction:
 		d.ActionClosesAt = tp(at.Add(ms(timing.ActionWindowMs)))
-	case KindBudget, KindBackground:
+	case KindBudget:
 		d.FormClosesAt = tp(at.Add(ms(timing.FormWindowMs)))
+	case KindBackground:
+		// No deadline when the window is 0: the screen stays open until the
+		// participant submits (or the abandon sweep ends the session).
+		if w := timing.BackgroundWindow(); w > 0 {
+			d.FormClosesAt = tp(at.Add(ms(w)))
+		}
 	}
 	r.s.Deadlines = d
 	r.s.CurrentState = st.Key()
@@ -998,6 +1004,9 @@ func (r *run) onForm(req *events.Request) (*rejection, error) {
 		return rej, nil
 	}
 	if timeout {
+		if r.s.Deadlines.FormClosesAt == nil {
+			return reject(ErrWrongState, "%s: this screen has no time limit", req.Type), nil
+		}
 		if rej := r.tooEarly(r.s.Deadlines.FormClosesAt.Add(-r.tol), req.Type); rej != nil {
 			return rej, nil
 		}

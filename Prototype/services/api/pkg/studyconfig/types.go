@@ -91,16 +91,28 @@ type StudyConfig struct {
 }
 
 type Timing struct {
-	PostAudioViewMs     Ms  `json:"postAudioViewMs"`
-	PostAnswerViewMs    Ms  `json:"postAnswerViewMs"`
-	RatingWindowMs      Ms  `json:"ratingWindowMs"`
-	ActionWindowMs      Ms  `json:"actionWindowMs"`
-	FormWindowMs        Ms  `json:"formWindowMs"`
+	PostAudioViewMs  Ms `json:"postAudioViewMs"`
+	PostAnswerViewMs Ms `json:"postAnswerViewMs"`
+	RatingWindowMs   Ms `json:"ratingWindowMs"`
+	ActionWindowMs   Ms `json:"actionWindowMs"`
+	FormWindowMs     Ms `json:"formWindowMs"`
+	// BackgroundWindowMs is the time limit of the background questions screen;
+	// 0 means none (Oliver, 2026-10-25: 30 s was too short to fill in the
+	// information). nil means formWindowMs, as before.
+	BackgroundWindowMs  *Ms `json:"backgroundWindowMs,omitempty"`
 	LinePauseMs         Ms  `json:"linePauseMs"`
 	AudioEndToleranceMs Ms  `json:"audioEndToleranceMs"`
 	LatencyAllowanceMs  Ms  `json:"latencyAllowanceMs"`
 	AbandonAfterMs      Ms  `json:"abandonAfterMs"`
 	MsPerWordEstimate   *Ms `json:"msPerWordEstimate,omitempty"`
+}
+
+// BackgroundWindow returns the background screen's time limit; 0 is untimed.
+func (t Timing) BackgroundWindow() Ms {
+	if t.BackgroundWindowMs == nil {
+		return t.FormWindowMs
+	}
+	return *t.BackgroundWindowMs
 }
 
 type Voices struct {

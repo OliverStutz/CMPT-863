@@ -21,12 +21,13 @@
     "ratingWindowMs": 15000,
     "actionWindowMs": 15000,
     "formWindowMs": 30000,
+    "backgroundWindowMs": 0,
     "linePauseMs": 50,
     "audioEndToleranceMs": 1500,
     "latencyAllowanceMs": 3000,
     "abandonAfterMs": 1800000,
     "msPerWordEstimate": 15,
-    "_note": "Fast timings for the local Playwright flows; all texts are those of v1.4.0."
+    "_note": "Fast timings for the local Playwright flows; all texts are those of v1.4.0. Background questions untimed as in v1.4.0 (2026-10-25)."
   },
   "voices": {
     "ciso": {

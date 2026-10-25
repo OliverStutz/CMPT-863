@@ -154,7 +154,8 @@ interface Timing {
   postAnswerViewMs: Ms;          // 10000, after each CISO answer, before the second rating (1.8)
   ratingWindowMs: Ms;            // 15000
   actionWindowMs: Ms;            // 15000 (2.1)
-  formWindowMs: Ms;              // 30000, for the budget screen and for the background screen, each (2.12)
+  formWindowMs: Ms;              // 30000, for the budget screen (2.12)
+  backgroundWindowMs?: Ms;       // 0 = untimed background screen (2.12 revised 2026-10-25); absent: formWindowMs
   linePauseMs: Ms;               // 600, silence tools/tts inserts where it joins lines into one clip
   audioEndToleranceMs: Ms;       // 1500, how early audio_ended may arrive
   latencyAllowanceMs: Ms;        // 3000, network allowance on window deadlines
@@ -311,7 +312,7 @@ interface BudgetScene {      // approve or reject, plus how sure (1.5); timed by
   confidence: { label: string; scale: ScaleSpec };   // "How sure are you?" 0 to 10
 }
 
-interface BackgroundScene {  // all items at the end, after the budget decision (1.9); timed by formWindowMs (2.12)
+interface BackgroundScene {  // all items at the end, after the budget decision (1.9); untimed when backgroundWindowMs is 0 (2.12, 2026-10-25)
   kind: "background";
   id: Id;
   intro: string;             // states plainly that this data is collected as part of the study; no mention of groups (4.6)
@@ -478,7 +479,7 @@ stateDiagram-v2
   PostView5 --> RatingT5: postAudioViewMs elapsed
   RatingT5 --> Budget
   Budget --> Background: budget_submitted or timeout (30 s)
-  Background --> Debrief: background_submitted or timeout (30 s)
+  Background --> Debrief: background_submitted (timeout only if backgroundWindowMs > 0)
   Debrief --> Finished: finished
   Finished --> [*]
 ```
@@ -516,7 +517,7 @@ All times below are server times. `d` is the clip duration from the resolved con
 | `budget_submitted` | `{ optionId, confidence }` | Budget | Shape matches the budget scene; either value may be `null`. Accepted up to `formOpenedAt + formWindowMs + lat` (2.12). |
 | `budget_timeout` | `{ partial: {...} }` | Budget | `now >= formOpenedAt + formWindowMs - tol`. Partial kept, rest marked missing (2.12). |
 | `background_submitted` | `{ items, hp }` | Background | Shape matches items; "Prefer not to say" is a valid answer for every item. Non-empty honeypot `hp` adds a flag (2.3). Same window rule as the budget. |
-| `background_timeout` | `{ partial: {...}, hp }` | Background | As `budget_timeout`. |
+| `background_timeout` | `{ partial: {...}, hp }` | Background | As `budget_timeout`; rejected as `wrong_state` when the screen has no time limit (`backgroundWindowMs` 0, the default content since 2026-10-25). |
 | `finished` | `{}` | Debrief | At least 5 s on the debrief. Sets status Finished. |
 | `visibility` | `{ hidden: boolean }` | any | Side event, does not advance. Logged so tab switches during audio are visible to analysis. Max 30 per session. |
 
@@ -1040,6 +1041,7 @@ Oliver answered every remaining point in `04 - Open Decisions.md`. The document 
 - **1.24**: configurable slides, as in the 2026-10-23 entry.
 - **1.25**: lint keeps AI terms out of checker texts before the debrief.
 - **1.26** (2026-10-25): run link codes default to 12 characters (`RUN_CODE_LENGTH`, 6 to 32); the six characters of the first draft were this document's choice, not a requirement. Existing runs keep their codes.
+- **1.28** (2026-10-25): background questions untimed (`timing.backgroundWindowMs: 0` in every config; the server sets no deadline and sends no `closesInMs`, the client shows no countdown); the budget vote keeps `formWindowMs`. Revises 2.12.
 - **1.27** (2026-10-25): a config without an audio manifest plays silent placeholder clips (11.1); the admin Configs and Runs tabs now say so ("no audio: silent clips"), and `content/study-config.test-sound.json` (version `test-sound-1.4.0`) is a walk-through copy of v1.4 with the real clips and 2 s views, next to the silent `test-fast-1.4.0` used by the Playwright flows.
 - **2.1, 2.2**: 15 s action window; a timeout is stored as missing in both groups and the chair asks; `timeoutMapsTo` and `effectiveAction` removed; partial ratings kept; `ratingTimeoutPolicy` removed.
 - **2.3, 2.4**: both checks, flag only; audio check has one answer attempt, the test clip may be replayed freely (`audio_check_played`), result and play count shown in the admin view; `maxAttempts`, `onWrong`, `heardLabel` and `attentionChecks` removed.
