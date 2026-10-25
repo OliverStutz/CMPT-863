@@ -530,6 +530,33 @@ func TestAdminLoginRateLimit(t *testing.T) {
 	}
 }
 
+// Correct logins are not limited, and a correct login clears earlier failures
+// from the same address (test runs and the admin often share one network).
+func TestAdminLoginSuccessNotLimited(t *testing.T) {
+	e := newEnv(t, true)
+	gate := e.gate()
+	for i := 0; i < AdminLoginAttempts*3; i++ {
+		if w := e.do("POST", "/api/admin/login", map[string]string{"password": testPW}, cookie(gate)); w.Code != 200 {
+			t.Fatalf("correct login %d: %d %s", i+1, w.Code, w.Body)
+		}
+	}
+	for i := 0; i < AdminLoginAttempts-1; i++ {
+		e.do("POST", "/api/admin/login", map[string]string{"password": "nope"}, cookie(gate))
+	}
+	if w := e.do("POST", "/api/admin/login", map[string]string{"password": testPW}, cookie(gate)); w.Code != 200 {
+		t.Fatalf("correct login after %d failures: %d", AdminLoginAttempts-1, w.Code)
+	}
+	for i := 0; i < AdminLoginAttempts-1; i++ {
+		e.do("POST", "/api/admin/login", map[string]string{"password": "nope"}, cookie(gate))
+	}
+	if w := e.do("POST", "/api/admin/login", map[string]string{"password": "nope"}, cookie(gate)); w.Code != 401 {
+		t.Fatalf("failure %d after the reset should still be a plain wrong password: %d", AdminLoginAttempts, w.Code)
+	}
+	if w := e.do("POST", "/api/admin/login", map[string]string{"password": testPW}, cookie(gate)); w.Code != 429 {
+		t.Fatalf("after %d failures every attempt is limited: %d", AdminLoginAttempts, w.Code)
+	}
+}
+
 func TestAdminRunsParticipantsExport(t *testing.T) {
 	e := newEnv(t, true)
 	gate := e.gate()

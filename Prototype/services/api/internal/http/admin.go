@@ -171,10 +171,15 @@ func (s *Server) requireAdmin(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+// adminLogin checks the shared password. Only wrong passwords count against
+// the per-IP limit (AdminLoginAttempts in 15 minutes); a correct login never
+// counts and clears the failures of its address.
+// DECISION (2026-10-25): the first version counted every attempt, so test runs
+// from the same network locked the admin out before the first try.
 func (s *Server) adminLogin(w http.ResponseWriter, r *http.Request) {
 	ip := ClientIP(r, s.o.TrustedProxyHops)
-	if s.loginLimit.Hit(ip) > AdminLoginAttempts {
-		writeErr(w, domain.ErrRateLimited, "too many login attempts; wait 15 minutes")
+	if s.loginLimit.Count(ip) >= AdminLoginAttempts {
+		writeErr(w, domain.ErrRateLimited, "too many wrong passwords from this address; wait 15 minutes")
 		return
 	}
 	var body struct {
@@ -186,9 +191,11 @@ func (s *Server) adminLogin(w http.ResponseWriter, r *http.Request) {
 	}
 	hash := s.o.PasswordHash.Get(r.Context())
 	if len(hash) == 0 || bcrypt.CompareHashAndPassword(hash, []byte(body.Password)) != nil {
+		s.loginLimit.Hit(ip)
 		writeErr(w, domain.ErrBadPassword, "wrong password")
 		return
 	}
+	s.loginLimit.Reset(ip)
 	exp := s.now().Add(adminTTL).Unix()
 	http.SetCookie(w, &http.Cookie{Name: adminCookie, Value: s.sign(r.Context(), "admin|"+randomToken()+"|"+strconv.FormatInt(exp, 10)),
 		Path: "/api/admin", HttpOnly: true, Secure: !s.o.InsecureCookies, SameSite: http.SameSiteStrictMode,

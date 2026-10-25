@@ -137,6 +137,13 @@ func (l *Limiter) Hit(key string) int {
 	return len(h)
 }
 
+// Reset forgets every hit of a key.
+func (l *Limiter) Reset(key string) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	delete(l.hits, key)
+}
+
 // Count returns the hits in the window without recording one.
 func (l *Limiter) Count(key string) int {
 	l.mu.Lock()
