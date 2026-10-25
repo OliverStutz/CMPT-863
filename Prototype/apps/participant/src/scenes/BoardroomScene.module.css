@@ -53,8 +53,8 @@
   font-weight: 600;
 }
 .portrait figcaption {
-  white-space: nowrap;
   margin-top: 8px;
+  line-height: 1.15;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 .portraitImage {
@@ -64,7 +64,10 @@
   border-radius: 12px;
   overflow: hidden;
   border: 3px solid rgba(255, 255, 255, 0.15);
-  transition: box-shadow 0.4s, border-color 0.4s, filter 0.4s;
+  transition:
+    box-shadow 0.4s,
+    border-color 0.4s,
+    filter 0.4s;
   filter: brightness(0.85);
 }
 .portraitImage svg,
@@ -76,7 +79,9 @@
 }
 .speaking .portraitImage {
   border-color: #f2c879;
-  box-shadow: 0 0 0 4px rgba(242, 200, 121, 0.35), 0 0 36px rgba(242, 200, 121, 0.55);
+  box-shadow:
+    0 0 0 4px rgba(242, 200, 121, 0.35),
+    0 0 36px rgba(242, 200, 121, 0.55);
   filter: none;
 }
 .speakingBars {
@@ -121,32 +126,40 @@
   top: 470px;
   width: 260px;
 }
-/* Table row (top 660, width 130 each): chair, the participant's seat, two more members, the controls
-   box, one more member at the right, then the CISO. */
+/* Table row: seven seats of 130 px spread evenly from 30 to 1225 (chair, the participant's seat, five
+   more members), then the CISO at 1240. The controls card and the dialog sit on top of the middle seats
+   when they appear. Captions are 18 px and may wrap to two lines. */
+.chair,
+.member,
+.member2,
+.member3,
+.member4,
+.member5,
+.member6 {
+  top: 660px;
+  width: 130px;
+  font-size: 18px;
+}
 .chair {
   left: 30px;
-  top: 660px;
-  width: 130px;
 }
 .member {
-  left: 180px;
-  top: 660px;
-  width: 130px;
+  left: 208px;
 }
 .member2 {
-  left: 330px;
-  top: 660px;
-  width: 130px;
+  left: 385px;
 }
 .member3 {
-  left: 480px;
-  top: 660px;
-  width: 130px;
+  left: 563px;
 }
 .member4 {
+  left: 740px;
+}
+.member5 {
+  left: 918px;
+}
+.member6 {
   left: 1095px;
-  top: 660px;
-  width: 130px;
 }
 /* The participant's own seat: a lighter frame and a "You" badge; the speaking glow still wins. */
 .you .portraitImage {

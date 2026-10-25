@@ -1,7 +1,7 @@
 // `<BoardroomScene>` (section 9.2): a fixed 16:9 stage, scaled to the viewport, as a still composite
 // (2.10). Layers: boardroom background; the presentation screen with the slide; the CISO portrait
 // beside the screen; at the table the chair, the participant's own seat ("Board member (You)", marked
-// with a badge and a lighter frame) and three more silent board members, so the board looks full
+// with a badge and a lighter frame) and five more silent board members, so the board looks full
 // (Oliver, 2026-10-25); for checker sessions the checker panel at the screen's top right corner. The
 // portrait of whoever speaks gets a soft glow and a speaking indicator while the clip plays; the
 // participant's seat lights while the board-member voice speaks the participant's question.
@@ -184,6 +184,20 @@ export function BoardroomScene(p: Props) {
           className={styles.member4}
           tone={4}
         />
+        <Portrait
+          role="member5"
+          label="Board member"
+          speaking={false}
+          className={styles.member5}
+          tone={5}
+        />
+        <Portrait
+          role="member6"
+          label="Board member"
+          speaking={false}
+          className={styles.member6}
+          tone={6}
+        />
 
         {p.controls && <div className={styles.controls}>{p.controls}</div>}
         {p.dialog && <div className={styles.dialog}>{p.dialog}</div>}
@@ -242,6 +256,8 @@ const TONES = [
   { bg: "#465064", fg: "#8e98a8", r: 39 },
   { bg: "#505866", fg: "#a3abb8", r: 36 },
   { bg: "#434b5c", fg: "#97a1b0", r: 40 },
+  { bg: "#4b5366", fg: "#a6afbd", r: 37 },
+  { bg: "#485263", fg: "#919bab", r: 39 },
 ];
 
 function Portrait({
