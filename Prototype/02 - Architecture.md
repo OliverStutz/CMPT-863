@@ -572,7 +572,7 @@ The main defence is structural: a valid record can only be built one event at a 
 
 ```text
 runs/{runId}
-  code            string   short URL code, e.g. "k7m2qp" (unique, 6 chars, no look-alikes)
+  code            string   URL code, e.g. "k7m2qpv4xw8n" (unique, RUN_CODE_LENGTH chars, default 12, no look-alikes)
   name            string   "LinkedIn post 1"
   source          string   "LinkedIn", "WhatsApp", ...
   configVersion   string   pinned; cannot change once the run has sessions (2.16)
@@ -1039,6 +1039,8 @@ Oliver answered every remaining point in `04 - Open Decisions.md`. The document 
 - **1.22**: `padDenialToReason` on `answers`; tools/tts appends silence to the denial (11.1 step 8); lint warning otherwise.
 - **1.24**: configurable slides, as in the 2026-10-23 entry.
 - **1.25**: lint keeps AI terms out of checker texts before the debrief.
+- **1.26** (2026-10-25): run link codes default to 12 characters (`RUN_CODE_LENGTH`, 6 to 32); the six characters of the first draft were this document's choice, not a requirement. Existing runs keep their codes.
+- **1.27** (2026-10-25): a config without an audio manifest plays silent placeholder clips (11.1); the admin Configs and Runs tabs now say so ("no audio: silent clips"), and `content/study-config.test-sound.json` (version `test-sound-1.4.0`) is a walk-through copy of v1.4 with the real clips and 2 s views, next to the silent `test-fast-1.4.0` used by the Playwright flows.
 - **2.1, 2.2**: 15 s action window; a timeout is stored as missing in both groups and the chair asks; `timeoutMapsTo` and `effectiveAction` removed; partial ratings kept; `ratingTimeoutPolicy` removed.
 - **2.3, 2.4**: both checks, flag only; audio check has one answer attempt, the test clip may be replayed freely (`audio_check_played`), result and play count shown in the admin view; `maxAttempts`, `onWrong`, `heardLabel` and `attentionChecks` removed.
 - **2.5**: a reload replays the interrupted clip from the start, one accepted `scene_started` repeat, `reloadCount` and flag `reloaded`; `resumePolicy` removed (5.3, 9.5).

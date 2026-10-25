@@ -49,6 +49,7 @@ Other targets: `make test` (all tests; the Firestore store test is skipped witho
 | `FIRESTORE_PROJECT_ID`, `FIRESTORE_PROJECT`, `GOOGLE_CLOUD_PROJECT` | `demo-study` with the emulator | Firestore project (first one set wins); database `(default)` |
 | `TRUSTED_PROXY_HOPS` | `0` | Client IP from `X-Forwarded-For`: the n-th entry from the right (1 on Cloud Run); 0 uses the TCP peer. The raw header is logged for the first 20 session creations per instance |
 | `ALLOW_TEST_CONFIGS` | `false` | Accept configs whose version starts with `test` |
+| `RUN_CODE_LENGTH` | `12` | Length of the link code of a new run (6 to 32; alphabet without look-alikes, 31 characters). Existing runs keep their codes |
 | `INSECURE_COOKIES` | `false` | Drop the `Secure` cookie flag (local http only) |
 | `PUBLIC_BASE_URL` | request host | Base of run links, e.g. `https://study.example.org` |
 | `SEED_RUN_CODE` | none | Create a dev run with this code at start |

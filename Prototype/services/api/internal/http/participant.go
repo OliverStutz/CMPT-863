@@ -27,6 +27,29 @@ const (
 // codeAlphabet has no look-alike characters (0/o, 1/l/i).
 const codeAlphabet = "abcdefghjkmnpqrstuvwxyz23456789"
 
+// Run link codes. DECISION (2026-10-25): the architecture's six characters were
+// Claude's choice, not a requirement from Oliver; the default is now twelve
+// (about 59 bits) and the length is configurable with RUN_CODE_LENGTH.
+const (
+	DefaultRunCodeLength = 12
+	MinRunCodeLength     = 6
+	MaxRunCodeLength     = 32
+)
+
+// runCodeLength returns the configured run code length within its bounds.
+func (s *Server) runCodeLength() int {
+	n := s.o.RunCodeLength
+	switch {
+	case n == 0:
+		return DefaultRunCodeLength
+	case n < MinRunCodeLength:
+		return MinRunCodeLength
+	case n > MaxRunCodeLength:
+		return MaxRunCodeLength
+	}
+	return n
+}
+
 func randomCode(n int) string {
 	b := make([]byte, n)
 	if _, err := rand.Read(b); err != nil {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getConfig, listConfigs } from "../api/client";
-import type { StudyConfigLite } from "../api/types";
+import { AUDIO_MODE_LABEL, audioMode, type StudyConfigLite } from "../api/types";
 import { localTime } from "../lib/time";
 import { useAsync } from "../lib/useAsync";
 
@@ -20,6 +20,17 @@ export function summarizeSlides(cfg: StudyConfigLite): SlideSummary {
     slideCount: slides.length,
     flagged: slides.flatMap((s, i) => (s.checker?.status === "flagged" ? [{ n: i + 1, id: s.id }] : [])),
   };
+}
+
+/** Chip naming how a config's clips are served (types.ts audioMode). */
+export function AudioChip({ mode }: { mode: ReturnType<typeof audioMode> }) {
+  if (!mode) return <span className="muted">-</span>;
+  const cls = mode === "spoken" ? "chip-success" : mode === "partly-silent" ? "chip-info" : "chip-warning";
+  return (
+    <span className={`chip ${cls}`} title={mode === "spoken" ? "Every clip has a TTS recording" : "No TTS recording for this version: the server plays silent placeholder clips"}>
+      {AUDIO_MODE_LABEL[mode]}
+    </span>
+  );
 }
 
 // DECISION: the config list response (8.2) carries no slide count, so each version's full config is fetched
@@ -58,6 +69,7 @@ export function ConfigsTab() {
                 <th>Uploaded</th>
                 <th>Slides</th>
                 <th>Flagged slides</th>
+                <th>Audio</th>
                 <th>Lint report</th>
               </tr>
             </thead>
@@ -82,6 +94,9 @@ export function ConfigsTab() {
                           : s.flagged.length
                             ? s.flagged.map((f) => `${f.n} (${f.id})`).join(", ")
                             : "none"}
+                    </td>
+                    <td>
+                      <AudioChip mode={audioMode(c)} />
                     </td>
                     <td>
                       {c.lintReport === undefined || c.lintReport === null ? (

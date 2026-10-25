@@ -543,7 +543,7 @@ func TestAdminRunsParticipantsExport(t *testing.T) {
 	}
 	var created struct{ ID, Code, URL string }
 	_ = json.Unmarshal(w.Body.Bytes(), &created)
-	if !regexp.MustCompile(`^[a-z2-9]{6}$`).MatchString(created.Code) || !strings.HasSuffix(created.URL, "/s/"+created.Code) {
+	if !regexp.MustCompile(`^[a-z2-9]{12}$`).MatchString(created.Code) || !strings.HasSuffix(created.URL, "/s/"+created.Code) {
 		t.Fatalf("%+v", created)
 	}
 	p := e.newParticipant(created.Code)

@@ -1,0 +1,131 @@
+{
+  "configVersion": "test-sound-1.4.0",
+  "toolVersion": "tts/1",
+  "generatedAt": "2026-10-25T22:39:28Z",
+  "clips": {
+    "opening": {
+      "audioKey": "f86fbc5ec7fe564f323e16817514c3b8ebcc4f1f59dbe735fbdef40bcb1ccdb3.mp3",
+      "durationMs": 59256,
+      "lines": [
+        "opening.chair.1",
+        "opening.chair.2",
+        "opening.chair.3",
+        "opening.chair.4",
+        "opening.ciso.5"
+      ],
+      "lineStarts": {
+        "opening.chair.1": 0,
+        "opening.chair.2": 8616,
+        "opening.chair.3": 33696,
+        "opening.chair.4": 53304,
+        "opening.ciso.5": 56256
+      }
+    },
+    "s1.narration": {
+      "audioKey": "0a91009fe039bc5f650cbd9f817463eb2d5e8b4c538e1b0d673689a5d1f970d9.mp3",
+      "durationMs": 40656
+    },
+    "s2.answer.a": {
+      "audioKey": "8288112efc694781bf47ac29926a77632cdde7d22c80c05542aaaed836121111.mp3",
+      "durationMs": 15552
+    },
+    "s2.answer.b": {
+      "audioKey": "1c76fa8b67b8cc5e6d8695a9d8394309f57ebe71a4d67ea4026df75693815da0.mp3",
+      "durationMs": 15552
+    },
+    "s2.narration": {
+      "audioKey": "252efc4a8715400971d31792372fafaba2d1584391d5d34825e516e7a630a107.mp3",
+      "durationMs": 40128
+    },
+    "s2.question.challenge": {
+      "audioKey": "f29dea77859ca6754b44f9893407623cc0d3084f289234e9e45b55a09301f065.mp3",
+      "durationMs": 7296
+    },
+    "s2.question.explain": {
+      "audioKey": "0373d383c6fbf0374cc9534399582a08245d9c690bb8e112c4a060dfb9f033e3.mp3",
+      "durationMs": 4800
+    },
+    "s2.question.routine": {
+      "audioKey": "bfd8e8a5c55e88de23853271c9b92b572c97fd1613d7d8f7896d2b232da57388.mp3",
+      "durationMs": 5616
+    },
+    "s3.answers.denial": {
+      "audioKey": "36529bae02fdb896ccf9954283d2f0845e4d47994e3d694231038f7df092a6b4.mp3",
+      "durationMs": 17304,
+      "lines": [
+        "s3.answer.part1",
+        "s3.answer.part3"
+      ],
+      "lineStarts": {
+        "s3.answer.part1": 0,
+        "s3.answer.part3": 2520
+      }
+    },
+    "s3.answers.reason": {
+      "audioKey": "bd2c38935d4b78a5c77a531d327074b4493608e32d66f6378ac79b7ebe97ef48.mp3",
+      "durationMs": 17304,
+      "lines": [
+        "s3.answer.part1",
+        "s3.answer.part2",
+        "s3.answer.part3"
+      ],
+      "lineStarts": {
+        "s3.answer.part1": 0,
+        "s3.answer.part2": 2520,
+        "s3.answer.part3": 15264
+      }
+    },
+    "s3.narration": {
+      "audioKey": "cc3eeca7eb35b8cfc89e002706650d9098d2c5380e42fc732a268a15e57f2650.mp3",
+      "durationMs": 36024
+    },
+    "s3.question.challenge": {
+      "audioKey": "3f3f8b33134804b973a200f248b363e0bf76ead5c148d356c5be54a1f3e0d504.mp3",
+      "durationMs": 6456
+    },
+    "s3.question.explain": {
+      "audioKey": "7c39da890cfd0f5b30a291707d7fcac333f9933cc8c0d32d69a65de1ae22c37d.mp3",
+      "durationMs": 4824
+    },
+    "s3.question.routine": {
+      "audioKey": "0befceb4c1fbe0913080732959e529538166997eabd03b3c39337c4c10fe040f.mp3",
+      "durationMs": 5568
+    },
+    "s4.answer.a": {
+      "audioKey": "946b8e8f947e59a60fb63079b20bdef95ee4cae6a41d7b25ba831fb1d44c932f.mp3",
+      "durationMs": 16992
+    },
+    "s4.answer.b": {
+      "audioKey": "e2baf561c94c764b06978683f72e252653c556fcd71d29c1bc75cb1e87e402e5.mp3",
+      "durationMs": 16992
+    },
+    "s4.narration": {
+      "audioKey": "df319aac0c4139769fe62c9cdeff2f11178938116cdc835e7c3805c53f24a97b.mp3",
+      "durationMs": 40032
+    },
+    "s4.question.challenge": {
+      "audioKey": "92bfcb1206dcda1c93ca97c48fb424b0a0eeae35119de808c4441f461279fe19.mp3",
+      "durationMs": 6288
+    },
+    "s4.question.explain": {
+      "audioKey": "4638211d36c371e9535b0a90585f1ea9eb016c0d557a61cb1b335338d4bfc7d6.mp3",
+      "durationMs": 5808
+    },
+    "s4.question.routine": {
+      "audioKey": "769389c9751243b6f7c00136410f9fd5976fdffba42272a8360edc027a9090e0.mp3",
+      "durationMs": 6024
+    },
+    "s5.narration": {
+      "audioKey": "d99a6429e5059ee73b162b6a13ec7070b8f5423e1635a8e57310b26efad1a033.mp3",
+      "durationMs": 33264
+    },
+    "setup.audioTest": {
+      "audioKey": "74b06db45ff59fc1cde23738d7bf19bf5194c049c81ef5a9f87628b00912b12c.mp3",
+      "durationMs": 5952
+    },
+    "setup.exampleScene": {
+      "audioKey": "3873393b77af3db114267ec99ad25cd6176d09d07dc946bef83deef1abdeb536.mp3",
+      "durationMs": 10728
+    }
+  }
+}

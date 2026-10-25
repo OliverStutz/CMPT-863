@@ -151,7 +151,30 @@ export interface ConfigSummary {
   status: ConfigStatus;
   uploadedAt?: string;
   lintReport?: unknown;
+  /** Path of the audio manifest the server resolved; empty when the config plays silent placeholder clips. */
+  manifestPath?: string;
+  /** True when at least one clip has no manifest entry (estimated duration, silent clip). */
+  estimatedAudio?: boolean;
 }
+
+/**
+ * How a config's audio is served. A config without an audio manifest (no TTS run for its version) plays silent
+ * placeholder clips of estimated length: the study flow works, but nothing is heard. The admin view says so
+ * wherever a version is shown, so a silent test run is never mistaken for a broken browser.
+ */
+export type AudioMode = "spoken" | "partly-silent" | "silent";
+
+export function audioMode(c: Pick<ConfigSummary, "manifestPath" | "estimatedAudio"> | undefined): AudioMode | undefined {
+  if (!c) return undefined;
+  if (!c.manifestPath) return "silent";
+  return c.estimatedAudio ? "partly-silent" : "spoken";
+}
+
+export const AUDIO_MODE_LABEL: Record<AudioMode, string> = {
+  spoken: "spoken audio",
+  "partly-silent": "some clips silent",
+  silent: "no audio: silent clips",
+};
 
 // DECISION: GET /api/admin/configs/{version} ("full config", 8.2) is read as the bare StudyConfig object.
 /** The parts of StudyConfig (section 4.1) the Configs tab reads from GET /api/admin/configs/{version}. */

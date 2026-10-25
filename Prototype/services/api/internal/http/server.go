@@ -33,8 +33,13 @@ type Options struct {
 	TrustedProxyHops int
 	InsecureCookies  bool   // dev over plain http only
 	PublicBaseURL    string // for run links; empty: from the request host
-	Now              func() time.Time
-	Log              *slog.Logger
+	// RunCodeLength is the length of a new run's link code (RUN_CODE_LENGTH;
+	// default DefaultRunCodeLength, clamped to MinRunCodeLength..MaxRunCodeLength).
+	// A run created through the admin API gets a random code of this length from
+	// the look-alike-free alphabet; existing runs keep their codes.
+	RunCodeLength int
+	Now           func() time.Time
+	Log           *slog.Logger
 }
 
 // Server is the HTTP server.

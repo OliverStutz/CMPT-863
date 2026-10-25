@@ -1,6 +1,7 @@
 import { Fragment, useState, type FormEvent } from "react";
 import { ApiError, createRun, listConfigs, listRuns, patchRun } from "../api/client";
-import type { ConfigSummary, Run } from "../api/types";
+import { AUDIO_MODE_LABEL, audioMode, type ConfigSummary, type Run } from "../api/types";
+import { AudioChip } from "../configs/ConfigsTab";
 import { useAsync } from "../lib/useAsync";
 import { localTime } from "../lib/time";
 import { CopyButton, RunQr, runUrl } from "./RunLink";
@@ -77,7 +78,15 @@ export function RunsTab() {
                         {expanded === r.id ? "Hide QR" : "QR"}
                       </button>
                     </td>
-                    <td className="mono">{r.configVersion}</td>
+                    <td className="mono">
+                      {r.configVersion}
+                      {audioMode(configs.data?.find((c) => c.version === r.configVersion)) !== "spoken" && (
+                        <>
+                          {" "}
+                          <AudioChip mode={audioMode(configs.data?.find((c) => c.version === r.configVersion))} />
+                        </>
+                      )}
+                    </td>
                     <td>
                       <span className={`chip ${r.status === "open" ? "chip-success" : "chip-neutral"}`}>{r.status}</span>
                     </td>
@@ -160,7 +169,8 @@ function NewRunForm(props: { configs: ConfigSummary[]; configsError: string | nu
           <option value="">Choose...</option>
           {props.configs.map((c) => (
             <option key={c.version} value={c.version}>
-              {c.version} ({c.status})
+              {c.version} ({c.status}
+              {audioMode(c) && audioMode(c) !== "spoken" ? `, ${AUDIO_MODE_LABEL[audioMode(c)!]}` : ""})
             </option>
           ))}
         </select>

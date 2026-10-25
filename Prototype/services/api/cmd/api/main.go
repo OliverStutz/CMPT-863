@@ -78,7 +78,7 @@ func run(log *slog.Logger) error {
 		Store: st, Registry: reg, Source: src, ParticipantFS: web.Participant(), AdminFS: web.Admin(),
 		PasswordHash: pwHash, SessionKey: sessKey, AccessKey: access,
 		TrustedProxyHops: app.EnvInt("TRUSTED_PROXY_HOPS", 0), InsecureCookies: app.EnvBool("INSECURE_COOKIES"),
-		PublicBaseURL: app.Env("PUBLIC_BASE_URL", ""), Log: log,
+		PublicBaseURL: app.Env("PUBLIC_BASE_URL", ""), RunCodeLength: app.EnvInt("RUN_CODE_LENGTH", apihttp.DefaultRunCodeLength), Log: log,
 	})
 	hs := &http.Server{Addr: ":" + app.Env("PORT", "8080"), Handler: srv, ReadHeaderTimeout: 10 * time.Second,
 		ReadTimeout: 30 * time.Second, WriteTimeout: 60 * time.Second, IdleTimeout: 120 * time.Second}

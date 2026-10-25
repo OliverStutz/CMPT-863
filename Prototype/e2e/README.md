@@ -74,7 +74,12 @@ loads `content/study-config.<tag>.json` from `CONTENT_DIR` and accepts versions 
 only with `ALLOW_TEST_CONFIGS=true`; it has no other fast mode, the timing comes from the config. So
 `content/study-config.test-fast.json` (version `test-fast-1.4.0`) is a copy of
 `study-config.v1.4.json` with every text unchanged and short timings: 15 ms per word for the clips and
-300 ms views after audio. With it both sessions take about a minute and a half.
+300 ms views after audio. With it both sessions take about a minute and a half. Its clips are silent
+placeholders: no TTS set exists for the version, so the server serves `/assets/_dev/silence/<ms>.wav`
+and the admin view marks the config "no audio: silent clips". For a walk-through with the spoken lines
+use `content/study-config.test-sound.json` (version `test-sound-1.4.0`): the same texts, the real clips
+(`content/audio/test-sound-1.4.0/`, built from the TTS cache at no cost) and 2 s views; one session takes
+about seven minutes, almost all of it audio.
 
 `E2E_CONFIG=1.4.0` runs the same test on the real 1.4 timing (10 s views and the real clip lengths
 from `content/audio/1.4.0/manifest.json`, or about 400 ms per word without it); expect about 15

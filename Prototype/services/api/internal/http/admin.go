@@ -278,7 +278,7 @@ func (s *Server) createRun(w http.ResponseWriter, r *http.Request) {
 		Status: domain.RunOpen, CreatedAt: s.now(), CreatedFromIP: ClientIP(r, s.o.TrustedProxyHops)}
 	var err error
 	for i := 0; i < 8; i++ {
-		run.Code = randomCode(6)
+		run.Code = randomCode(s.runCodeLength())
 		if err = s.o.Store.CreateRun(ctx, run); !errors.Is(err, store.ErrConflict) {
 			break
 		}
