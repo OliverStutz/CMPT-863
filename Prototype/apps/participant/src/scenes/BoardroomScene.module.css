@@ -117,25 +117,64 @@
   }
 }
 .ciso {
-  left: 1230px;
+  left: 1240px;
   top: 470px;
   width: 260px;
 }
+/* Table row (top 660, width 130 each): chair, the participant's seat, two more members, the controls
+   box, one more member at the right, then the CISO. */
 .chair {
-  left: 120px;
+  left: 30px;
   top: 660px;
-  width: 140px;
+  width: 130px;
 }
 .member {
+  left: 180px;
+  top: 660px;
+  width: 130px;
+}
+.member2 {
   left: 330px;
   top: 660px;
-  width: 140px;
+  width: 130px;
+}
+.member3 {
+  left: 480px;
+  top: 660px;
+  width: 130px;
+}
+.member4 {
+  left: 1095px;
+  top: 660px;
+  width: 130px;
+}
+/* The participant's own seat: a lighter frame and a "You" badge; the speaking glow still wins. */
+.you .portraitImage {
+  border-color: rgba(143, 208, 255, 0.85);
+  box-shadow: 0 0 0 3px rgba(143, 208, 255, 0.25);
+  filter: brightness(0.95);
+}
+.you figcaption {
+  color: #cfe9ff;
+}
+.youBadge {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #8fd0ff;
+  color: #10233a;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 .controls {
   position: absolute;
-  left: 560px;
+  left: 630px;
   top: 676px;
-  width: 560px;
+  width: 450px;
   min-height: 110px;
   background: rgba(255, 255, 255, 0.96);
   color: #1f2933;

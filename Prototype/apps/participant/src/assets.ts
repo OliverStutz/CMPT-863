@@ -8,10 +8,17 @@ export function consentPdfUrl(pdfAssetKey: string | undefined): string {
 }
 
 // Boardroom composite (section 9.2). Each is optional: until the file exists the app draws a neutral
-// placeholder (SVG silhouette labelled by role, or a plain room).
+// placeholder (SVG silhouette labelled by role, or a plain room). `member` is the participant's own seat
+// ("Board member (You)", lit while the board-member voice speaks the participant's question);
+// member2 to member4 are the silent board members that fill the table (Oliver, 2026-10-25).
 export const IMAGE_URLS = {
   boardroom: "/assets/images/boardroom.jpg",
   ciso: "/assets/images/ciso.png",
   chair: "/assets/images/chair.png",
   member: "/assets/images/member.png",
+  member2: "/assets/images/member2.png",
+  member3: "/assets/images/member3.png",
+  member4: "/assets/images/member4.png",
 } as const;
+
+export type PortraitRole = Exclude<keyof typeof IMAGE_URLS, "boardroom">;
