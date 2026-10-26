@@ -27,15 +27,16 @@ Trust is the 0-to-10 rating; the three METI items are shown beside it and analys
 |---|---|---|---|
 | **Baseline check** (Validity: "the groups start alike") | `T0` | mean, SD, 95% CI | checker vs neutral, Welch t, Hedges g |
 | **Slide 1 check** (Validity: "whether the checker's presence alone moves trust") | `T1 - T0` | mean, CI | checker vs neutral |
-| **H1 flag** | for each flagged slide n: `T{n}a - previous rating` (previous = `T{n-1}b` if it exists, else `T{n-1}a` or `T1`/`T0`) | per slide and pooled over the three flagged slides (mean of the participant's three deltas) | (a) checker delta below zero: one-sample t against 0; (b) checker vs neutral: Welch t on the pooled delta; also the raw level `T{n}a` checker vs neutral |
-| **H2 answer** | for the two reasoned slides: `T{n}b - T{n}a` | per group, pooled over the participant's reasoned slides | (a) checker delta above zero: one-sample t; (b) checker vs neutral: Welch t. Exploratory: `T{n}b - previous rating before the flag` (does trust end above where it was) |
+| **H1 flag** | for each flagged slide n: `T{n}a - the rating point immediately before it in plan order` (`T2a - T1`, `T3a - T2b`, `T4a - T3b` for v1.4; the Abstract: "the change from the rating just before it"); if that earlier rating is missing (timeout), the delta is missing, no fallback | per slide and pooled over the three flagged slides (mean of the participant's available deltas) | (a) checker delta below zero: one-sample t against 0; (b) checker vs neutral: Welch t on the pooled delta; also the raw level `T{n}a` checker vs neutral |
+| **H2 answer** | for the two reasoned slides: the change `T{n}b - T{n}a` and the level `T{n}b` | per group, pooled over the participant's reasoned slides (participant means) | (a) "higher than after the flag": checker change above zero, one-sample t; (b) "higher than in the neutral group": the **level** `T{n}b` checker vs neutral, Welch t (the Abstract compares the groups at the same step; a comparison of changes would favour the group that fell further, and is H4b1). Exploratory, "whether trust rises above the first rating": `T{n}b - T0` within each group, one-sample t (reviewer 2026-10-25; the earlier wording used the pre-flag rating and a between-group test, which is kept as a secondary number) |
 | **H3 denial** | for the denial slide: `T{n}b - T{n}a` | per group: denial delta vs the same participant's mean reasoned delta (paired, within subject) | paired t on (reasoned mean - denial) per group; shown per group and for both groups together |
-| **H4a participation** | checker: share of flagged slides where the participant chose "ask to explain" or "challenge" (not "say nothing", not timeout); neutral: share of flagged slides with "has a question" | mean share per group; also counts of slides | two-proportion z on slides, and Welch t on the per-participant shares |
+| **H4a participation** | checker: share of flagged slides where the participant chose "ask to explain" or "challenge" (not "say nothing", not timeout); neutral: share of flagged slides with "has a question" | mean share per group; also counts of slides | Welch t on the per-participant shares carries the reading; the two-proportion z on slides is shown as a descriptive number only, because a participant's slides are not independent |
 | **H4b amplification (exploratory)** | b1: reasoned delta `T{n}b - T{n}a`; b2: denial delta | checker vs neutral | Welch t for each; shown as a dumbbell |
+| **Research question** (Validity: "the change from the first to the last rating answers the research question") | `T_last - T0` (`T5 - T0` for v1.4) | mean, SD, CI per group | checker vs neutral, Welch t, no stated direction |
 | **Budget** (Measures: "whether a change in trust reaches an actual decision") | approve or reject, sureness | share approving per group, mean sureness | two-proportion z; approve rate split by last trust rating tercile |
 | **Moderators** (cyber knowledge, AI use; H1 and H2) | the participant's pooled H1 delta and H2 delta | by knowledge level 1 to 5 and by AI-use step, both groups | means with CI per level, Spearman correlation per group (descriptive) |
 
-Tests on the dashboard are for reading the pilot and the running study, not the final analysis. The confirmatory analysis stays offline on the export (mixed model: rating ~ point x group with participant intercepts, as planned in the analysis plan to come), so the dashboard shows: n, mean, SD, 95% CI (t-based), the test statistic, p (two-sided, Welch-Satterthwaite df) and Hedges g, and a one-line reading: "supports H1 so far", "does not support", or "too few participants" (fewer than 8 per group). With 40 to 60 participants (20 to 30 per group) the dashboard can show a medium effect (g about 0.6 to 0.8); smaller effects need the planned sample and the offline model. No multiple-comparison correction on the dashboard; the final analysis plan decides that.
+Tests on the dashboard are for reading the pilot and the running study, not the final analysis. The confirmatory analysis stays offline on the export (mixed model: rating ~ point x group with participant intercepts, as planned in the analysis plan to come), so the dashboard shows: n, mean, SD, 95% CI (t-based), the test statistic, p (two-sided, Welch-Satterthwaite df) and Hedges g, and a one-line reading: "supports" (sign as hypothesised and p < .05), "opposite" (p < .05 against the hypothesis), "does not support" (not significant), or "too few" (fewer than 8 contributing participants per group). Per-slide breakdowns show the numbers without a reading, so about twenty uncorrected readings do not become one chance "supports". With 40 to 60 participants (20 to 30 per group) the dashboard can show a medium effect (g about 0.6 to 0.8); smaller effects need the planned sample and the offline model. No multiple-comparison correction on the dashboard; the final analysis plan decides that.
 
 ## 3. Charts (forms chosen by the data's job, after the data-visualisation method in the dataviz skill)
 
@@ -120,12 +121,22 @@ interface Analysis {
   hypotheses: {
     baseline: Comparison;                                  // T0 checker vs neutral
     slide1: Comparison;                                    // T1 - T0
-    h1: { pooled: Comparison; checkerBelowZero: OneSample; perSlide: Record<string, Comparison>; levelAtFlag: Record<string, Comparison> };
-    h2: { pooled: Comparison; checkerAboveZero: OneSample; perSlide: Record<string, Comparison>; exploratoryNet: Comparison };
+    overall: Comparison;                                   // T_last - T0, research question, no direction
+    h1: { pooled: Comparison; checkerBelowZero: OneSample; perSlide: Record<string, Comparison>; levelAtFlag: Record<string, Comparison> };   // perSlide and levelAtFlag carry reading "n_a"
+    h2: {
+      pooled: Comparison;                                  // change T{n}b - T{n}a, checker vs neutral (same data as h4b.afterReason; shown as H4b1)
+      checkerAboveZero: OneSample;                         // H2(a)
+      level: Comparison;                                   // H2(b): level T{n}b over reasoned slides, checker vs neutral, direction +1; carries the H2 reading
+      perSlide: Record<string, Comparison>;                // change per slide, reading "n_a"
+      levelPerSlide: Record<string, Comparison>;           // level per slide, reading "n_a"
+      aboveBaseline: Record<"checker" | "neutral", OneSample>; // exploratory: T{n}b - T0 within group, direction +1
+      exploratoryNet: Comparison;                          // secondary: T{n}b - pre-flag rating, between groups, no direction
+    };
     h3: { perGroup: Record<"checker" | "neutral", Paired>; both: Paired };
-    h4a: { checker: Share; neutral: Share; slidesTest: TwoProportion; participantsTest: Comparison };
+    h4a: { checker: Share; neutral: Share; slidesTest: TwoProportion; participantsTest: Comparison };   // participantsTest carries the reading; slidesTest reading is "n_a"
     h4b: { afterReason: Comparison; afterDenial: Comparison };
-    budget: { byGroup: Record<"checker" | "neutral", { approve: number; reject: number; missing: number; confidence: Summary }>; approveTest: TwoProportion };
+    budget: { byGroup: Record<"checker" | "neutral", { approve: number; reject: number; missing: number; confidence: Summary }>; approveTest: TwoProportion;
+              byLastTrustTercile: { tercile: 1 | 2 | 3; from: number; to: number; approve: number; reject: number; missing: number }[] };  // terciles of the participant's last trust rating
     moderators: {
       cyberKnowledge: { level: number; h1: Record<"checker" | "neutral", Summary>; h2: Record<"checker" | "neutral", Summary> }[];
       aiUse: { optionId: string; h1: Record<"checker" | "neutral", Summary>; h2: Record<"checker" | "neutral", Summary> }[];
@@ -143,10 +154,10 @@ interface Comparison { checker: Summary; neutral: Summary; diff: number | null; 
 interface Paired    { n: number; reasoned: Summary; denial: Summary; meanDiff: number | null; ci95: [number, number] | null; t: number | null; df: number | null; p: number | null; reading: Reading }
 interface Share     { slides: number; withQuestion: number; share: number | null; perParticipant: Summary }
 interface TwoProportion { p1: number | null; p2: number | null; diff: number | null; z: number | null; p: number | null; reading: Reading }
-type Reading = "supports" | "does_not_support" | "too_few" | "n_a";   // too_few below 8 analysed per group
+type Reading = "supports" | "opposite" | "does_not_support" | "too_few" | "n_a";   // opposite: p < .05 against the hypothesis; too_few below 8 contributing participants per group
 ```
 
-Deltas use only ratings whose trust value is present at both points; `n` is the number of participants with that delta. CI and p use Student's t with Welch-Satterthwaite degrees of freedom (one-sample and paired: n-1); Hedges g is Cohen's d with the small-sample correction. Readings: "supports" when the sign matches the hypothesis and p < .05; "does_not_support" otherwise; "too_few" when either group has fewer than 8 analysed participants.
+Deltas use only ratings whose trust value is present at both points; `n` is the number of participants with that delta. CI and p use Student's t with Welch-Satterthwaite degrees of freedom (one-sample and paired: n-1); Hedges g is Cohen's d with the small-sample correction. Readings: "supports" when the sign matches the hypothesis and p < .05; "opposite" when p < .05 with the other sign; "does_not_support" otherwise; "too_few" when either group has fewer than 8 contributing participants; "n_a" where no direction is stated or the value is undefined. Zero variance with a non-zero mean gives t and p null and a reading from the sign is not attempted ("n_a").
 
 ### `DELETE /api/admin/sessions/{id}`
 
@@ -162,3 +173,6 @@ A run "Dashboard pilot (emulated)" on config `1.4.0`, source `Emulated`, filled 
 2. Whether the dashboard should also show the METI items in the hypothesis panels (now: trust only in the panels, items in the trajectory small multiples).
 3. The reading thresholds (p < .05, fewer than 8 per group) are placeholders for the analysis plan.
 4. Whether to keep deleted-session tombstones or delete without trace.
+5. The exploratory H2 reference point: the Abstract's "first rating" is read as T0 (within group); say if the pre-flag rating is meant instead.
+6. H1 with a missing earlier rating: the delta is dropped (no fallback to an older point). Confirm.
+7. Whether the research-question comparison (T_last - T0) should carry a direction.
