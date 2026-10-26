@@ -1,0 +1,34 @@
+.delete-zone {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.delete-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 560px;
+}
+.delete-box h3 {
+  margin: 0;
+  color: var(--danger-fg);
+}
+.delete-box p {
+  margin: 0;
+}
+.delete-box input,
+.delete-box textarea {
+  width: 100%;
+  font: inherit;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+}
+button.danger,
+button[type="submit"].danger {
+  background: var(--danger-fg);
+  border-color: var(--danger-fg);
+  color: var(--surface);
+}

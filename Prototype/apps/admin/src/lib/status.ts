@@ -1,6 +1,6 @@
 import type { SessionStatus } from "../api/types";
 
-export type ChipTone = "neutral" | "info" | "active" | "success" | "warning" | "danger";
+export type ChipTone = "neutral" | "info" | "active" | "success" | "warning" | "danger" | "muted";
 
 export interface Chip {
   label: string;

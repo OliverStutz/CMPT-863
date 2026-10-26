@@ -1,0 +1,8352 @@
+{
+  "run": {
+    "id": "run-dashboard-pilot",
+    "code": "DPILOT",
+    "name": "Dashboard pilot (emulated)",
+    "source": "Emulated",
+    "configVersion": "1.4.0",
+    "status": "open",
+    "createdAt": "2026-10-25T07:30:00Z",
+    "testOverrides": false
+  },
+  "generatedAt": "2026-10-25T12:00:00Z",
+  "filters": {
+    "include": "finished",
+    "exclude": [
+      "forced_allocation",
+      "honeypot",
+      "audio_check_wrong",
+      "many_invalid_events"
+    ],
+    "group": "both"
+  },
+  "config": {
+    "groups": [
+      "checker",
+      "neutral"
+    ],
+    "slides": [
+      {
+        "id": "s1",
+        "n": 1,
+        "title": "Where we stand today",
+        "flagged": false
+      },
+      {
+        "id": "s2",
+        "n": 2,
+        "title": "The risk and what it would cost us",
+        "flagged": true
+      },
+      {
+        "id": "s3",
+        "n": 3,
+        "title": "How we will protect our 13 sites",
+        "flagged": true
+      },
+      {
+        "id": "s4",
+        "n": 4,
+        "title": "What the $2.4 million pays for",
+        "flagged": true
+      },
+      {
+        "id": "s5",
+        "n": 5,
+        "title": "The decision today",
+        "flagged": false
+      }
+    ],
+    "flaggedSlides": [
+      "s2",
+      "s3",
+      "s4"
+    ],
+    "ratingPoints": [
+      {
+        "point": "T0",
+        "slideId": "opening",
+        "phase": "baseline",
+        "label": "Baseline"
+      },
+      {
+        "point": "T1",
+        "slideId": "s1",
+        "phase": "afterSlide",
+        "label": "After slide 1"
+      },
+      {
+        "point": "T2a",
+        "slideId": "s2",
+        "phase": "afterSlide",
+        "label": "After slide 2"
+      },
+      {
+        "point": "T2b",
+        "slideId": "s2",
+        "phase": "afterAnswer",
+        "label": "After answer 2"
+      },
+      {
+        "point": "T3a",
+        "slideId": "s3",
+        "phase": "afterSlide",
+        "label": "After slide 3"
+      },
+      {
+        "point": "T3b",
+        "slideId": "s3",
+        "phase": "afterAnswer",
+        "label": "After answer 3"
+      },
+      {
+        "point": "T4a",
+        "slideId": "s4",
+        "phase": "afterSlide",
+        "label": "After slide 4"
+      },
+      {
+        "point": "T4b",
+        "slideId": "s4",
+        "phase": "afterAnswer",
+        "label": "After answer 4"
+      },
+      {
+        "point": "T5",
+        "slideId": "s5",
+        "phase": "afterSlide",
+        "label": "After slide 5"
+      }
+    ],
+    "items": [
+      {
+        "id": "trust",
+        "label": "Trust",
+        "min": 0,
+        "max": 10
+      },
+      {
+        "id": "competence",
+        "label": "Competence",
+        "min": 1,
+        "max": 7
+      },
+      {
+        "id": "benevolence",
+        "label": "Benevolence",
+        "min": 1,
+        "max": 7
+      },
+      {
+        "id": "integrity",
+        "label": "Integrity",
+        "min": 1,
+        "max": 7
+      }
+    ],
+    "actions": {
+      "checker": [
+        {
+          "id": "nothing",
+          "label": "Say nothing"
+        },
+        {
+          "id": "explain",
+          "label": "Ask Daniel to explain"
+        },
+        {
+          "id": "challenge",
+          "label": "Challenge Daniel with the checker's finding"
+        }
+      ],
+      "neutral": [
+        {
+          "id": "hasQuestion",
+          "label": "Yes"
+        },
+        {
+          "id": "noQuestion",
+          "label": "No"
+        }
+      ]
+    },
+    "background": [
+      {
+        "id": "field",
+        "label": "What is your main field of expertise?",
+        "kind": "single",
+        "options": [
+          {
+            "id": "field.business",
+            "label": "Business and management"
+          },
+          {
+            "id": "field.finance",
+            "label": "Finance or accounting"
+          },
+          {
+            "id": "field.law",
+            "label": "Law"
+          },
+          {
+            "id": "field.it",
+            "label": "Information technology"
+          },
+          {
+            "id": "field.cyber",
+            "label": "Cybersecurity"
+          },
+          {
+            "id": "field.engineering",
+            "label": "Engineering"
+          },
+          {
+            "id": "field.health",
+            "label": "Health care or medicine"
+          },
+          {
+            "id": "field.education",
+            "label": "Education"
+          },
+          {
+            "id": "field.naturalSciences",
+            "label": "Natural sciences"
+          },
+          {
+            "id": "field.socialSciences",
+            "label": "Social sciences or humanities"
+          },
+          {
+            "id": "field.arts",
+            "label": "Arts, media or design"
+          },
+          {
+            "id": "field.government",
+            "label": "Government or public service"
+          },
+          {
+            "id": "field.studentNoField",
+            "label": "Student, no field yet"
+          },
+          {
+            "id": "field.other",
+            "label": "Other (please specify)"
+          }
+        ]
+      },
+      {
+        "id": "country",
+        "label": "In which country do you live?",
+        "kind": "country"
+      },
+      {
+        "id": "age",
+        "label": "What is your age?",
+        "kind": "single",
+        "options": [
+          {
+            "id": "age.a18",
+            "label": "18 to 24"
+          },
+          {
+            "id": "age.a25",
+            "label": "25 to 34"
+          },
+          {
+            "id": "age.a35",
+            "label": "35 to 44"
+          },
+          {
+            "id": "age.a45",
+            "label": "45 to 54"
+          },
+          {
+            "id": "age.a55",
+            "label": "55 to 64"
+          },
+          {
+            "id": "age.a65",
+            "label": "65 or older"
+          }
+        ]
+      },
+      {
+        "id": "jobLevel",
+        "label": "What is your current job level?",
+        "kind": "single",
+        "options": [
+          {
+            "id": "jobLevel.student",
+            "label": "Student"
+          },
+          {
+            "id": "jobLevel.employee",
+            "label": "Employee"
+          },
+          {
+            "id": "jobLevel.leadership",
+            "label": "Leadership"
+          },
+          {
+            "id": "jobLevel.cLevel",
+            "label": "C-Level"
+          }
+        ]
+      },
+      {
+        "id": "education",
+        "label": "What is the highest level of education you have completed?",
+        "kind": "single",
+        "options": [
+          {
+            "id": "education.secondary",
+            "label": "Secondary school or less"
+          },
+          {
+            "id": "education.college",
+            "label": "College diploma or trade certificate"
+          },
+          {
+            "id": "education.bachelor",
+            "label": "Bachelor's degree"
+          },
+          {
+            "id": "education.master",
+            "label": "Master's degree"
+          },
+          {
+            "id": "education.doctorate",
+            "label": "Doctorate"
+          },
+          {
+            "id": "education.other",
+            "label": "Other"
+          }
+        ]
+      },
+      {
+        "id": "cyberKnowledge",
+        "label": "How would you rate your own knowledge of cybersecurity?",
+        "kind": "scale",
+        "scale": {
+          "min": 1,
+          "max": 5,
+          "pointLabels": {
+            "1": "None",
+            "2": "Basic",
+            "3": "Some",
+            "4": "Good",
+            "5": "Expert"
+          }
+        }
+      },
+      {
+        "id": "aiUse",
+        "label": "How often do you use AI tools such as chatbots or writing assistants?",
+        "kind": "single",
+        "options": [
+          {
+            "id": "aiUse.never",
+            "label": "Never"
+          },
+          {
+            "id": "aiUse.lessMonthly",
+            "label": "Less than once a month"
+          },
+          {
+            "id": "aiUse.monthly",
+            "label": "About once a month"
+          },
+          {
+            "id": "aiUse.weekly",
+            "label": "About once a week"
+          },
+          {
+            "id": "aiUse.severalWeekly",
+            "label": "Several times a week"
+          },
+          {
+            "id": "aiUse.daily",
+            "label": "Every day"
+          }
+        ]
+      }
+    ],
+    "budgetOptions": [
+      {
+        "id": "approve",
+        "label": "Approve the request"
+      },
+      {
+        "id": "reject",
+        "label": "Reject the request"
+      }
+    ]
+  },
+  "counts": {
+    "byStatus": {
+      "opened": 2,
+      "started": 1,
+      "ongoing": 1,
+      "finished": 48,
+      "abandoned": 2,
+      "blocked": 1
+    },
+    "total": 55,
+    "consented": 52,
+    "analysed": 44,
+    "excluded": {
+      "forced": 2,
+      "byFlag": {
+        "honeypot": 1,
+        "audio_check_wrong": 1,
+        "many_invalid_events": 0
+      },
+      "notIncluded": 4
+    },
+    "byGroup": {
+      "checker": {
+        "consented": 26,
+        "finished": 24,
+        "analysed": 22
+      },
+      "neutral": {
+        "consented": 26,
+        "finished": 24,
+        "analysed": 22
+      }
+    },
+    "durationsSec": {
+      "n": 44,
+      "median": 824.5,
+      "p25": 702.75,
+      "p75": 938.25,
+      "histogram": [
+        {
+          "fromSec": 600,
+          "toSec": 660,
+          "n": 7
+        },
+        {
+          "fromSec": 660,
+          "toSec": 720,
+          "n": 6
+        },
+        {
+          "fromSec": 720,
+          "toSec": 780,
+          "n": 7
+        },
+        {
+          "fromSec": 780,
+          "toSec": 840,
+          "n": 6
+        },
+        {
+          "fromSec": 840,
+          "toSec": 900,
+          "n": 2
+        },
+        {
+          "fromSec": 900,
+          "toSec": 960,
+          "n": 7
+        },
+        {
+          "fromSec": 960,
+          "toSec": 1020,
+          "n": 4
+        },
+        {
+          "fromSec": 1020,
+          "toSec": 1080,
+          "n": 2
+        },
+        {
+          "fromSec": 1080,
+          "toSec": 1140,
+          "n": 3
+        }
+      ]
+    }
+  },
+  "participants": [
+    {
+      "sessionId": "08d9252011f5189cffaa",
+      "group": "checker",
+      "denialSlide": "s4",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T08:04:15.093Z",
+      "durationSec": 963,
+      "ratings": {
+        "T0": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 3,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 3,
+          "competence": 4,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 2,
+          "competence": 1,
+          "benevolence": 3,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 3,
+          "competence": 2,
+          "benevolence": 2,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 2,
+          "competence": 2,
+          "benevolence": 2,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 6,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.other",
+        "country": "CA",
+        "age": "preferNotToSay",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.master",
+        "cyberKnowledge": 3,
+        "aiUse": "aiUse.severalWeekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "f5deeca34a586420dfab",
+      "group": "checker",
+      "denialSlide": "s4",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T08:13:13.863Z",
+      "durationSec": 637,
+      "ratings": {
+        "T0": {
+          "trust": 7,
+          "competence": 4,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": null,
+          "competence": null,
+          "benevolence": null,
+          "integrity": null,
+          "status": "timeout"
+        },
+        "T2a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 8,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 6,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 4,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.health",
+        "country": "DE",
+        "age": "age.a25",
+        "jobLevel": "jobLevel.leadership",
+        "education": "education.doctorate",
+        "cyberKnowledge": 2,
+        "aiUse": "aiUse.lessMonthly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "db29378ce641efcf0f95",
+      "group": "checker",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T08:18:58.515Z",
+      "durationSec": 992,
+      "ratings": {
+        "T0": {
+          "trust": null,
+          "competence": null,
+          "benevolence": null,
+          "integrity": null,
+          "status": "timeout"
+        },
+        "T1": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 3,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 4,
+          "competence": 2,
+          "benevolence": 4,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 2,
+          "competence": 1,
+          "benevolence": 3,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": null,
+        "confidence": null,
+        "status": "timeout"
+      },
+      "background": {
+        "field": "field.business",
+        "country": "CA",
+        "age": "age.a25",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.master",
+        "cyberKnowledge": 3,
+        "aiUse": "preferNotToSay"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "08f239237fbfd3effced",
+      "group": "checker",
+      "denialSlide": "s3",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T08:30:22.389Z",
+      "durationSec": 1099,
+      "ratings": {
+        "T0": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 9,
+          "competence": 7,
+          "benevolence": 7,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 8,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 10,
+          "competence": 7,
+          "benevolence": 5,
+          "integrity": 7,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 8,
+          "competence": 5,
+          "benevolence": 7,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 7,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 7,
+          "competence": 4,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s4": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 6,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.engineering",
+        "country": "CA",
+        "age": "age.a35",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.other",
+        "cyberKnowledge": 2,
+        "aiUse": "aiUse.daily"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "48313b987fc169ea0691",
+      "group": "checker",
+      "denialSlide": "s3",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T08:38:54.067Z",
+      "durationSec": 940,
+      "ratings": {
+        "T0": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 3,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        },
+        "s4": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 6,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.government",
+        "country": "DE",
+        "age": "age.a25",
+        "jobLevel": "jobLevel.leadership",
+        "education": "education.bachelor",
+        "cyberKnowledge": 2,
+        "aiUse": "aiUse.daily"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "f8e44f4947eda6a24c84",
+      "group": "checker",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T08:47:54.986Z",
+      "durationSec": 697,
+      "ratings": {
+        "T0": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 2,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 3,
+          "competence": 2,
+          "benevolence": 2,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 1,
+          "competence": 2,
+          "benevolence": 2,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 3,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 2,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 5,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.finance",
+        "country": "US",
+        "age": "age.a55",
+        "jobLevel": "jobLevel.leadership",
+        "education": "education.master",
+        "cyberKnowledge": 3,
+        "aiUse": "aiUse.severalWeekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "c3758fe07001831e91bb",
+      "group": "checker",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T08:56:48.705Z",
+      "durationSec": 989,
+      "ratings": {
+        "T0": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 7,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 4,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.engineering",
+        "country": "GB",
+        "age": "age.a55",
+        "jobLevel": "jobLevel.leadership",
+        "education": "education.bachelor",
+        "cyberKnowledge": 5,
+        "aiUse": "aiUse.severalWeekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "bc4b93c0f605a5718737",
+      "group": "checker",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T09:06:29.957Z",
+      "durationSec": 613,
+      "ratings": {
+        "T0": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 4,
+          "competence": 5,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 2,
+          "competence": 3,
+          "benevolence": 2,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 3,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": null,
+          "timedOut": true,
+          "questionBy": "chair",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 7,
+        "status": "answered"
+      },
+      "background": {
+        "field": "preferNotToSay",
+        "country": "DE",
+        "age": "age.a45",
+        "jobLevel": "jobLevel.leadership",
+        "education": "education.master",
+        "cyberKnowledge": 5,
+        "aiUse": "aiUse.daily"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "673477e2196c2341cb88",
+      "group": "checker",
+      "denialSlide": "s3",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T09:15:13.249Z",
+      "durationSec": 702,
+      "ratings": {
+        "T0": {
+          "trust": 6,
+          "competence": 6,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 6,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s4": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 6,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.law",
+        "country": "BR",
+        "age": "age.a25",
+        "jobLevel": "jobLevel.leadership",
+        "education": "education.doctorate",
+        "cyberKnowledge": 4,
+        "aiUse": "aiUse.severalWeekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "59d0287ae7f01b688846",
+      "group": "checker",
+      "denialSlide": "s3",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T09:25:24.889Z",
+      "durationSec": 938,
+      "ratings": {
+        "T0": {
+          "trust": 7,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 5,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 2,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        },
+        "s4": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 4,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.health",
+        "country": "CA",
+        "age": "age.a45",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.master",
+        "cyberKnowledge": 2,
+        "aiUse": "aiUse.severalWeekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "1a370db8aed76faa9570",
+      "group": "checker",
+      "denialSlide": "s3",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T09:30:56.647Z",
+      "durationSec": 756,
+      "ratings": {
+        "T0": {
+          "trust": 8,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 7,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 9,
+          "competence": 7,
+          "benevolence": 7,
+          "integrity": 7,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 6,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 5,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 4,
+          "competence": 2,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 2,
+          "competence": 3,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 2,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        },
+        "s4": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 6,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.business",
+        "country": "BR",
+        "age": "age.a45",
+        "jobLevel": "preferNotToSay",
+        "education": "education.bachelor",
+        "cyberKnowledge": 3,
+        "aiUse": "aiUse.weekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "eefd10ec91d692a6d8b2",
+      "group": "checker",
+      "denialSlide": "s4",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T09:39:07.147Z",
+      "durationSec": 923,
+      "ratings": {
+        "T0": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 7,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 8,
+          "competence": 7,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 5,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.cyber",
+        "country": "US",
+        "age": "age.a18",
+        "jobLevel": "jobLevel.employee",
+        "education": "preferNotToSay",
+        "cyberKnowledge": 4,
+        "aiUse": "aiUse.lessMonthly"
+      },
+      "flags": [
+        "possible_duplicate",
+        "reloaded"
+      ]
+    },
+    {
+      "sessionId": "289de048089b66972de0",
+      "group": "checker",
+      "denialSlide": "s4",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T09:49:17.956Z",
+      "durationSec": 831,
+      "ratings": {
+        "T0": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 5,
+          "competence": 5,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 3,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 2,
+          "competence": 2,
+          "benevolence": 2,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 2,
+          "competence": 2,
+          "benevolence": 1,
+          "integrity": 1,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 0,
+          "competence": 1,
+          "benevolence": 2,
+          "integrity": 1,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 1,
+          "competence": 3,
+          "benevolence": 1,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 1,
+          "competence": 1,
+          "benevolence": 1,
+          "integrity": 1,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 6,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.finance",
+        "country": "US",
+        "age": "age.a25",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.other",
+        "cyberKnowledge": 4,
+        "aiUse": "aiUse.daily"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "661250d3445260f2c576",
+      "group": "checker",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T09:58:26.882Z",
+      "durationSec": 1092,
+      "ratings": {
+        "T0": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 6,
+          "competence": 3,
+          "benevolence": 5,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 4,
+          "competence": 5,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 5,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 7,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.cyber",
+        "country": "US",
+        "age": "age.a45",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.secondary",
+        "cyberKnowledge": 5,
+        "aiUse": "aiUse.never"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "317ad6a3df449427bc5c",
+      "group": "checker",
+      "denialSlide": "s3",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T10:08:48.482Z",
+      "durationSec": 770,
+      "ratings": {
+        "T0": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 2,
+          "competence": 3,
+          "benevolence": 2,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 4,
+          "competence": 5,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 2,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 2,
+          "competence": 1,
+          "benevolence": 2,
+          "integrity": 1,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 1,
+          "competence": 3,
+          "benevolence": 1,
+          "integrity": 1,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 2,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 2,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        },
+        "s4": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 9,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.health",
+        "country": "CH",
+        "age": "age.a35",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.bachelor",
+        "cyberKnowledge": 5,
+        "aiUse": "aiUse.daily"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "03bd5db8d5b71f0697e6",
+      "group": "checker",
+      "denialSlide": "s4",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T10:15:51.226Z",
+      "durationSec": 786,
+      "ratings": {
+        "T0": {
+          "trust": 5,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 3,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 4,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 3,
+          "competence": 4,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        }
+      },
+      "budget": {
+        "optionId": null,
+        "confidence": null,
+        "status": "timeout"
+      },
+      "background": {
+        "field": "field.business",
+        "country": "IN",
+        "age": "age.a45",
+        "jobLevel": "jobLevel.cLevel",
+        "education": "education.master",
+        "cyberKnowledge": 3,
+        "aiUse": "aiUse.severalWeekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "bcc1474c510c590c1178",
+      "group": "checker",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T10:26:13.577Z",
+      "durationSec": 623,
+      "ratings": {
+        "T0": {
+          "trust": 5,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 5,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 4,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 2,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": null,
+          "competence": null,
+          "benevolence": null,
+          "integrity": null,
+          "status": "timeout"
+        },
+        "T4a": {
+          "trust": 2,
+          "competence": 3,
+          "benevolence": 2,
+          "integrity": 1,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 2,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 6,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.naturalSciences",
+        "country": "CH",
+        "age": "age.a25",
+        "jobLevel": "jobLevel.student",
+        "education": "education.bachelor",
+        "cyberKnowledge": 3,
+        "aiUse": "aiUse.weekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "d5b4345aa528fd09c2b1",
+      "group": "checker",
+      "denialSlide": "s3",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T10:33:49.982Z",
+      "durationSec": 849,
+      "ratings": {
+        "T0": {
+          "trust": 6,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 4,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 5,
+          "competence": 3,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s4": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 6,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.socialSciences",
+        "country": "GB",
+        "age": "age.a25",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.bachelor",
+        "cyberKnowledge": 3,
+        "aiUse": "aiUse.weekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "586520cdd6b34cdb6d17",
+      "group": "checker",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T10:44:30.390Z",
+      "durationSec": 898,
+      "ratings": {
+        "T0": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 8,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 4,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 5,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.studentNoField",
+        "country": "IN",
+        "age": "age.a18",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.bachelor",
+        "cyberKnowledge": 5,
+        "aiUse": "aiUse.severalWeekly"
+      },
+      "flags": [
+        "possible_duplicate",
+        "tab_hidden_during_audio"
+      ]
+    },
+    {
+      "sessionId": "67e5959e44ec804eeb54",
+      "group": "checker",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T10:55:27.899Z",
+      "durationSec": 677,
+      "ratings": {
+        "T0": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 3,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 4,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.finance",
+        "country": "FR",
+        "age": "age.a35",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.bachelor",
+        "cyberKnowledge": 2,
+        "aiUse": "aiUse.severalWeekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "3baa655f019dbaafd3b6",
+      "group": "checker",
+      "denialSlide": "s4",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T11:00:33.040Z",
+      "durationSec": 921,
+      "ratings": {
+        "T0": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 3,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": null,
+          "competence": null,
+          "benevolence": null,
+          "integrity": null,
+          "status": "timeout"
+        },
+        "T2a": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 8,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 7,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "nothing",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 5,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.business",
+        "country": "US",
+        "age": "age.a45",
+        "jobLevel": "jobLevel.cLevel",
+        "education": "education.master",
+        "cyberKnowledge": 2,
+        "aiUse": "aiUse.lessMonthly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "5c51945a22c55ba7aa24",
+      "group": "checker",
+      "denialSlide": "s4",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T11:13:21.099Z",
+      "durationSec": 1078,
+      "ratings": {
+        "T0": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 3,
+          "competence": 2,
+          "benevolence": 2,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 2,
+          "competence": 2,
+          "benevolence": 1,
+          "integrity": 1,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 3,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "challenge",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": null,
+          "timedOut": true,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "explain",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 4,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.it",
+        "country": "DE",
+        "age": "age.a25",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.secondary",
+        "cyberKnowledge": 3,
+        "aiUse": "aiUse.monthly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "d201d9db6b5be381aa1e",
+      "group": "neutral",
+      "denialSlide": "s3",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T11:18:36.155Z",
+      "durationSec": 722,
+      "ratings": {
+        "T0": {
+          "trust": 5,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 5,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 4,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 2,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 2,
+          "competence": 2,
+          "benevolence": 2,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 1,
+          "competence": 1,
+          "benevolence": 2,
+          "integrity": 2,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s4": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 7,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.cyber",
+        "country": "DE",
+        "age": "age.a35",
+        "jobLevel": "jobLevel.student",
+        "education": "education.master",
+        "cyberKnowledge": 2,
+        "aiUse": "aiUse.weekly"
+      },
+      "flags": [
+        "possible_duplicate",
+        "tab_hidden_during_audio"
+      ]
+    },
+    {
+      "sessionId": "1a1684497f36e099d10a",
+      "group": "neutral",
+      "denialSlide": "s4",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T11:29:23.999Z",
+      "durationSec": 735,
+      "ratings": {
+        "T0": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 4,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.it",
+        "country": "CH",
+        "age": "age.a35",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.bachelor",
+        "cyberKnowledge": 3,
+        "aiUse": "aiUse.daily"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "b91f523ff561f36f9251",
+      "group": "neutral",
+      "denialSlide": "s4",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T11:38:57.170Z",
+      "durationSec": 742,
+      "ratings": {
+        "T0": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 7,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": null,
+          "competence": null,
+          "benevolence": null,
+          "integrity": null,
+          "status": "timeout"
+        },
+        "T3a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 3,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.studentNoField",
+        "country": "DE",
+        "age": "age.a35",
+        "jobLevel": "jobLevel.student",
+        "education": "education.master",
+        "cyberKnowledge": "preferNotToSay",
+        "aiUse": "aiUse.severalWeekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "c662b19a34b51922a894",
+      "group": "neutral",
+      "denialSlide": "s4",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T11:47:26.496Z",
+      "durationSec": 635,
+      "ratings": {
+        "T0": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": null,
+          "competence": null,
+          "benevolence": null,
+          "integrity": null,
+          "status": "timeout"
+        },
+        "T3a": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 5,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 5,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 5,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 6,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.business",
+        "country": "CA",
+        "age": "age.a35",
+        "jobLevel": "jobLevel.leadership",
+        "education": "education.bachelor",
+        "cyberKnowledge": 2,
+        "aiUse": "aiUse.severalWeekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "209285304837114caec1",
+      "group": "neutral",
+      "denialSlide": "s4",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T11:54:43.207Z",
+      "durationSec": 988,
+      "ratings": {
+        "T0": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 8,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 8,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": null,
+          "competence": null,
+          "benevolence": null,
+          "integrity": null,
+          "status": "timeout"
+        },
+        "T4b": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": null,
+          "timedOut": true,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 7,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.government",
+        "country": "GB",
+        "age": "age.a25",
+        "jobLevel": "jobLevel.leadership",
+        "education": "education.college",
+        "cyberKnowledge": 2,
+        "aiUse": "aiUse.weekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "81f37708b6b9a1100316",
+      "group": "neutral",
+      "denialSlide": "s3",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T12:03:35.375Z",
+      "durationSec": 636,
+      "ratings": {
+        "T0": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 7,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 9,
+          "competence": 7,
+          "benevolence": 6,
+          "integrity": 7,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 8,
+          "competence": 7,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 8,
+          "competence": 7,
+          "benevolence": 6,
+          "integrity": 7,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 8,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s4": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 8,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.business",
+        "country": "DE",
+        "age": "age.a18",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.secondary",
+        "cyberKnowledge": 4,
+        "aiUse": "aiUse.weekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "c59d98121a81736a44f0",
+      "group": "neutral",
+      "denialSlide": "s3",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T12:14:19.985Z",
+      "durationSec": 614,
+      "ratings": {
+        "T0": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 9,
+          "competence": 7,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 8,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": null,
+          "competence": null,
+          "benevolence": null,
+          "integrity": null,
+          "status": "timeout"
+        },
+        "T5": {
+          "trust": 8,
+          "competence": 7,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        },
+        "s4": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 6,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.business",
+        "country": "NL",
+        "age": "age.a35",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.master",
+        "cyberKnowledge": 2,
+        "aiUse": "aiUse.weekly"
+      },
+      "flags": [
+        "possible_duplicate",
+        "tab_hidden_during_audio"
+      ]
+    },
+    {
+      "sessionId": "44fa1b014e3f169aff83",
+      "group": "neutral",
+      "denialSlide": "s3",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T12:23:17.479Z",
+      "durationSec": 835,
+      "ratings": {
+        "T0": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 6,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 6,
+          "competence": 6,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 7,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 8,
+          "competence": 5,
+          "benevolence": 7,
+          "integrity": 5,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        },
+        "s4": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 7,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.finance",
+        "country": "US",
+        "age": "age.a25",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.doctorate",
+        "cyberKnowledge": 1,
+        "aiUse": "aiUse.weekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "51fcc0c4c2c43e79de36",
+      "group": "neutral",
+      "denialSlide": "s4",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T12:31:53.997Z",
+      "durationSec": 732,
+      "ratings": {
+        "T0": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 7,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 7,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 4,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 8,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.cyber",
+        "country": "IN",
+        "age": "age.a65",
+        "jobLevel": "jobLevel.leadership",
+        "education": "education.other",
+        "cyberKnowledge": 5,
+        "aiUse": "aiUse.monthly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "b294e63063ed94609bc2",
+      "group": "neutral",
+      "denialSlide": "s4",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T12:40:59.267Z",
+      "durationSec": 919,
+      "ratings": {
+        "T0": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 7,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 6,
+          "competence": 6,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 7,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.engineering",
+        "country": "preferNotToSay",
+        "age": "age.a25",
+        "jobLevel": "jobLevel.student",
+        "education": "education.doctorate",
+        "cyberKnowledge": 2,
+        "aiUse": "preferNotToSay"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "99f655147ffd6a2fa746",
+      "group": "neutral",
+      "denialSlide": "s3",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T12:49:03.494Z",
+      "durationSec": 703,
+      "ratings": {
+        "T0": {
+          "trust": 9,
+          "competence": 7,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 9,
+          "competence": 7,
+          "benevolence": 7,
+          "integrity": 7,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 10,
+          "competence": 7,
+          "benevolence": 7,
+          "integrity": 7,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 10,
+          "competence": 6,
+          "benevolence": 7,
+          "integrity": 7,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 9,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 9,
+          "competence": 7,
+          "benevolence": 6,
+          "integrity": 7,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 9,
+          "competence": 7,
+          "benevolence": 6,
+          "integrity": 7,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 9,
+          "competence": 6,
+          "benevolence": 7,
+          "integrity": 6,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s4": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 4,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.it",
+        "country": "CA",
+        "age": "age.a35",
+        "jobLevel": "jobLevel.leadership",
+        "education": "education.bachelor",
+        "cyberKnowledge": 2,
+        "aiUse": "aiUse.daily"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "ebd63484c6bccbcd652c",
+      "group": "neutral",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T12:59:18.482Z",
+      "durationSec": 824,
+      "ratings": {
+        "T0": {
+          "trust": 5,
+          "competence": 5,
+          "benevolence": 3,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 4,
+          "competence": 2,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 3,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 3,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 3,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 3,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": null,
+          "timedOut": true,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 5,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.it",
+        "country": "CH",
+        "age": "age.a55",
+        "jobLevel": "jobLevel.cLevel",
+        "education": "education.bachelor",
+        "cyberKnowledge": 2,
+        "aiUse": "aiUse.daily"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "584a4888feba13e08257",
+      "group": "neutral",
+      "denialSlide": "s4",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T13:09:00.638Z",
+      "durationSec": 634,
+      "ratings": {
+        "T0": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 6,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 3,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 3,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 5,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.business",
+        "country": "CA",
+        "age": "age.a18",
+        "jobLevel": "jobLevel.leadership",
+        "education": "education.master",
+        "cyberKnowledge": 4,
+        "aiUse": "aiUse.monthly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "4e36fcb4c867ef293060",
+      "group": "neutral",
+      "denialSlide": "s3",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T13:17:59.721Z",
+      "durationSec": 832,
+      "ratings": {
+        "T0": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 7,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 4,
+          "competence": 2,
+          "benevolence": 1,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        },
+        "s4": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 5,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.education",
+        "country": "IN",
+        "age": "age.a45",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.master",
+        "cyberKnowledge": 5,
+        "aiUse": "aiUse.weekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "79dfcc267e451d50dd89",
+      "group": "neutral",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T13:28:06.616Z",
+      "durationSec": 825,
+      "ratings": {
+        "T0": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 2,
+          "competence": 2,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 3,
+          "competence": 2,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": null,
+        "confidence": null,
+        "status": "timeout"
+      },
+      "background": {
+        "field": "field.education",
+        "country": "GB",
+        "age": "age.a45",
+        "jobLevel": "jobLevel.leadership",
+        "education": "preferNotToSay",
+        "cyberKnowledge": 1,
+        "aiUse": "aiUse.weekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "28e5eb410ebb46fe583f",
+      "group": "neutral",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T13:36:14.725Z",
+      "durationSec": 712,
+      "ratings": {
+        "T0": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 5,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": null,
+          "timedOut": true,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 6,
+        "status": "answered"
+      },
+      "background": {
+        "field": "preferNotToSay",
+        "country": "preferNotToSay",
+        "age": "age.a25",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.bachelor",
+        "cyberKnowledge": 1,
+        "aiUse": "aiUse.weekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "dce189fbd4fcf291faf0",
+      "group": "neutral",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T13:44:39.416Z",
+      "durationSec": 734,
+      "ratings": {
+        "T0": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 5,
+          "competence": 5,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 4,
+          "competence": 4,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 3,
+          "competence": 1,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 3,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 2,
+          "competence": 2,
+          "benevolence": 3,
+          "integrity": 2,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 2,
+          "competence": 1,
+          "benevolence": 2,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 2,
+          "competence": 2,
+          "benevolence": 2,
+          "integrity": 2,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 7,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.business",
+        "country": "CA",
+        "age": "age.a35",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.bachelor",
+        "cyberKnowledge": 3,
+        "aiUse": "aiUse.severalWeekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "f322ccb58980b178929b",
+      "group": "neutral",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T13:55:31.747Z",
+      "durationSec": 694,
+      "ratings": {
+        "T0": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 7,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": null,
+          "competence": null,
+          "benevolence": null,
+          "integrity": null,
+          "status": "timeout"
+        },
+        "T4a": {
+          "trust": 6,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 7,
+          "competence": 7,
+          "benevolence": 5,
+          "integrity": 7,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 7,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 6,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.health",
+        "country": "DE",
+        "age": "age.a18",
+        "jobLevel": "jobLevel.student",
+        "education": "education.bachelor",
+        "cyberKnowledge": 3,
+        "aiUse": "aiUse.severalWeekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "c6b0dc63eb185a8ded4b",
+      "group": "neutral",
+      "denialSlide": "s3",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T14:02:49.599Z",
+      "durationSec": 939,
+      "ratings": {
+        "T0": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": null,
+          "competence": null,
+          "benevolence": null,
+          "integrity": null,
+          "status": "timeout"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s3": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s4": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 8,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.it",
+        "country": "CA",
+        "age": "age.a35",
+        "jobLevel": "jobLevel.leadership",
+        "education": "education.bachelor",
+        "cyberKnowledge": 2,
+        "aiUse": "aiUse.lessMonthly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "7369c65ad6980c2b62c3",
+      "group": "neutral",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T14:12:31.262Z",
+      "durationSec": 1059,
+      "ratings": {
+        "T0": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 8,
+          "competence": 5,
+          "benevolence": 7,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 9,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 8,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 6,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": null,
+          "timedOut": true,
+          "questionBy": "chair",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "approve",
+        "confidence": 4,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.finance",
+        "country": "NL",
+        "age": "age.a25",
+        "jobLevel": "jobLevel.student",
+        "education": "education.bachelor",
+        "cyberKnowledge": 3,
+        "aiUse": "aiUse.severalWeekly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "65eeeffdbe529d834e39",
+      "group": "neutral",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T14:22:40.239Z",
+      "durationSec": 1098,
+      "ratings": {
+        "T0": {
+          "trust": 5,
+          "competence": 3,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 5,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 5,
+          "competence": 5,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 4,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 5,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 5,
+          "competence": 3,
+          "benevolence": 4,
+          "integrity": 3,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 3,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.education",
+        "country": "CA",
+        "age": "age.a18",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.master",
+        "cyberKnowledge": 3,
+        "aiUse": "aiUse.daily"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    },
+    {
+      "sessionId": "15aebf6c56fe2bc086b9",
+      "group": "neutral",
+      "denialSlide": "s2",
+      "status": "Finished",
+      "finishedAt": "2026-10-25T14:29:11.839Z",
+      "durationSec": 931,
+      "ratings": {
+        "T0": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 6,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T1": {
+          "trust": 7,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T2a": {
+          "trust": 7,
+          "competence": 5,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T2b": {
+          "trust": 6,
+          "competence": 5,
+          "benevolence": 4,
+          "integrity": 6,
+          "status": "answered"
+        },
+        "T3a": {
+          "trust": 6,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 4,
+          "status": "answered"
+        },
+        "T3b": {
+          "trust": 7,
+          "competence": 6,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4a": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 5,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T4b": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 4,
+          "integrity": 5,
+          "status": "answered"
+        },
+        "T5": {
+          "trust": 5,
+          "competence": 4,
+          "benevolence": 3,
+          "integrity": 4,
+          "status": "answered"
+        }
+      },
+      "actions": {
+        "s2": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "denial"
+        },
+        "s3": {
+          "actionId": "hasQuestion",
+          "timedOut": false,
+          "questionBy": "member",
+          "answerType": "reason"
+        },
+        "s4": {
+          "actionId": "noQuestion",
+          "timedOut": false,
+          "questionBy": "chair",
+          "answerType": "reason"
+        }
+      },
+      "budget": {
+        "optionId": "reject",
+        "confidence": 5,
+        "status": "answered"
+      },
+      "background": {
+        "field": "field.engineering",
+        "country": "GB",
+        "age": "age.a18",
+        "jobLevel": "jobLevel.employee",
+        "education": "education.college",
+        "cyberKnowledge": 1,
+        "aiUse": "aiUse.lessMonthly"
+      },
+      "flags": [
+        "possible_duplicate"
+      ]
+    }
+  ],
+  "ratingStats": {
+    "trust": {
+      "T0": {
+        "checker": {
+          "n": 21,
+          "mean": 6.381,
+          "sd": 1.117,
+          "ci95": [
+            5.8725,
+            6.8894
+          ],
+          "median": 7
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 6.3182,
+          "sd": 1.1291,
+          "ci95": [
+            5.8176,
+            6.8188
+          ],
+          "median": 6
+        }
+      },
+      "T1": {
+        "checker": {
+          "n": 20,
+          "mean": 6.55,
+          "sd": 1.4318,
+          "ci95": [
+            5.8799,
+            7.2201
+          ],
+          "median": 6
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 6.5,
+          "sd": 1.3715,
+          "ci95": [
+            5.8919,
+            7.1081
+          ],
+          "median": 6
+        }
+      },
+      "T2a": {
+        "checker": {
+          "n": 22,
+          "mean": 4.9545,
+          "sd": 1.6177,
+          "ci95": [
+            4.2373,
+            5.6718
+          ],
+          "median": 4.5
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 5.9091,
+          "sd": 1.342,
+          "ci95": [
+            5.3141,
+            6.5041
+          ],
+          "median": 6
+        }
+      },
+      "T2b": {
+        "checker": {
+          "n": 22,
+          "mean": 5.6818,
+          "sd": 1.8358,
+          "ci95": [
+            4.8679,
+            6.4958
+          ],
+          "median": 5.5
+        },
+        "neutral": {
+          "n": 20,
+          "mean": 6.3,
+          "sd": 1.6255,
+          "ci95": [
+            5.5393,
+            7.0607
+          ],
+          "median": 6.5
+        }
+      },
+      "T3a": {
+        "checker": {
+          "n": 22,
+          "mean": 4.1364,
+          "sd": 1.7538,
+          "ci95": [
+            3.3588,
+            4.9139
+          ],
+          "median": 4
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 5.9091,
+          "sd": 1.925,
+          "ci95": [
+            5.0556,
+            6.7626
+          ],
+          "median": 6.5
+        }
+      },
+      "T3b": {
+        "checker": {
+          "n": 21,
+          "mean": 4.8095,
+          "sd": 1.9396,
+          "ci95": [
+            3.9266,
+            5.6924
+          ],
+          "median": 4
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 6.0476,
+          "sd": 1.8568,
+          "ci95": [
+            5.2024,
+            6.8928
+          ],
+          "median": 6
+        }
+      },
+      "T4a": {
+        "checker": {
+          "n": 22,
+          "mean": 3.3182,
+          "sd": 1.9853,
+          "ci95": [
+            2.4379,
+            4.1984
+          ],
+          "median": 3
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 5.2381,
+          "sd": 2.0953,
+          "ci95": [
+            4.2843,
+            6.1919
+          ],
+          "median": 5
+        }
+      },
+      "T4b": {
+        "checker": {
+          "n": 22,
+          "mean": 4.3182,
+          "sd": 1.6729,
+          "ci95": [
+            3.5764,
+            5.0599
+          ],
+          "median": 4
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 5.2857,
+          "sd": 1.9785,
+          "ci95": [
+            4.3851,
+            6.1863
+          ],
+          "median": 5
+        }
+      },
+      "T5": {
+        "checker": {
+          "n": 22,
+          "mean": 4.1818,
+          "sd": 1.5927,
+          "ci95": [
+            3.4756,
+            4.888
+          ],
+          "median": 4
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 5.4762,
+          "sd": 2.2499,
+          "ci95": [
+            4.4521,
+            6.5003
+          ],
+          "median": 5
+        }
+      }
+    },
+    "competence": {
+      "T0": {
+        "checker": {
+          "n": 21,
+          "mean": 4.7143,
+          "sd": 0.9562,
+          "ci95": [
+            4.279,
+            5.1495
+          ],
+          "median": 5
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 4.9091,
+          "sd": 0.9715,
+          "ci95": [
+            4.4784,
+            5.3398
+          ],
+          "median": 5
+        }
+      },
+      "T1": {
+        "checker": {
+          "n": 20,
+          "mean": 5.15,
+          "sd": 0.9333,
+          "ci95": [
+            4.7132,
+            5.5868
+          ],
+          "median": 5
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 4.9545,
+          "sd": 0.9989,
+          "ci95": [
+            4.5117,
+            5.3974
+          ],
+          "median": 5
+        }
+      },
+      "T2a": {
+        "checker": {
+          "n": 22,
+          "mean": 3.8636,
+          "sd": 0.9902,
+          "ci95": [
+            3.4246,
+            4.3027
+          ],
+          "median": 4
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 4.4545,
+          "sd": 1.0108,
+          "ci95": [
+            4.0064,
+            4.9027
+          ],
+          "median": 4
+        }
+      },
+      "T2b": {
+        "checker": {
+          "n": 22,
+          "mean": 4.5455,
+          "sd": 1.1434,
+          "ci95": [
+            4.0385,
+            5.0524
+          ],
+          "median": 4.5
+        },
+        "neutral": {
+          "n": 20,
+          "mean": 4.85,
+          "sd": 1.1821,
+          "ci95": [
+            4.2968,
+            5.4032
+          ],
+          "median": 5
+        }
+      },
+      "T3a": {
+        "checker": {
+          "n": 22,
+          "mean": 3.5909,
+          "sd": 1.2968,
+          "ci95": [
+            3.0159,
+            4.1659
+          ],
+          "median": 4
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 4.3182,
+          "sd": 1.3934,
+          "ci95": [
+            3.7004,
+            4.936
+          ],
+          "median": 4.5
+        }
+      },
+      "T3b": {
+        "checker": {
+          "n": 21,
+          "mean": 3.619,
+          "sd": 1.5322,
+          "ci95": [
+            2.9216,
+            4.3165
+          ],
+          "median": 3
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 4.5238,
+          "sd": 1.0779,
+          "ci95": [
+            4.0331,
+            5.0145
+          ],
+          "median": 4
+        }
+      },
+      "T4a": {
+        "checker": {
+          "n": 22,
+          "mean": 2.9545,
+          "sd": 1.0901,
+          "ci95": [
+            2.4712,
+            3.4379
+          ],
+          "median": 3
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 4.0952,
+          "sd": 1.6705,
+          "ci95": [
+            3.3348,
+            4.8556
+          ],
+          "median": 4
+        }
+      },
+      "T4b": {
+        "checker": {
+          "n": 22,
+          "mean": 3.8182,
+          "sd": 0.9069,
+          "ci95": [
+            3.4161,
+            4.2203
+          ],
+          "median": 4
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 4.3333,
+          "sd": 1.8529,
+          "ci95": [
+            3.4899,
+            5.1768
+          ],
+          "median": 4
+        }
+      },
+      "T5": {
+        "checker": {
+          "n": 22,
+          "mean": 3.3182,
+          "sd": 0.9946,
+          "ci95": [
+            2.8772,
+            3.7592
+          ],
+          "median": 3
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 4.3333,
+          "sd": 1.5275,
+          "ci95": [
+            3.638,
+            5.0287
+          ],
+          "median": 4
+        }
+      }
+    },
+    "benevolence": {
+      "T0": {
+        "checker": {
+          "n": 21,
+          "mean": 4.8095,
+          "sd": 0.9808,
+          "ci95": [
+            4.3631,
+            5.256
+          ],
+          "median": 5
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 4.7727,
+          "sd": 0.8691,
+          "ci95": [
+            4.3874,
+            5.1581
+          ],
+          "median": 5
+        }
+      },
+      "T1": {
+        "checker": {
+          "n": 20,
+          "mean": 4.95,
+          "sd": 1.1459,
+          "ci95": [
+            4.4137,
+            5.4863
+          ],
+          "median": 5
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 5,
+          "sd": 1.1127,
+          "ci95": [
+            4.5067,
+            5.4933
+          ],
+          "median": 5
+        }
+      },
+      "T2a": {
+        "checker": {
+          "n": 22,
+          "mean": 4.0455,
+          "sd": 1.0455,
+          "ci95": [
+            3.5819,
+            4.509
+          ],
+          "median": 4
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 4.4545,
+          "sd": 1.0108,
+          "ci95": [
+            4.0064,
+            4.9027
+          ],
+          "median": 4
+        }
+      },
+      "T2b": {
+        "checker": {
+          "n": 22,
+          "mean": 4.1364,
+          "sd": 1.3556,
+          "ci95": [
+            3.5353,
+            4.7374
+          ],
+          "median": 4
+        },
+        "neutral": {
+          "n": 20,
+          "mean": 4.8,
+          "sd": 1.1965,
+          "ci95": [
+            4.24,
+            5.36
+          ],
+          "median": 5
+        }
+      },
+      "T3a": {
+        "checker": {
+          "n": 22,
+          "mean": 3.4091,
+          "sd": 1.098,
+          "ci95": [
+            2.9223,
+            3.8959
+          ],
+          "median": 3
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 4.5455,
+          "sd": 1.5346,
+          "ci95": [
+            3.8651,
+            5.2259
+          ],
+          "median": 4.5
+        }
+      },
+      "T3b": {
+        "checker": {
+          "n": 21,
+          "mean": 3.619,
+          "sd": 1.5322,
+          "ci95": [
+            2.9216,
+            4.3165
+          ],
+          "median": 3
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 4.4762,
+          "sd": 1.1233,
+          "ci95": [
+            3.9648,
+            4.9875
+          ],
+          "median": 5
+        }
+      },
+      "T4a": {
+        "checker": {
+          "n": 22,
+          "mean": 2.8182,
+          "sd": 1.1396,
+          "ci95": [
+            2.3129,
+            3.3235
+          ],
+          "median": 3
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 4.2381,
+          "sd": 1.1792,
+          "ci95": [
+            3.7013,
+            4.7749
+          ],
+          "median": 4
+        }
+      },
+      "T4b": {
+        "checker": {
+          "n": 22,
+          "mean": 3.4091,
+          "sd": 1.0075,
+          "ci95": [
+            2.9624,
+            3.8558
+          ],
+          "median": 3
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 3.9048,
+          "sd": 1.3749,
+          "ci95": [
+            3.2789,
+            4.5306
+          ],
+          "median": 4
+        }
+      },
+      "T5": {
+        "checker": {
+          "n": 22,
+          "mean": 3.6818,
+          "sd": 1.3233,
+          "ci95": [
+            3.0951,
+            4.2685
+          ],
+          "median": 3
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 4.2381,
+          "sd": 1.5134,
+          "ci95": [
+            3.5492,
+            4.927
+          ],
+          "median": 4
+        }
+      }
+    },
+    "integrity": {
+      "T0": {
+        "checker": {
+          "n": 21,
+          "mean": 4.9048,
+          "sd": 0.9437,
+          "ci95": [
+            4.4752,
+            5.3343
+          ],
+          "median": 5
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 4.6364,
+          "sd": 0.7267,
+          "ci95": [
+            4.3141,
+            4.9586
+          ],
+          "median": 5
+        }
+      },
+      "T1": {
+        "checker": {
+          "n": 20,
+          "mean": 4.8,
+          "sd": 1.0563,
+          "ci95": [
+            4.3056,
+            5.2944
+          ],
+          "median": 4.5
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 4.7273,
+          "sd": 0.9351,
+          "ci95": [
+            4.3127,
+            5.1419
+          ],
+          "median": 4.5
+        }
+      },
+      "T2a": {
+        "checker": {
+          "n": 22,
+          "mean": 4.1818,
+          "sd": 1.0527,
+          "ci95": [
+            3.7151,
+            4.6486
+          ],
+          "median": 4
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 4.6818,
+          "sd": 0.8387,
+          "ci95": [
+            4.3099,
+            5.0537
+          ],
+          "median": 5
+        }
+      },
+      "T2b": {
+        "checker": {
+          "n": 22,
+          "mean": 4.5,
+          "sd": 1.1019,
+          "ci95": [
+            4.0114,
+            4.9886
+          ],
+          "median": 4
+        },
+        "neutral": {
+          "n": 20,
+          "mean": 4.65,
+          "sd": 1.4609,
+          "ci95": [
+            3.9663,
+            5.3337
+          ],
+          "median": 4.5
+        }
+      },
+      "T3a": {
+        "checker": {
+          "n": 22,
+          "mean": 3.6818,
+          "sd": 1.1705,
+          "ci95": [
+            3.1628,
+            4.2008
+          ],
+          "median": 4
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 4.5,
+          "sd": 1.1443,
+          "ci95": [
+            3.9926,
+            5.0074
+          ],
+          "median": 4.5
+        }
+      },
+      "T3b": {
+        "checker": {
+          "n": 21,
+          "mean": 3.619,
+          "sd": 1.5645,
+          "ci95": [
+            2.9069,
+            4.3312
+          ],
+          "median": 4
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 4.5238,
+          "sd": 1.2498,
+          "ci95": [
+            3.9549,
+            5.0927
+          ],
+          "median": 5
+        }
+      },
+      "T4a": {
+        "checker": {
+          "n": 22,
+          "mean": 2.9545,
+          "sd": 1.3266,
+          "ci95": [
+            2.3664,
+            3.5427
+          ],
+          "median": 3
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 4.0952,
+          "sd": 1.2209,
+          "ci95": [
+            3.5395,
+            4.651
+          ],
+          "median": 4
+        }
+      },
+      "T4b": {
+        "checker": {
+          "n": 22,
+          "mean": 3.4545,
+          "sd": 1.2994,
+          "ci95": [
+            2.8784,
+            4.0306
+          ],
+          "median": 3
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 4.4762,
+          "sd": 1.6315,
+          "ci95": [
+            3.7335,
+            5.2189
+          ],
+          "median": 4
+        }
+      },
+      "T5": {
+        "checker": {
+          "n": 22,
+          "mean": 3.5455,
+          "sd": 1.101,
+          "ci95": [
+            3.0573,
+            4.0336
+          ],
+          "median": 4
+        },
+        "neutral": {
+          "n": 21,
+          "mean": 4.381,
+          "sd": 1.3593,
+          "ci95": [
+            3.7622,
+            4.9997
+          ],
+          "median": 4
+        }
+      }
+    }
+  },
+  "hypotheses": {
+    "baseline": {
+      "checker": {
+        "n": 21,
+        "mean": 6.381,
+        "sd": 1.117,
+        "ci95": [
+          5.8725,
+          6.8894
+        ],
+        "median": 7
+      },
+      "neutral": {
+        "n": 22,
+        "mean": 6.3182,
+        "sd": 1.1291,
+        "ci95": [
+          5.8176,
+          6.8188
+        ],
+        "median": 6
+      },
+      "diff": 0.0628,
+      "diffCi95": [
+        -0.6291,
+        0.7547
+      ],
+      "welchT": 0.1832,
+      "df": 40.9444,
+      "p": 0.8555,
+      "hedgesG": 0.0549,
+      "reading": "n_a"
+    },
+    "slide1": {
+      "checker": {
+        "n": 19,
+        "mean": 0.3158,
+        "sd": 0.7493,
+        "ci95": [
+          -0.0453,
+          0.6769
+        ],
+        "median": 0
+      },
+      "neutral": {
+        "n": 22,
+        "mean": 0.1818,
+        "sd": 0.5885,
+        "ci95": [
+          -0.0791,
+          0.4427
+        ],
+        "median": 0
+      },
+      "diff": 0.134,
+      "diffCi95": [
+        -0.2985,
+        0.5665
+      ],
+      "welchT": 0.6295,
+      "df": 34.0134,
+      "p": 0.5332,
+      "hedgesG": 0.1968,
+      "reading": "n_a"
+    },
+    "overall": {
+      "checker": {
+        "n": 21,
+        "mean": -2.1905,
+        "sd": 1.3645,
+        "ci95": [
+          -2.8116,
+          -1.5694
+        ],
+        "median": -2
+      },
+      "neutral": {
+        "n": 21,
+        "mean": -0.8095,
+        "sd": 1.6917,
+        "ci95": [
+          -1.5796,
+          -0.0395
+        ],
+        "median": 0
+      },
+      "diff": -1.381,
+      "diffCi95": [
+        -2.3409,
+        -0.4211
+      ],
+      "welchT": -2.9117,
+      "df": 38.2843,
+      "p": 0.006,
+      "hedgesG": -0.8816,
+      "reading": "n_a"
+    },
+    "h1": {
+      "pooled": {
+        "checker": {
+          "n": 22,
+          "mean": -1.553,
+          "sd": 0.4406,
+          "ci95": [
+            -1.7484,
+            -1.3577
+          ],
+          "median": -1.6667
+        },
+        "neutral": {
+          "n": 22,
+          "mean": -0.5758,
+          "sd": 0.5032,
+          "ci95": [
+            -0.7989,
+            -0.3526
+          ],
+          "median": -0.5
+        },
+        "diff": -0.9773,
+        "diffCi95": [
+          -1.2652,
+          -0.6893
+        ],
+        "welchT": -6.853,
+        "df": 41.2796,
+        "p": 2.57e-8,
+        "hedgesG": -2.0292,
+        "reading": "supports"
+      },
+      "checkerBelowZero": {
+        "n": 22,
+        "mean": -1.553,
+        "ci95": [
+          -1.7484,
+          -1.3577
+        ],
+        "t": -16.5322,
+        "df": 21,
+        "p": 1.626e-13,
+        "reading": "supports"
+      },
+      "perSlide": {
+        "s2": {
+          "checker": {
+            "n": 20,
+            "mean": -1.75,
+            "sd": 0.9665,
+            "ci95": [
+              -2.2024,
+              -1.2976
+            ],
+            "median": -2
+          },
+          "neutral": {
+            "n": 22,
+            "mean": -0.5909,
+            "sd": 0.7341,
+            "ci95": [
+              -0.9164,
+              -0.2654
+            ],
+            "median": -1
+          },
+          "diff": -1.1591,
+          "diffCi95": [
+            -1.7006,
+            -0.6176
+          ],
+          "welchT": -4.3436,
+          "df": 35.3568,
+          "p": 0.0001125,
+          "hedgesG": -1.334,
+          "reading": "n_a"
+        },
+        "s3": {
+          "checker": {
+            "n": 22,
+            "mean": -1.5455,
+            "sd": 0.5958,
+            "ci95": [
+              -1.8096,
+              -1.2813
+            ],
+            "median": -1.5
+          },
+          "neutral": {
+            "n": 20,
+            "mean": -0.35,
+            "sd": 0.7452,
+            "ci95": [
+              -0.6987,
+              -0.0013
+            ],
+            "median": -0.5
+          },
+          "diff": -1.1955,
+          "diffCi95": [
+            -1.6202,
+            -0.7707
+          ],
+          "welchT": -5.7057,
+          "df": 36.3836,
+          "p": 0.000001661,
+          "hedgesG": -1.7482,
+          "reading": "n_a"
+        },
+        "s4": {
+          "checker": {
+            "n": 21,
+            "mean": -1.4286,
+            "sd": 0.8106,
+            "ci95": [
+              -1.7976,
+              -1.0596
+            ],
+            "median": -1
+          },
+          "neutral": {
+            "n": 20,
+            "mean": -0.8,
+            "sd": 0.8944,
+            "ci95": [
+              -1.2186,
+              -0.3814
+            ],
+            "median": -1
+          },
+          "diff": -0.6286,
+          "diffCi95": [
+            -1.169,
+            -0.0881
+          ],
+          "welchT": -2.3541,
+          "df": 38.166,
+          "p": 0.0238,
+          "hedgesG": -0.7231,
+          "reading": "n_a"
+        }
+      },
+      "levelAtFlag": {
+        "s2": {
+          "checker": {
+            "n": 22,
+            "mean": 4.9545,
+            "sd": 1.6177,
+            "ci95": [
+              4.2373,
+              5.6718
+            ],
+            "median": 4.5
+          },
+          "neutral": {
+            "n": 22,
+            "mean": 5.9091,
+            "sd": 1.342,
+            "ci95": [
+              5.3141,
+              6.5041
+            ],
+            "median": 6
+          },
+          "diff": -0.9545,
+          "diffCi95": [
+            -1.8598,
+            -0.0493
+          ],
+          "welchT": -2.1301,
+          "df": 40.6143,
+          "p": 0.0393,
+          "hedgesG": -0.6307,
+          "reading": "n_a"
+        },
+        "s3": {
+          "checker": {
+            "n": 22,
+            "mean": 4.1364,
+            "sd": 1.7538,
+            "ci95": [
+              3.3588,
+              4.9139
+            ],
+            "median": 4
+          },
+          "neutral": {
+            "n": 22,
+            "mean": 5.9091,
+            "sd": 1.925,
+            "ci95": [
+              5.0556,
+              6.7626
+            ],
+            "median": 6.5
+          },
+          "diff": -1.7727,
+          "diffCi95": [
+            -2.8934,
+            -0.652
+          ],
+          "welchT": -3.193,
+          "df": 41.6408,
+          "p": 0.0027,
+          "hedgesG": -0.9454,
+          "reading": "n_a"
+        },
+        "s4": {
+          "checker": {
+            "n": 22,
+            "mean": 3.3182,
+            "sd": 1.9853,
+            "ci95": [
+              2.4379,
+              4.1984
+            ],
+            "median": 3
+          },
+          "neutral": {
+            "n": 21,
+            "mean": 5.2381,
+            "sd": 2.0953,
+            "ci95": [
+              4.2843,
+              6.1919
+            ],
+            "median": 5
+          },
+          "diff": -1.9199,
+          "diffCi95": [
+            -3.1786,
+            -0.6612
+          ],
+          "welchT": -3.0813,
+          "df": 40.5823,
+          "p": 0.0037,
+          "hedgesG": -0.9239,
+          "reading": "n_a"
+        }
+      }
+    },
+    "h2": {
+      "pooled": {
+        "checker": {
+          "n": 22,
+          "mean": 1.0909,
+          "sd": 0.479,
+          "ci95": [
+            0.8785,
+            1.3033
+          ],
+          "median": 1
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 0.4091,
+          "sd": 0.4535,
+          "ci95": [
+            0.208,
+            0.6101
+          ],
+          "median": 0.5
+        },
+        "diff": 0.6818,
+        "diffCi95": [
+          0.398,
+          0.9656
+        ],
+        "welchT": 4.8484,
+        "df": 41.8746,
+        "p": 0.00001749,
+        "hedgesG": 1.4356,
+        "reading": "supports"
+      },
+      "checkerAboveZero": {
+        "n": 22,
+        "mean": 1.0909,
+        "ci95": [
+          0.8785,
+          1.3033
+        ],
+        "t": 10.6824,
+        "df": 21,
+        "p": 6.024e-10,
+        "reading": "supports"
+      },
+      "level": {
+        "checker": {
+          "n": 22,
+          "mean": 5.0455,
+          "sd": 1.7922,
+          "ci95": [
+            4.2508,
+            5.8401
+          ],
+          "median": 4.75
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 6.0227,
+          "sd": 1.8611,
+          "ci95": [
+            5.1976,
+            6.8479
+          ],
+          "median": 6.5
+        },
+        "diff": -0.9773,
+        "diffCi95": [
+          -2.089,
+          0.1345
+        ],
+        "welchT": -1.7741,
+        "df": 41.9404,
+        "p": 0.0833,
+        "hedgesG": -0.5253,
+        "reading": "does_not_support"
+      },
+      "perSlide": {
+        "s2": {
+          "checker": {
+            "n": 14,
+            "mean": 1,
+            "sd": 0.7845,
+            "ci95": [
+              0.5471,
+              1.4529
+            ],
+            "median": 1
+          },
+          "neutral": {
+            "n": 12,
+            "mean": 0.6667,
+            "sd": 0.7785,
+            "ci95": [
+              0.172,
+              1.1613
+            ],
+            "median": 0.5
+          },
+          "diff": 0.3333,
+          "diffCi95": [
+            -0.3018,
+            0.9685
+          ],
+          "welchT": 1.0846,
+          "df": 23.4497,
+          "p": 0.2891,
+          "hedgesG": 0.4129,
+          "reading": "n_a"
+        },
+        "s3": {
+          "checker": {
+            "n": 14,
+            "mean": 1,
+            "sd": 0.8771,
+            "ci95": [
+              0.4936,
+              1.5064
+            ],
+            "median": 1
+          },
+          "neutral": {
+            "n": 14,
+            "mean": 0.3571,
+            "sd": 0.6333,
+            "ci95": [
+              -0.0085,
+              0.7228
+            ],
+            "median": 0
+          },
+          "diff": 0.6429,
+          "diffCi95": [
+            0.0457,
+            1.24
+          ],
+          "welchT": 2.2234,
+          "df": 23.6591,
+          "p": 0.036,
+          "hedgesG": 0.8159,
+          "reading": "n_a"
+        },
+        "s4": {
+          "checker": {
+            "n": 15,
+            "mean": 1.2667,
+            "sd": 0.5936,
+            "ci95": [
+              0.9379,
+              1.5954
+            ],
+            "median": 1
+          },
+          "neutral": {
+            "n": 14,
+            "mean": 0.1429,
+            "sd": 0.7703,
+            "ci95": [
+              -0.3019,
+              0.5876
+            ],
+            "median": 0
+          },
+          "diff": 1.1238,
+          "diffCi95": [
+            0.5946,
+            1.653
+          ],
+          "welchT": 4.3785,
+          "df": 24.434,
+          "p": 0.0001949,
+          "hedgesG": 1.596,
+          "reading": "n_a"
+        }
+      },
+      "levelPerSlide": {
+        "s2": {
+          "checker": {
+            "n": 14,
+            "mean": 6,
+            "sd": 2,
+            "ci95": [
+              4.8452,
+              7.1548
+            ],
+            "median": 6
+          },
+          "neutral": {
+            "n": 12,
+            "mean": 7,
+            "sd": 1.4771,
+            "ci95": [
+              6.0615,
+              7.9385
+            ],
+            "median": 7
+          },
+          "diff": -1,
+          "diffCi95": [
+            -2.4127,
+            0.4127
+          ],
+          "welchT": -1.4625,
+          "df": 23.5427,
+          "p": 0.1568,
+          "hedgesG": -0.5442,
+          "reading": "n_a"
+        },
+        "s3": {
+          "checker": {
+            "n": 14,
+            "mean": 4.9286,
+            "sd": 2.0178,
+            "ci95": [
+              3.7635,
+              6.0936
+            ],
+            "median": 4
+          },
+          "neutral": {
+            "n": 14,
+            "mean": 5.6429,
+            "sd": 1.8649,
+            "ci95": [
+              4.5661,
+              6.7196
+            ],
+            "median": 5
+          },
+          "diff": -0.7143,
+          "diffCi95": [
+            -2.2242,
+            0.7956
+          ],
+          "welchT": -0.9727,
+          "df": 25.8403,
+          "p": 0.3397,
+          "hedgesG": -0.3569,
+          "reading": "n_a"
+        },
+        "s4": {
+          "checker": {
+            "n": 15,
+            "mean": 4.4,
+            "sd": 1.4541,
+            "ci95": [
+              3.5948,
+              5.2052
+            ],
+            "median": 4
+          },
+          "neutral": {
+            "n": 14,
+            "mean": 5.3571,
+            "sd": 2.2051,
+            "ci95": [
+              4.0839,
+              6.6304
+            ],
+            "median": 5
+          },
+          "diff": -0.9571,
+          "diffCi95": [
+            -2.4052,
+            0.491
+          ],
+          "welchT": -1.3697,
+          "df": 22.2843,
+          "p": 0.1844,
+          "hedgesG": -0.5018,
+          "reading": "n_a"
+        }
+      },
+      "aboveBaseline": {
+        "checker": {
+          "n": 21,
+          "mean": -1.2857,
+          "ci95": [
+            -1.9196,
+            -0.6518
+          ],
+          "t": -4.2309,
+          "df": 20,
+          "p": 0.00041,
+          "reading": "opposite"
+        },
+        "neutral": {
+          "n": 22,
+          "mean": -0.2955,
+          "ci95": [
+            -0.8327,
+            0.2418
+          ],
+          "t": -1.1437,
+          "df": 21,
+          "p": 0.2656,
+          "reading": "does_not_support"
+        }
+      },
+      "exploratoryNet": {
+        "checker": {
+          "n": 21,
+          "mean": -0.5714,
+          "sd": 0.5542,
+          "ci95": [
+            -0.8237,
+            -0.3192
+          ],
+          "median": -0.5
+        },
+        "neutral": {
+          "n": 19,
+          "mean": -0.2632,
+          "sd": 0.5367,
+          "ci95": [
+            -0.5218,
+            -0.0045
+          ],
+          "median": -0.5
+        },
+        "diff": -0.3083,
+        "diffCi95": [
+          -0.6577,
+          0.0412
+        ],
+        "welchT": -1.7862,
+        "df": 37.8115,
+        "p": 0.0821,
+        "hedgesG": -0.5534,
+        "reading": "n_a"
+      }
+    },
+    "h3": {
+      "perGroup": {
+        "checker": {
+          "n": 22,
+          "reasoned": {
+            "n": 22,
+            "mean": 1.0909,
+            "sd": 0.479,
+            "ci95": [
+              0.8785,
+              1.3033
+            ],
+            "median": 1
+          },
+          "denial": {
+            "n": 22,
+            "mean": 0.1818,
+            "sd": 0.6645,
+            "ci95": [
+              -0.1128,
+              0.4764
+            ],
+            "median": 0
+          },
+          "meanDiff": 0.9091,
+          "ci95": [
+            0.4894,
+            1.3288
+          ],
+          "t": 4.5044,
+          "df": 21,
+          "p": 0.0001946,
+          "reading": "supports"
+        },
+        "neutral": {
+          "n": 21,
+          "reasoned": {
+            "n": 21,
+            "mean": 0.4524,
+            "sd": 0.4155,
+            "ci95": [
+              0.2633,
+              0.6415
+            ],
+            "median": 0.5
+          },
+          "denial": {
+            "n": 21,
+            "mean": -0.1905,
+            "sd": 0.6796,
+            "ci95": [
+              -0.4998,
+              0.1189
+            ],
+            "median": 0
+          },
+          "meanDiff": 0.6429,
+          "ci95": [
+            0.2348,
+            1.0509
+          ],
+          "t": 3.2863,
+          "df": 20,
+          "p": 0.0037,
+          "reading": "supports"
+        }
+      },
+      "both": {
+        "n": 43,
+        "reasoned": {
+          "n": 43,
+          "mean": 0.7791,
+          "sd": 0.5488,
+          "ci95": [
+            0.6102,
+            0.948
+          ],
+          "median": 1
+        },
+        "denial": {
+          "n": 43,
+          "mean": 0,
+          "sd": 0.6901,
+          "ci95": [
+            -0.2124,
+            0.2124
+          ],
+          "median": 0
+        },
+        "meanDiff": 0.7791,
+        "ci95": [
+          0.4955,
+          1.0626
+        ],
+        "t": 5.545,
+        "df": 42,
+        "p": 0.000001788,
+        "reading": "supports"
+      }
+    },
+    "h4a": {
+      "checker": {
+        "slides": 66,
+        "withQuestion": 40,
+        "share": 0.6061,
+        "perParticipant": {
+          "n": 22,
+          "mean": 0.6061,
+          "sd": 0.2843,
+          "ci95": [
+            0.48,
+            0.7321
+          ],
+          "median": 0.6667
+        }
+      },
+      "neutral": {
+        "slides": 66,
+        "withQuestion": 28,
+        "share": 0.4242,
+        "perParticipant": {
+          "n": 22,
+          "mean": 0.4242,
+          "sd": 0.2558,
+          "ci95": [
+            0.3108,
+            0.5376
+          ],
+          "median": 0.3333
+        }
+      },
+      "slidesTest": {
+        "p1": 0.6061,
+        "p2": 0.4242,
+        "diff": 0.1818,
+        "z": 2.0899,
+        "p": 0.0366,
+        "reading": "n_a"
+      },
+      "participantsTest": {
+        "checker": {
+          "n": 22,
+          "mean": 0.6061,
+          "sd": 0.2843,
+          "ci95": [
+            0.48,
+            0.7321
+          ],
+          "median": 0.6667
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 0.4242,
+          "sd": 0.2558,
+          "ci95": [
+            0.3108,
+            0.5376
+          ],
+          "median": 0.3333
+        },
+        "diff": 0.1818,
+        "diffCi95": [
+          0.0172,
+          0.3464
+        ],
+        "welchT": 2.2302,
+        "df": 41.5397,
+        "p": 0.0312,
+        "hedgesG": 0.6603,
+        "reading": "supports"
+      }
+    },
+    "h4b": {
+      "afterReason": {
+        "checker": {
+          "n": 22,
+          "mean": 1.0909,
+          "sd": 0.479,
+          "ci95": [
+            0.8785,
+            1.3033
+          ],
+          "median": 1
+        },
+        "neutral": {
+          "n": 22,
+          "mean": 0.4091,
+          "sd": 0.4535,
+          "ci95": [
+            0.208,
+            0.6101
+          ],
+          "median": 0.5
+        },
+        "diff": 0.6818,
+        "diffCi95": [
+          0.398,
+          0.9656
+        ],
+        "welchT": 4.8484,
+        "df": 41.8746,
+        "p": 0.00001749,
+        "hedgesG": 1.4356,
+        "reading": "supports"
+      },
+      "afterDenial": {
+        "checker": {
+          "n": 22,
+          "mean": 0.1818,
+          "sd": 0.6645,
+          "ci95": [
+            -0.1128,
+            0.4764
+          ],
+          "median": 0
+        },
+        "neutral": {
+          "n": 21,
+          "mean": -0.1905,
+          "sd": 0.6796,
+          "ci95": [
+            -0.4998,
+            0.1189
+          ],
+          "median": 0
+        },
+        "diff": 0.3723,
+        "diffCi95": [
+          -0.042,
+          0.7866
+        ],
+        "welchT": 1.8152,
+        "df": 40.7992,
+        "p": 0.0769,
+        "hedgesG": 0.5439,
+        "reading": "does_not_support"
+      }
+    },
+    "budget": {
+      "byGroup": {
+        "checker": {
+          "approve": 7,
+          "reject": 13,
+          "missing": 2,
+          "confidence": {
+            "n": 20,
+            "mean": 5.55,
+            "sd": 1.2763,
+            "ci95": [
+              4.9527,
+              6.1473
+            ],
+            "median": 6
+          }
+        },
+        "neutral": {
+          "approve": 13,
+          "reject": 8,
+          "missing": 1,
+          "confidence": {
+            "n": 21,
+            "mean": 5.7619,
+            "sd": 1.5781,
+            "ci95": [
+              5.0436,
+              6.4803
+            ],
+            "median": 6
+          }
+        }
+      },
+      "byLastTrustTercile": [
+        {
+          "tercile": 1,
+          "from": 1,
+          "to": 4,
+          "approve": 3,
+          "reject": 15,
+          "missing": 3
+        },
+        {
+          "tercile": 2,
+          "from": 5,
+          "to": 6,
+          "approve": 5,
+          "reject": 6,
+          "missing": 0
+        },
+        {
+          "tercile": 3,
+          "from": 7,
+          "to": 9,
+          "approve": 12,
+          "reject": 0,
+          "missing": 0
+        }
+      ],
+      "approveTest": {
+        "p1": 0.35,
+        "p2": 0.619,
+        "diff": -0.269,
+        "z": -1.7227,
+        "p": 0.0849,
+        "reading": "n_a"
+      }
+    },
+    "moderators": {
+      "cyberKnowledge": [
+        {
+          "level": 1,
+          "h1": {
+            "checker": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "ci95": null,
+              "median": null
+            },
+            "neutral": {
+              "n": 4,
+              "mean": -0.6667,
+              "sd": 0.2722,
+              "ci95": [
+                -1.0997,
+                -0.2336
+              ],
+              "median": -0.6667
+            }
+          },
+          "h2": {
+            "checker": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "ci95": null,
+              "median": null
+            },
+            "neutral": {
+              "n": 4,
+              "mean": 0.75,
+              "sd": 0.2887,
+              "ci95": [
+                0.2907,
+                1.2093
+              ],
+              "median": 0.75
+            }
+          }
+        },
+        {
+          "level": 2,
+          "h1": {
+            "checker": {
+              "n": 6,
+              "mean": -1.3611,
+              "sd": 0.4763,
+              "ci95": [
+                -1.8609,
+                -0.8613
+              ],
+              "median": -1.4167
+            },
+            "neutral": {
+              "n": 8,
+              "mean": -0.6667,
+              "sd": 0.504,
+              "ci95": [
+                -1.088,
+                -0.2454
+              ],
+              "median": -0.5
+            }
+          },
+          "h2": {
+            "checker": {
+              "n": 6,
+              "mean": 1.25,
+              "sd": 0.2739,
+              "ci95": [
+                0.9626,
+                1.5374
+              ],
+              "median": 1.25
+            },
+            "neutral": {
+              "n": 8,
+              "mean": 0.375,
+              "sd": 0.5825,
+              "ci95": [
+                -0.112,
+                0.862
+              ],
+              "median": 0.25
+            }
+          }
+        },
+        {
+          "level": 3,
+          "h1": {
+            "checker": {
+              "n": 8,
+              "mean": -1.4167,
+              "sd": 0.4272,
+              "ci95": [
+                -1.7739,
+                -1.0595
+              ],
+              "median": -1.3333
+            },
+            "neutral": {
+              "n": 5,
+              "mean": -0.3,
+              "sd": 0.5821,
+              "ci95": [
+                -1.0228,
+                0.4228
+              ],
+              "median": -0.3333
+            }
+          },
+          "h2": {
+            "checker": {
+              "n": 8,
+              "mean": 0.9375,
+              "sd": 0.4955,
+              "ci95": [
+                0.5232,
+                1.3518
+              ],
+              "median": 1
+            },
+            "neutral": {
+              "n": 5,
+              "mean": 0.3,
+              "sd": 0.4472,
+              "ci95": [
+                -0.2553,
+                0.8553
+              ],
+              "median": 0
+            }
+          }
+        },
+        {
+          "level": 4,
+          "h1": {
+            "checker": {
+              "n": 3,
+              "mean": -1.7778,
+              "sd": 0.1925,
+              "ci95": [
+                -2.2559,
+                -1.2997
+              ],
+              "median": -1.6667
+            },
+            "neutral": {
+              "n": 2,
+              "mean": -0.6667,
+              "sd": 0.4714,
+              "ci95": [
+                -4.9021,
+                3.5687
+              ],
+              "median": -0.6667
+            }
+          },
+          "h2": {
+            "checker": {
+              "n": 3,
+              "mean": 0.8333,
+              "sd": 0.5774,
+              "ci95": [
+                -0.6009,
+                2.2676
+              ],
+              "median": 0.5
+            },
+            "neutral": {
+              "n": 2,
+              "mean": 0.25,
+              "sd": 0.3536,
+              "ci95": [
+                -2.9266,
+                3.4266
+              ],
+              "median": 0.25
+            }
+          }
+        },
+        {
+          "level": 5,
+          "h1": {
+            "checker": {
+              "n": 5,
+              "mean": -1.8667,
+              "sd": 0.3801,
+              "ci95": [
+                -2.3386,
+                -1.3948
+              ],
+              "median": -2
+            },
+            "neutral": {
+              "n": 2,
+              "mean": -0.1667,
+              "sd": 0.2357,
+              "ci95": [
+                -2.2844,
+                1.951
+              ],
+              "median": -0.1667
+            }
+          },
+          "h2": {
+            "checker": {
+              "n": 5,
+              "mean": 1.3,
+              "sd": 0.5701,
+              "ci95": [
+                0.5921,
+                2.0079
+              ],
+              "median": 1.5
+            },
+            "neutral": {
+              "n": 2,
+              "mean": 0.5,
+              "sd": 0,
+              "ci95": [
+                0.5,
+                0.5
+              ],
+              "median": 0.5
+            }
+          }
+        }
+      ],
+      "aiUse": [
+        {
+          "optionId": "aiUse.never",
+          "h1": {
+            "checker": {
+              "n": 1,
+              "mean": -1.3333,
+              "sd": null,
+              "ci95": null,
+              "median": -1.3333
+            },
+            "neutral": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "ci95": null,
+              "median": null
+            }
+          },
+          "h2": {
+            "checker": {
+              "n": 1,
+              "mean": 2,
+              "sd": null,
+              "ci95": null,
+              "median": 2
+            },
+            "neutral": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "ci95": null,
+              "median": null
+            }
+          }
+        },
+        {
+          "optionId": "aiUse.lessMonthly",
+          "h1": {
+            "checker": {
+              "n": 3,
+              "mean": -1.3889,
+              "sd": 0.3469,
+              "ci95": [
+                -2.2507,
+                -0.527
+              ],
+              "median": -1.5
+            },
+            "neutral": {
+              "n": 2,
+              "mean": -0.5,
+              "sd": 0.2357,
+              "ci95": [
+                -2.6177,
+                1.6177
+              ],
+              "median": -0.5
+            }
+          },
+          "h2": {
+            "checker": {
+              "n": 3,
+              "mean": 1.1667,
+              "sd": 0.5774,
+              "ci95": [
+                -0.2676,
+                2.6009
+              ],
+              "median": 1.5
+            },
+            "neutral": {
+              "n": 2,
+              "mean": 0.25,
+              "sd": 0.3536,
+              "ci95": [
+                -2.9266,
+                3.4266
+              ],
+              "median": 0.25
+            }
+          }
+        },
+        {
+          "optionId": "aiUse.monthly",
+          "h1": {
+            "checker": {
+              "n": 1,
+              "mean": -1,
+              "sd": null,
+              "ci95": null,
+              "median": -1
+            },
+            "neutral": {
+              "n": 2,
+              "mean": -0.6667,
+              "sd": 0.4714,
+              "ci95": [
+                -4.9021,
+                3.5687
+              ],
+              "median": -0.6667
+            }
+          },
+          "h2": {
+            "checker": {
+              "n": 1,
+              "mean": 0,
+              "sd": null,
+              "ci95": null,
+              "median": 0
+            },
+            "neutral": {
+              "n": 2,
+              "mean": 0.25,
+              "sd": 0.3536,
+              "ci95": [
+                -2.9266,
+                3.4266
+              ],
+              "median": 0.25
+            }
+          }
+        },
+        {
+          "optionId": "aiUse.weekly",
+          "h1": {
+            "checker": {
+              "n": 3,
+              "mean": -1.4444,
+              "sd": 0.5092,
+              "ci95": [
+                -2.7093,
+                -0.1796
+              ],
+              "median": -1.3333
+            },
+            "neutral": {
+              "n": 8,
+              "mean": -0.625,
+              "sd": 0.5474,
+              "ci95": [
+                -1.0826,
+                -0.1674
+              ],
+              "median": -0.5
+            }
+          },
+          "h2": {
+            "checker": {
+              "n": 3,
+              "mean": 1,
+              "sd": 0,
+              "ci95": [
+                1,
+                1
+              ],
+              "median": 1
+            },
+            "neutral": {
+              "n": 8,
+              "mean": 0.5625,
+              "sd": 0.4955,
+              "ci95": [
+                0.1482,
+                0.9768
+              ],
+              "median": 0.5
+            }
+          }
+        },
+        {
+          "optionId": "aiUse.severalWeekly",
+          "h1": {
+            "checker": {
+              "n": 8,
+              "mean": -1.6667,
+              "sd": 0.3563,
+              "ci95": [
+                -1.9646,
+                -1.3688
+              ],
+              "median": -1.6667
+            },
+            "neutral": {
+              "n": 5,
+              "mean": -0.6,
+              "sd": 0.8216,
+              "ci95": [
+                -1.6201,
+                0.4201
+              ],
+              "median": -1
+            }
+          },
+          "h2": {
+            "checker": {
+              "n": 8,
+              "mean": 1.0625,
+              "sd": 0.4173,
+              "ci95": [
+                0.7137,
+                1.4113
+              ],
+              "median": 1
+            },
+            "neutral": {
+              "n": 5,
+              "mean": 0.4,
+              "sd": 0.5477,
+              "ci95": [
+                -0.2801,
+                1.0801
+              ],
+              "median": 0
+            }
+          }
+        },
+        {
+          "optionId": "aiUse.daily",
+          "h1": {
+            "checker": {
+              "n": 5,
+              "mean": -1.6667,
+              "sd": 0.6667,
+              "ci95": [
+                -2.4944,
+                -0.8389
+              ],
+              "median": -2
+            },
+            "neutral": {
+              "n": 4,
+              "mean": -0.5,
+              "sd": 0.1925,
+              "ci95": [
+                -0.8062,
+                -0.1938
+              ],
+              "median": -0.5
+            }
+          },
+          "h2": {
+            "checker": {
+              "n": 5,
+              "mean": 1.1,
+              "sd": 0.4183,
+              "ci95": [
+                0.5806,
+                1.6194
+              ],
+              "median": 1
+            },
+            "neutral": {
+              "n": 4,
+              "mean": 0.375,
+              "sd": 0.4787,
+              "ci95": [
+                -0.3867,
+                1.1367
+              ],
+              "median": 0.25
+            }
+          }
+        }
+      ],
+      "spearman": {
+        "cyberKnowledgeH1": {
+          "checker": -0.4483,
+          "neutral": 0.3136
+        },
+        "cyberKnowledgeH2": {
+          "checker": -0.0251,
+          "neutral": -0.2695
+        },
+        "aiUseH1": {
+          "checker": -0.3438,
+          "neutral": 0.0282
+        },
+        "aiUseH2": {
+          "checker": -0.0685,
+          "neutral": 0.0028
+        }
+      }
+    }
+  },
+  "actions": {
+    "s2": {
+      "checker": {
+        "nothing": 11,
+        "explain": 1,
+        "challenge": 10,
+        "timeout": 0
+      },
+      "neutral": {
+        "hasQuestion": 10,
+        "noQuestion": 10,
+        "timeout": 2
+      }
+    },
+    "s3": {
+      "checker": {
+        "nothing": 9,
+        "explain": 6,
+        "challenge": 6,
+        "timeout": 1
+      },
+      "neutral": {
+        "hasQuestion": 7,
+        "noQuestion": 13,
+        "timeout": 2
+      }
+    },
+    "s4": {
+      "checker": {
+        "nothing": 4,
+        "explain": 10,
+        "challenge": 7,
+        "timeout": 1
+      },
+      "neutral": {
+        "hasQuestion": 11,
+        "noQuestion": 11,
+        "timeout": 0
+      }
+    }
+  },
+  "background": {
+    "field": [
+      {
+        "id": "field.business",
+        "label": "Business and management",
+        "n": 9,
+        "byGroup": {
+          "checker": 4,
+          "neutral": 5
+        }
+      },
+      {
+        "id": "field.finance",
+        "label": "Finance or accounting",
+        "n": 5,
+        "byGroup": {
+          "checker": 3,
+          "neutral": 2
+        }
+      },
+      {
+        "id": "field.law",
+        "label": "Law",
+        "n": 1,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 0
+        }
+      },
+      {
+        "id": "field.it",
+        "label": "Information technology",
+        "n": 5,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 4
+        }
+      },
+      {
+        "id": "field.cyber",
+        "label": "Cybersecurity",
+        "n": 4,
+        "byGroup": {
+          "checker": 2,
+          "neutral": 2
+        }
+      },
+      {
+        "id": "field.engineering",
+        "label": "Engineering",
+        "n": 4,
+        "byGroup": {
+          "checker": 2,
+          "neutral": 2
+        }
+      },
+      {
+        "id": "field.health",
+        "label": "Health care or medicine",
+        "n": 4,
+        "byGroup": {
+          "checker": 3,
+          "neutral": 1
+        }
+      },
+      {
+        "id": "field.education",
+        "label": "Education",
+        "n": 3,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 3
+        }
+      },
+      {
+        "id": "field.naturalSciences",
+        "label": "Natural sciences",
+        "n": 1,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 0
+        }
+      },
+      {
+        "id": "field.socialSciences",
+        "label": "Social sciences or humanities",
+        "n": 1,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 0
+        }
+      },
+      {
+        "id": "field.arts",
+        "label": "Arts, media or design",
+        "n": 0,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 0
+        }
+      },
+      {
+        "id": "field.government",
+        "label": "Government or public service",
+        "n": 2,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 1
+        }
+      },
+      {
+        "id": "field.studentNoField",
+        "label": "Student, no field yet",
+        "n": 2,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 1
+        }
+      },
+      {
+        "id": "field.other",
+        "label": "Other (please specify)",
+        "n": 1,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 0
+        }
+      },
+      {
+        "id": "preferNotToSay",
+        "label": "Prefer not to say",
+        "n": 2,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 1
+        }
+      },
+      {
+        "id": "missing",
+        "label": "Missing",
+        "n": 0,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 0
+        }
+      }
+    ],
+    "country": [
+      {
+        "id": "CA",
+        "label": "CA",
+        "n": 10,
+        "byGroup": {
+          "checker": 4,
+          "neutral": 6
+        }
+      },
+      {
+        "id": "DE",
+        "label": "DE",
+        "n": 8,
+        "byGroup": {
+          "checker": 4,
+          "neutral": 4
+        }
+      },
+      {
+        "id": "US",
+        "label": "US",
+        "n": 6,
+        "byGroup": {
+          "checker": 5,
+          "neutral": 1
+        }
+      },
+      {
+        "id": "GB",
+        "label": "GB",
+        "n": 5,
+        "byGroup": {
+          "checker": 2,
+          "neutral": 3
+        }
+      },
+      {
+        "id": "CH",
+        "label": "CH",
+        "n": 4,
+        "byGroup": {
+          "checker": 2,
+          "neutral": 2
+        }
+      },
+      {
+        "id": "IN",
+        "label": "IN",
+        "n": 4,
+        "byGroup": {
+          "checker": 2,
+          "neutral": 2
+        }
+      },
+      {
+        "id": "BR",
+        "label": "BR",
+        "n": 2,
+        "byGroup": {
+          "checker": 2,
+          "neutral": 0
+        }
+      },
+      {
+        "id": "NL",
+        "label": "NL",
+        "n": 2,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 2
+        }
+      },
+      {
+        "id": "FR",
+        "label": "FR",
+        "n": 1,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 0
+        }
+      },
+      {
+        "id": "preferNotToSay",
+        "label": "Prefer not to say",
+        "n": 2,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 2
+        }
+      },
+      {
+        "id": "missing",
+        "label": "Missing",
+        "n": 0,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 0
+        }
+      }
+    ],
+    "age": [
+      {
+        "id": "age.a18",
+        "label": "18 to 24",
+        "n": 7,
+        "byGroup": {
+          "checker": 2,
+          "neutral": 5
+        }
+      },
+      {
+        "id": "age.a25",
+        "label": "25 to 34",
+        "n": 13,
+        "byGroup": {
+          "checker": 8,
+          "neutral": 5
+        }
+      },
+      {
+        "id": "age.a35",
+        "label": "35 to 44",
+        "n": 11,
+        "byGroup": {
+          "checker": 3,
+          "neutral": 8
+        }
+      },
+      {
+        "id": "age.a45",
+        "label": "45 to 54",
+        "n": 8,
+        "byGroup": {
+          "checker": 6,
+          "neutral": 2
+        }
+      },
+      {
+        "id": "age.a55",
+        "label": "55 to 64",
+        "n": 3,
+        "byGroup": {
+          "checker": 2,
+          "neutral": 1
+        }
+      },
+      {
+        "id": "age.a65",
+        "label": "65 or older",
+        "n": 1,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 1
+        }
+      },
+      {
+        "id": "preferNotToSay",
+        "label": "Prefer not to say",
+        "n": 1,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 0
+        }
+      },
+      {
+        "id": "missing",
+        "label": "Missing",
+        "n": 0,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 0
+        }
+      }
+    ],
+    "jobLevel": [
+      {
+        "id": "jobLevel.student",
+        "label": "Student",
+        "n": 6,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 5
+        }
+      },
+      {
+        "id": "jobLevel.employee",
+        "label": "Employee",
+        "n": 21,
+        "byGroup": {
+          "checker": 12,
+          "neutral": 9
+        }
+      },
+      {
+        "id": "jobLevel.leadership",
+        "label": "Leadership",
+        "n": 13,
+        "byGroup": {
+          "checker": 6,
+          "neutral": 7
+        }
+      },
+      {
+        "id": "jobLevel.cLevel",
+        "label": "C-Level",
+        "n": 3,
+        "byGroup": {
+          "checker": 2,
+          "neutral": 1
+        }
+      },
+      {
+        "id": "preferNotToSay",
+        "label": "Prefer not to say",
+        "n": 1,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 0
+        }
+      },
+      {
+        "id": "missing",
+        "label": "Missing",
+        "n": 0,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 0
+        }
+      }
+    ],
+    "education": [
+      {
+        "id": "education.secondary",
+        "label": "Secondary school or less",
+        "n": 3,
+        "byGroup": {
+          "checker": 2,
+          "neutral": 1
+        }
+      },
+      {
+        "id": "education.college",
+        "label": "College diploma or trade certificate",
+        "n": 2,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 2
+        }
+      },
+      {
+        "id": "education.bachelor",
+        "label": "Bachelor's degree",
+        "n": 17,
+        "byGroup": {
+          "checker": 8,
+          "neutral": 9
+        }
+      },
+      {
+        "id": "education.master",
+        "label": "Master's degree",
+        "n": 13,
+        "byGroup": {
+          "checker": 7,
+          "neutral": 6
+        }
+      },
+      {
+        "id": "education.doctorate",
+        "label": "Doctorate",
+        "n": 4,
+        "byGroup": {
+          "checker": 2,
+          "neutral": 2
+        }
+      },
+      {
+        "id": "education.other",
+        "label": "Other",
+        "n": 3,
+        "byGroup": {
+          "checker": 2,
+          "neutral": 1
+        }
+      },
+      {
+        "id": "preferNotToSay",
+        "label": "Prefer not to say",
+        "n": 2,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 1
+        }
+      },
+      {
+        "id": "missing",
+        "label": "Missing",
+        "n": 0,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 0
+        }
+      }
+    ],
+    "cyberKnowledge": [
+      {
+        "id": "1",
+        "label": "None",
+        "n": 4,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 4
+        }
+      },
+      {
+        "id": "2",
+        "label": "Basic",
+        "n": 14,
+        "byGroup": {
+          "checker": 6,
+          "neutral": 8
+        }
+      },
+      {
+        "id": "3",
+        "label": "Some",
+        "n": 13,
+        "byGroup": {
+          "checker": 8,
+          "neutral": 5
+        }
+      },
+      {
+        "id": "4",
+        "label": "Good",
+        "n": 5,
+        "byGroup": {
+          "checker": 3,
+          "neutral": 2
+        }
+      },
+      {
+        "id": "5",
+        "label": "Expert",
+        "n": 7,
+        "byGroup": {
+          "checker": 5,
+          "neutral": 2
+        }
+      },
+      {
+        "id": "preferNotToSay",
+        "label": "Prefer not to say",
+        "n": 1,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 1
+        }
+      },
+      {
+        "id": "missing",
+        "label": "Missing",
+        "n": 0,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 0
+        }
+      }
+    ],
+    "aiUse": [
+      {
+        "id": "aiUse.never",
+        "label": "Never",
+        "n": 1,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 0
+        }
+      },
+      {
+        "id": "aiUse.lessMonthly",
+        "label": "Less than once a month",
+        "n": 5,
+        "byGroup": {
+          "checker": 3,
+          "neutral": 2
+        }
+      },
+      {
+        "id": "aiUse.monthly",
+        "label": "About once a month",
+        "n": 3,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 2
+        }
+      },
+      {
+        "id": "aiUse.weekly",
+        "label": "About once a week",
+        "n": 11,
+        "byGroup": {
+          "checker": 3,
+          "neutral": 8
+        }
+      },
+      {
+        "id": "aiUse.severalWeekly",
+        "label": "Several times a week",
+        "n": 13,
+        "byGroup": {
+          "checker": 8,
+          "neutral": 5
+        }
+      },
+      {
+        "id": "aiUse.daily",
+        "label": "Every day",
+        "n": 9,
+        "byGroup": {
+          "checker": 5,
+          "neutral": 4
+        }
+      },
+      {
+        "id": "preferNotToSay",
+        "label": "Prefer not to say",
+        "n": 2,
+        "byGroup": {
+          "checker": 1,
+          "neutral": 1
+        }
+      },
+      {
+        "id": "missing",
+        "label": "Missing",
+        "n": 0,
+        "byGroup": {
+          "checker": 0,
+          "neutral": 0
+        }
+      }
+    ]
+  },
+  "countries": [
+    {
+      "code": "CA",
+      "n": 10,
+      "byGroup": {
+        "checker": 4,
+        "neutral": 6
+      }
+    },
+    {
+      "code": "DE",
+      "n": 8,
+      "byGroup": {
+        "checker": 4,
+        "neutral": 4
+      }
+    },
+    {
+      "code": "US",
+      "n": 6,
+      "byGroup": {
+        "checker": 5,
+        "neutral": 1
+      }
+    },
+    {
+      "code": "GB",
+      "n": 5,
+      "byGroup": {
+        "checker": 2,
+        "neutral": 3
+      }
+    },
+    {
+      "code": "CH",
+      "n": 4,
+      "byGroup": {
+        "checker": 2,
+        "neutral": 2
+      }
+    },
+    {
+      "code": "IN",
+      "n": 4,
+      "byGroup": {
+        "checker": 2,
+        "neutral": 2
+      }
+    },
+    {
+      "code": "BR",
+      "n": 2,
+      "byGroup": {
+        "checker": 2,
+        "neutral": 0
+      }
+    },
+    {
+      "code": "NL",
+      "n": 2,
+      "byGroup": {
+        "checker": 0,
+        "neutral": 2
+      }
+    },
+    {
+      "code": "FR",
+      "n": 1,
+      "byGroup": {
+        "checker": 1,
+        "neutral": 0
+      }
+    }
+  ],
+  "quality": {
+    "flags": {
+      "possible_duplicate": 46,
+      "tab_hidden_during_audio": 3,
+      "audio_check_wrong": 1,
+      "honeypot": 1,
+      "reloaded": 1
+    },
+    "audioCheck": {
+      "correct": 45,
+      "wrong": 1,
+      "missing": 0
+    },
+    "ratingTimeouts": {
+      "T0": 1,
+      "T1": 2,
+      "T2a": 0,
+      "T2b": 2,
+      "T3a": 0,
+      "T3b": 2,
+      "T4a": 1,
+      "T4b": 1,
+      "T5": 1
+    },
+    "reloads": {
+      "sessions": 1,
+      "total": 2
+    }
+  }
+}

@@ -168,7 +168,9 @@ export interface ConfigSummary {
  */
 export type AudioMode = "spoken" | "partly-silent" | "silent";
 
-export function audioMode(c: Pick<ConfigSummary, "manifestPath" | "estimatedAudio"> | undefined): AudioMode | undefined {
+export function audioMode(
+  c: Pick<ConfigSummary, "manifestPath" | "estimatedAudio"> | undefined,
+): AudioMode | undefined {
   if (!c) return undefined;
   if (!c.manifestPath) return "silent";
   return c.estimatedAudio ? "partly-silent" : "spoken";
@@ -190,4 +192,226 @@ export interface StudyConfigLite {
 /** Section 8.3. */
 export interface ApiErrorBody {
   error: { code: string; message: string; retryable?: boolean; retryInMs?: number };
+}
+
+// ---- Run analysis, "06 - Analysis Dashboard Plan.md" section 6 (binding contract). ----
+
+export type AnalysisInclude = "finished" | "consented";
+export type AnalysisGroupFilter = "both" | Group;
+// opposite: p < .05 against the hypothesis; does_not_support: not significant; too_few below 8 contributing per group;
+// n_a where no direction is stated or the value is undefined.
+export type Reading = "supports" | "opposite" | "does_not_support" | "too_few" | "n_a";
+export type RatingItemId = "trust" | "competence" | "benevolence" | "integrity";
+export type RatingPhase = "baseline" | "afterSlide" | "afterAnswer";
+
+export interface Summary {
+  n: number;
+  mean: number | null;
+  sd: number | null;
+  ci95: [number, number] | null;
+  median: number | null;
+}
+export interface OneSample {
+  n: number;
+  mean: number | null;
+  ci95: [number, number] | null;
+  t: number | null;
+  df: number | null;
+  p: number | null;
+  reading: Reading;
+}
+export interface Comparison {
+  checker: Summary;
+  neutral: Summary;
+  diff: number | null;
+  diffCi95: [number, number] | null;
+  welchT: number | null;
+  df: number | null;
+  p: number | null;
+  hedgesG: number | null;
+  reading: Reading;
+}
+export interface Paired {
+  n: number;
+  reasoned: Summary;
+  denial: Summary;
+  meanDiff: number | null;
+  ci95: [number, number] | null;
+  t: number | null;
+  df: number | null;
+  p: number | null;
+  reading: Reading;
+}
+export interface Share {
+  slides: number;
+  withQuestion: number;
+  share: number | null;
+  perParticipant: Summary;
+}
+export interface TwoProportion {
+  p1: number | null;
+  p2: number | null;
+  diff: number | null;
+  z: number | null;
+  p: number | null;
+  reading: Reading;
+}
+
+export type ByGroup<T> = Record<Group, T>;
+
+export interface RatingValue {
+  trust: number | null;
+  competence: number | null;
+  benevolence: number | null;
+  integrity: number | null;
+  status: string;
+}
+
+export interface AnalysisParticipant {
+  sessionId: string;
+  group: Group;
+  denialSlide: string;
+  status: string;
+  finishedAt: string | null;
+  durationSec: number | null;
+  ratings: Record<string, RatingValue | null>; // by point
+  actions: Record<
+    string,
+    { actionId: string | null; timedOut: boolean; questionBy: string; answerType: "reason" | "denial" }
+  >; // by flagged slide id
+  budget: { optionId: string | null; confidence: number | null; status: string } | null;
+  background: Record<string, string | number | null> | null; // item id -> value or "preferNotToSay"
+  flags: string[];
+}
+
+export interface BackgroundItemConfig {
+  id: string;
+  label: string;
+  kind: "single" | "scale" | "country";
+  options?: { id: string; label: string }[];
+  scale?: { min: number; max: number; pointLabels?: Record<string, string> };
+}
+
+export interface LastTrustTercile {
+  tercile: 1 | 2 | 3;
+  from: number;
+  to: number;
+  approve: number;
+  reject: number;
+  missing: number;
+}
+
+export interface ModeratorRow {
+  h1: ByGroup<Summary>;
+  h2: ByGroup<Summary>;
+}
+
+/** GET /api/admin/runs/{id}/analysis. */
+export interface RunAnalysis {
+  run: {
+    id: string;
+    code: string;
+    name: string;
+    source: string;
+    configVersion: string;
+    status: string;
+    createdAt: string;
+    testOverrides: boolean;
+  };
+  generatedAt: string;
+  filters: { include: AnalysisInclude; exclude: string[]; group: AnalysisGroupFilter };
+  config: {
+    groups: ["checker", "neutral"];
+    slides: { id: string; n: number; title: string; flagged: boolean }[];
+    flaggedSlides: string[];
+    ratingPoints: { point: string; slideId: string; phase: RatingPhase; label: string }[]; // plan order
+    items: { id: RatingItemId; label: string; min: number; max: number }[];
+    actions: { checker: { id: string; label: string }[]; neutral: { id: string; label: string }[] };
+    background: BackgroundItemConfig[];
+    budgetOptions: { id: string; label: string }[];
+  };
+  counts: {
+    byStatus: {
+      opened: number;
+      started: number;
+      ongoing: number;
+      finished: number;
+      abandoned: number;
+      blocked: number;
+    };
+    total: number; // every session of the run
+    consented: number;
+    analysed: number; // after include and exclude
+    excluded: { forced: number; byFlag: Record<string, number>; notIncluded: number };
+    byGroup: ByGroup<{ consented: number; finished: number; analysed: number }>;
+    durationsSec: {
+      n: number;
+      median: number | null;
+      p25: number | null;
+      p75: number | null;
+      histogram: { fromSec: number; toSec: number; n: number }[];
+    };
+  };
+  participants: AnalysisParticipant[];
+  ratingStats: Record<string /* item */, Record<string /* point */, ByGroup<Summary>>>;
+  hypotheses: {
+    baseline: Comparison; // T0 checker vs neutral
+    slide1: Comparison; // T1 - T0
+    overall: Comparison; // last rating - T0, research question, no direction
+    h1: {
+      pooled: Comparison;
+      checkerBelowZero: OneSample;
+      perSlide: Record<string, Comparison>; // reading "n_a"
+      levelAtFlag: Record<string, Comparison>; // reading "n_a"
+    };
+    h2: {
+      pooled: Comparison; // change T{n}b - T{n}a between groups (same data as h4b.afterReason, H4b1)
+      checkerAboveZero: OneSample; // H2(a)
+      level: Comparison; // H2(b): level T{n}b over reasoned slides; carries the H2 reading
+      perSlide: Record<string, Comparison>; // change per slide, reading "n_a"
+      levelPerSlide: Record<string, Comparison>; // level per slide, reading "n_a"
+      aboveBaseline: ByGroup<OneSample>; // exploratory: T{n}b - T0 within group
+      exploratoryNet: Comparison; // secondary: T{n}b - pre-flag rating, no direction
+    };
+    h3: { perGroup: ByGroup<Paired>; both: Paired };
+    h4a: { checker: Share; neutral: Share; slidesTest: TwoProportion; participantsTest: Comparison }; // slidesTest reading "n_a"
+    h4b: { afterReason: Comparison; afterDenial: Comparison };
+    budget: {
+      byGroup: ByGroup<{ approve: number; reject: number; missing: number; confidence: Summary }>;
+      approveTest: TwoProportion;
+      /** Terciles of the last trust rating (ties to the lower tercile); optional until every server sends it. */
+      byLastTrustTercile?: LastTrustTercile[];
+    };
+    moderators: {
+      cyberKnowledge: ({ level: number } & ModeratorRow)[];
+      aiUse: ({ optionId: string } & ModeratorRow)[];
+      spearman: {
+        cyberKnowledgeH1: ByGroup<number | null>;
+        cyberKnowledgeH2: ByGroup<number | null>;
+        aiUseH1: ByGroup<number | null>;
+        aiUseH2: ByGroup<number | null>;
+      };
+    };
+  };
+  actions: Record<string /* slide */, ByGroup<Record<string /* actionId or "timeout" */, number>>>;
+  background: Record<string /* item */, { id: string; label: string; n: number; byGroup: ByGroup<number> }[]>; // every item, country too; with "preferNotToSay" and "missing"
+  countries: { code: string; n: number; byGroup: ByGroup<number> }[]; // real ISO codes only, sorted by n desc
+  quality: {
+    flags: Record<string, number>;
+    audioCheck: { correct: number; wrong: number; missing: number };
+    ratingTimeouts: Record<string /* point */, number>;
+    reloads: { sessions: number; total: number };
+  };
+}
+
+export interface AnalysisQuery {
+  include?: AnalysisInclude;
+  exclude?: string[];
+  group?: AnalysisGroupFilter;
+}
+
+/** DELETE /api/admin/sessions/{id} body. */
+export interface DeleteSessionRequest {
+  confirm: string;
+  reason: string;
 }

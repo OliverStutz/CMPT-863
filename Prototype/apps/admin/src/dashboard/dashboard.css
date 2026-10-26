@@ -1,0 +1,138 @@
+.dashboard .dash-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.dashboard .dash-title {
+  margin: 0;
+}
+.dashboard .dash-spacer {
+  flex: 1;
+}
+.dashboard .dash-meta {
+  margin: 6px 0 0;
+}
+.dashboard .dash-notice {
+  margin: 8px 0 0;
+  white-space: normal;
+}
+.dashboard .dash-filters {
+  position: sticky;
+  top: 48px;
+  z-index: 4;
+  background: var(--bg);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.dashboard .dash-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+.dashboard .dash-flags legend {
+  font-size: 12px;
+  color: var(--muted);
+  padding: 0;
+  margin-bottom: 3px;
+}
+.dashboard .dash-body {
+  transition: opacity 150ms;
+}
+.dashboard .dash-body.refetching {
+  opacity: 0.5;
+}
+.dashboard h2 {
+  margin-top: 24px;
+}
+.dashboard h4 {
+  font-size: 13px;
+  margin: 14px 0 6px;
+  font-weight: 600;
+}
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.dash-grid.three {
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+}
+.dash-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 12px;
+  min-width: 0;
+}
+.dash-grid > .dash-card {
+  margin-top: 0;
+}
+.dash-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.dash-card-head h3 {
+  margin: 0;
+  flex: 1;
+}
+.dash-card p {
+  margin: 4px 0 8px;
+}
+.kpi-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+.numbers-wrap {
+  overflow-x: auto;
+}
+table.numbers {
+  width: 100%;
+  margin: 8px 0 4px;
+  font-size: 13px;
+}
+table.numbers caption {
+  text-align: left;
+  font-size: 12px;
+  color: var(--muted);
+  padding-bottom: 2px;
+}
+table.numbers th,
+table.numbers td {
+  padding: 3px 6px;
+}
+table.numbers tbody th {
+  font-weight: 400;
+  color: var(--text);
+}
+table.numbers .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.numbers-line {
+  font-size: 13px;
+  line-height: 1.6;
+}
+.chip-muted {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+@media (max-width: 520px) {
+  .dash-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.dashboard {
+  color-scheme: light dark;
+}

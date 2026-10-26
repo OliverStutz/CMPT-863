@@ -1,10 +1,11 @@
-import { Fragment, useState, type FormEvent } from "react";
+import { Fragment, useEffect, useState, type FormEvent } from "react";
 import { ApiError, createRun, listConfigs, listRuns, patchRun } from "../api/client";
 import { AUDIO_MODE_LABEL, audioMode, type ConfigSummary, type Run } from "../api/types";
 import { AudioChip } from "../configs/ConfigsTab";
 import { useAsync } from "../lib/useAsync";
 import { localTime } from "../lib/time";
 import { CopyButton, RunQr, runUrl } from "./RunLink";
+import { RunDashboard } from "../dashboard/RunDashboard";
 
 const SOURCE_SUGGESTIONS = ["LinkedIn", "WhatsApp", "Email", "Other"];
 
@@ -14,7 +15,40 @@ export function selectableConfigs(configs: ConfigSummary[]): ConfigSummary[] {
   return configs.filter((c) => c.status === "validated" || c.status === "locked");
 }
 
-export function RunsTab() {
+/** Run id from a `#run=<id>` URL hash, or null. */
+export function runFromHash(hash: string): string | null {
+  const m = /^#run=([^&]+)/.exec(hash);
+  if (!m) return null;
+  try {
+    return decodeURIComponent(m[1]);
+  } catch {
+    return null;
+  }
+}
+
+// DECISION: the dashboard is addressed by `#run=<id>` (no router library). Opening it pushes a history entry, so the
+// browser's Back button returns to the table; the tab stays mounted under the login overlay, so a 401 resumes in place.
+export function RunsTab({ onOpenExport }: { onOpenExport?: () => void } = {}) {
+  const [dashboardRun, setDashboardRun] = useState<string | null>(() => runFromHash(window.location.hash));
+  useEffect(() => {
+    const onHash = () => setDashboardRun(runFromHash(window.location.hash));
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+  const openDashboard = (id: string) => {
+    window.location.hash = `run=${encodeURIComponent(id)}`;
+    setDashboardRun(id);
+  };
+  const closeDashboard = () => {
+    if (window.location.hash) window.history.pushState(null, "", window.location.pathname + window.location.search);
+    setDashboardRun(null);
+  };
+
+  if (dashboardRun) return <RunDashboard runId={dashboardRun} onBack={closeDashboard} onOpenExport={onOpenExport} />;
+  return <RunsTable onOpenDashboard={openDashboard} />;
+}
+
+function RunsTable({ onOpenDashboard }: { onOpenDashboard: (id: string) => void }) {
   const runs = useAsync(listRuns);
   const configs = useAsync(listConfigs);
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -71,7 +105,15 @@ export function RunsTab() {
               {runs.data.map((r) => (
                 <Fragment key={r.id}>
                   <tr>
-                    <td>{r.name}</td>
+                    <td>
+                      <button
+                        className="link"
+                        title="Open the dashboard of this run"
+                        onClick={() => onOpenDashboard(r.id)}
+                      >
+                        {r.name}
+                      </button>
+                    </td>
                     <td>{r.source}</td>
                     <td className="mono">{r.code}</td>
                     <td>
@@ -90,11 +132,16 @@ export function RunsTab() {
                       )}
                     </td>
                     <td>
-                      <span className={`chip ${r.status === "open" ? "chip-success" : "chip-neutral"}`}>{r.status}</span>
+                      <span className={`chip ${r.status === "open" ? "chip-success" : "chip-neutral"}`}>
+                        {r.status}
+                      </span>
                       {r.testOverrides && (
                         <>
                           {" "}
-                          <span className="chip chip-info" title="Links may carry ?group=checker|neutral&denial=<slide id>; such sessions are flagged forced_allocation and skip the round robin">
+                          <span
+                            className="chip chip-info"
+                            title="Links may carry ?group=checker|neutral&denial=<slide id>; such sessions are flagged forced_allocation and skip the round robin"
+                          >
                             test overrides
                           </span>
                         </>
@@ -102,7 +149,14 @@ export function RunsTab() {
                     </td>
                     <td className="mono">
                       {r.counts
-                        ? [r.counts.opened, r.counts.started, r.counts.ongoing, r.counts.finished, r.counts.abandoned, r.counts.blocked]
+                        ? [
+                            r.counts.opened,
+                            r.counts.started,
+                            r.counts.ongoing,
+                            r.counts.finished,
+                            r.counts.abandoned,
+                            r.counts.blocked,
+                          ]
                             .map((n) => n ?? 0)
                             .join(" / ")
                         : "-"}
@@ -112,6 +166,9 @@ export function RunsTab() {
                     </td>
                     <td>{localTime(r.createdAt)}</td>
                     <td>
+                      <button className="small" onClick={() => onOpenDashboard(r.id)}>
+                        Dashboard
+                      </button>{" "}
                       <button className="small" disabled={busyId === r.id} onClick={() => void toggleStatus(r)}>
                         {r.status === "open" ? "Close" : "Reopen"}
                       </button>{" "}
@@ -195,7 +252,10 @@ function NewRunForm(props: { configs: ConfigSummary[]; configsError: string | nu
           ))}
         </select>
       </label>
-      <label className="checkbox" title="Sessions opened with ?group=checker|neutral&denial=<slide id> get that allocation, are flagged forced_allocation and do not count in the round robin. Never for a real run.">
+      <label
+        className="checkbox"
+        title="Sessions opened with ?group=checker|neutral&denial=<slide id> get that allocation, are flagged forced_allocation and do not count in the round robin. Never for a real run."
+      >
         <input type="checkbox" checked={testOverrides} onChange={(e) => setTestOverrides(e.target.checked)} />
         Test run: allow group and denial overrides in the link
       </label>

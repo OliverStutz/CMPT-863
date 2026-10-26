@@ -29,6 +29,7 @@ export function ParticipantsTab() {
   const [error, setError] = useState<string | null>(null);
   const [lastPoll, setLastPoll] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0); // bumped after a deletion: the delta poll cannot report removals
   const now = useNow(1000);
   const serverTime = useRef<string | null>(null);
 
@@ -94,7 +95,7 @@ export function ParticipantsTab() {
       alive = false;
       if (timer) clearTimeout(timer);
     };
-  }, [filters, runCodeOf]);
+  }, [filters, runCodeOf, reloadKey]);
 
   const set = <K extends keyof Filters>(k: K, v: Filters[K]) => setFilters((f) => ({ ...f, [k]: v }));
 
@@ -191,7 +192,16 @@ export function ParticipantsTab() {
           </table>
         </div>
       )}
-      {selected && <ParticipantDrawer sessionId={selected} onClose={() => setSelected(null)} />}
+      {selected && (
+        <ParticipantDrawer
+          sessionId={selected}
+          onClose={() => setSelected(null)}
+          onDeleted={() => {
+            setRows((cur) => cur?.filter((r) => r.sessionId !== selected) ?? cur);
+            setReloadKey((n) => n + 1);
+          }}
+        />
+      )}
     </section>
   );
 }

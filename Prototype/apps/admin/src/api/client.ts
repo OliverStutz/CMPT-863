@@ -1,13 +1,16 @@
 import type {
+  AnalysisQuery,
   ApiErrorBody,
   ConfigSummary,
   CreateRunRequest,
   CreateRunResponse,
+  DeleteSessionRequest,
   ParticipantDetail,
   ParticipantsPage,
   ParticipantsQuery,
   PatchRunRequest,
   Run,
+  RunAnalysis,
   SessionDoc,
   StudyConfigLite,
 } from "./types";
@@ -167,3 +170,25 @@ export async function downloadExport(o: ExportOptions, runLabel: string): Promis
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
+
+// ---- run analysis and deletion ("06 - Analysis Dashboard Plan.md" section 6) ----
+
+/** Query string of the analysis call; a missing filter is left out so the server default applies. */
+export function analysisQuery(q: AnalysisQuery): string {
+  const p = new URLSearchParams();
+  if (q.include) p.set("include", q.include);
+  // DECISION: an empty exclude list is sent as `exclude=` (exclude nothing beyond forced_allocation), which the
+  // contract distinguishes from a missing parameter (the server default). forced_allocation is never sent, the
+  // server always adds it.
+  if (q.exclude) p.set("exclude", q.exclude.filter((f) => f !== "forced_allocation").join(","));
+  if (q.group) p.set("group", q.group);
+  const qs = p.toString();
+  return qs ? `?${qs}` : "";
+}
+
+export const getRunAnalysis = (id: string, q: AnalysisQuery = {}) =>
+  json<RunAnalysis>(`/runs/${encodeURIComponent(id)}/analysis${analysisQuery(q)}`);
+
+/** 204 on success; 404 unknown session; 400 when confirm does not match the id. */
+export const deleteSession = (id: string, req: DeleteSessionRequest) =>
+  json<void>(`/sessions/${encodeURIComponent(id)}`, { method: "DELETE", body: JSON.stringify(req) });

@@ -1,11 +1,21 @@
-import { useEffect, useState } from "react";
-import { getParticipant } from "../api/client";
+import { useEffect, useState, type FormEvent } from "react";
+import { ApiError, deleteSession, getParticipant } from "../api/client";
 import type { ParticipantDetail } from "../api/types";
 import { Chip } from "../lib/Chip";
 import { flagChip, statusChip } from "../lib/status";
 import { localTime } from "../lib/time";
+import "./drawer.css";
 
-export function ParticipantDrawer({ sessionId, onClose }: { sessionId: string; onClose: () => void }) {
+export function ParticipantDrawer({
+  sessionId,
+  onClose,
+  onDeleted,
+}: {
+  sessionId: string;
+  onClose: () => void;
+  /** Called after the session was deleted; the drawer closes itself. */
+  onDeleted?: () => void;
+}) {
   const [detail, setDetail] = useState<ParticipantDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
@@ -117,7 +127,9 @@ export function ParticipantDrawer({ sessionId, onClose }: { sessionId: string; o
                       <td className="mono small-text">
                         {e.stateBefore ?? "-"} to {e.stateAfter ?? "-"}
                       </td>
-                      <td>{e.valid ? "accepted" : <span className="chip chip-danger">{e.reason ?? "rejected"}</span>}</td>
+                      <td>
+                        {e.valid ? "accepted" : <span className="chip chip-danger">{e.reason ?? "rejected"}</span>}
+                      </td>
                       <td className="mono small-text payload">{payloadText(e.payload)}</td>
                     </tr>
                   ))}
@@ -130,6 +142,13 @@ export function ParticipantDrawer({ sessionId, onClose }: { sessionId: string; o
             <pre className="json">{JSON.stringify(detail.answers, null, 2)}</pre>
           </>
         )}
+        <DeleteSession
+          sessionId={sessionId}
+          onDeleted={() => {
+            onDeleted?.();
+            onClose();
+          }}
+        />
       </aside>
     </div>
   );
@@ -139,4 +158,85 @@ function payloadText(p: unknown): string {
   if (p === null || p === undefined) return "";
   const t = JSON.stringify(p);
   return t === "{}" ? "" : t;
+}
+
+export const REASON_MAX = 500;
+
+/** The confirm box may submit only when the typed id matches exactly and the reason has 1 to 500 characters. */
+export function canDelete(sessionId: string, typedId: string, reason: string): boolean {
+  const r = reason.trim();
+  return typedId === sessionId && r.length >= 1 && r.length <= REASON_MAX;
+}
+
+// DECISION: deletion is the last section of the drawer and needs two steps: open the confirm box, then type the
+// session id exactly (no trimming, no case folding) and give a reason. The reason is sent trimmed.
+function DeleteSession({ sessionId, onDeleted }: { sessionId: string; onDeleted: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [typedId, setTypedId] = useState("");
+  const [reason, setReason] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function submit(e: FormEvent) {
+    e.preventDefault();
+    if (!canDelete(sessionId, typedId, reason)) return;
+    setBusy(true);
+    setError(null);
+    try {
+      await deleteSession(sessionId, { confirm: typedId, reason: reason.trim() });
+      onDeleted();
+    } catch (err) {
+      setError(err instanceof ApiError ? `${err.code}: ${err.message}` : String(err));
+      setBusy(false);
+    }
+  }
+
+  if (!open)
+    return (
+      <div className="delete-zone">
+        <button className="danger" onClick={() => setOpen(true)}>
+          Delete this participant's data
+        </button>
+      </div>
+    );
+  return (
+    <form className="delete-zone delete-box" onSubmit={submit}>
+      <h3>Delete this participant's data</h3>
+      <p>
+        This removes the session, its events, ratings and answers for good. A record without personal data stays (run,
+        group, time and your reason), so the deletion can be counted. The export and the dashboard will no longer show
+        this session.
+      </p>
+      <label>
+        Type the session id to confirm
+        <input
+          className="mono"
+          value={typedId}
+          onChange={(e) => setTypedId(e.target.value)}
+          placeholder={sessionId}
+          autoComplete="off"
+          spellCheck={false}
+        />
+      </label>
+      <label>
+        Reason ({reason.trim().length} of {REASON_MAX} characters)
+        <textarea
+          value={reason}
+          maxLength={REASON_MAX}
+          rows={3}
+          onChange={(e) => setReason(e.target.value)}
+          placeholder="Participant asked by e-mail on ..."
+        />
+      </label>
+      <div className="row-actions">
+        <button type="submit" className="danger" disabled={busy || !canDelete(sessionId, typedId, reason)}>
+          {busy ? "Deleting..." : "Delete permanently"}
+        </button>
+        <button type="button" disabled={busy} onClick={() => setOpen(false)}>
+          Cancel
+        </button>
+      </div>
+      {error && <p className="error">{error}</p>}
+    </form>
+  );
 }

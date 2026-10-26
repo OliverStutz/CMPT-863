@@ -1,0 +1,315 @@
+/*
+ * Chart tokens, defined once. Values from the dataviz reference palette (palette.md), validated with
+ * scripts/validate_palette.js: checker #2a78d6 / neutral #eb6834 (light), #3987e5 / #d95926 (dark); the ordinal
+ * ramps with --ordinal. Dark values sit under both the OS media query and [data-theme="dark"]; a light stamp beats
+ * OS dark. --viz-on-* is the label ink inside that fill (white, or near-black on a light fill).
+ */
+:root {
+  --viz-surface: #fcfcfb;
+  --viz-ink: #0b0b0b;
+  --viz-ink-2: #52514e;
+  --viz-muted: #898781;
+  --viz-grid: #e1e0d9;
+  --viz-axis: #c3c2b7;
+  --viz-ring: #fcfcfb;
+  --viz-checker: #2a78d6;
+  --viz-neutral: #eb6834;
+  --viz-single: #2a78d6;
+  --viz-deemph: #898781;
+  --viz-other: #c3c2b7;
+  --viz-diverge-pos: #2a78d6;
+  --viz-diverge-neg: #e34948;
+  --viz-cat-1: #2a78d6;
+  --viz-cat-2: #eb6834;
+  --viz-cat-3: #1baf7a;
+  --viz-cat-4: #eda100;
+  --viz-cat-5: #e87ba4;
+  --viz-cat-6: #008300;
+  --viz-ord-1: #86b6ef;
+  --viz-ord-2: #6da7ec;
+  --viz-ord-3: #5598e7;
+  --viz-ord-4: #3987e5;
+  --viz-ord-5: #2a78d6;
+  --viz-ord-6: #1c5cab;
+  --viz-on-ord-1: #0b0b0b;
+  --viz-on-ord-2: #0b0b0b;
+  --viz-on-ord-3: #0b0b0b;
+  --viz-on-ord-4: #ffffff;
+  --viz-on-ord-5: #ffffff;
+  --viz-on-ord-6: #ffffff;
+  --viz-on-other: #0b0b0b;
+  --viz-good: #0ca30c;
+  --viz-critical: #d03b3b;
+  --viz-tooltip-bg: #ffffff;
+  --viz-tooltip-border: rgba(11, 11, 11, 0.1);
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --viz-surface: #1a1a19;
+    --viz-ink: #f0efec;
+    --viz-ink-2: #c3c2b7;
+    --viz-muted: #898781;
+    --viz-grid: #2c2c2a;
+    --viz-axis: #383835;
+    --viz-ring: #1a1a19;
+    --viz-checker: #3987e5;
+    --viz-neutral: #d95926;
+    --viz-single: #3987e5;
+    --viz-deemph: #898781;
+    --viz-other: #5f5e5a;
+    --viz-diverge-pos: #3987e5;
+    --viz-diverge-neg: #e66767;
+    --viz-cat-1: #3987e5;
+    --viz-cat-2: #d95926;
+    --viz-cat-3: #199e70;
+    --viz-cat-4: #c98500;
+    --viz-cat-5: #d55181;
+    --viz-cat-6: #008300;
+    --viz-ord-1: #184f95;
+    --viz-ord-2: #1c5cab;
+    --viz-ord-3: #256abf;
+    --viz-ord-4: #2a78d6;
+    --viz-ord-5: #3987e5;
+    --viz-ord-6: #6da7ec;
+    --viz-on-ord-1: #ffffff;
+    --viz-on-ord-2: #ffffff;
+    --viz-on-ord-3: #ffffff;
+    --viz-on-ord-4: #ffffff;
+    --viz-on-ord-5: #0b0b0b;
+    --viz-on-ord-6: #0b0b0b;
+    --viz-on-other: #ffffff;
+    --viz-good: #0ca30c;
+    --viz-critical: #d03b3b;
+    --viz-tooltip-bg: #222220;
+    --viz-tooltip-border: rgba(255, 255, 255, 0.1);
+  }
+}
+:root[data-theme="dark"] {
+  --viz-surface: #1a1a19;
+  --viz-ink: #f0efec;
+  --viz-ink-2: #c3c2b7;
+  --viz-muted: #898781;
+  --viz-grid: #2c2c2a;
+  --viz-axis: #383835;
+  --viz-ring: #1a1a19;
+  --viz-checker: #3987e5;
+  --viz-neutral: #d95926;
+  --viz-single: #3987e5;
+  --viz-deemph: #898781;
+  --viz-other: #5f5e5a;
+  --viz-diverge-pos: #3987e5;
+  --viz-diverge-neg: #e66767;
+  --viz-cat-1: #3987e5;
+  --viz-cat-2: #d95926;
+  --viz-cat-3: #199e70;
+  --viz-cat-4: #c98500;
+  --viz-cat-5: #d55181;
+  --viz-cat-6: #008300;
+  --viz-ord-1: #184f95;
+  --viz-ord-2: #1c5cab;
+  --viz-ord-3: #256abf;
+  --viz-ord-4: #2a78d6;
+  --viz-ord-5: #3987e5;
+  --viz-ord-6: #6da7ec;
+  --viz-on-ord-1: #ffffff;
+  --viz-on-ord-2: #ffffff;
+  --viz-on-ord-3: #ffffff;
+  --viz-on-ord-4: #ffffff;
+  --viz-on-ord-5: #0b0b0b;
+  --viz-on-ord-6: #0b0b0b;
+  --viz-on-other: #ffffff;
+  --viz-good: #0ca30c;
+  --viz-critical: #d03b3b;
+  --viz-tooltip-bg: #222220;
+  --viz-tooltip-border: rgba(255, 255, 255, 0.1);
+}
+
+.viz {
+  position: relative;
+  margin: 0;
+  color: var(--viz-ink);
+}
+.viz svg {
+  display: block;
+  overflow: visible;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+}
+.viz svg text {
+  fill: var(--viz-ink-2);
+  font-size: 11px;
+}
+.viz svg text.viz-tick {
+  fill: var(--viz-muted);
+}
+.viz svg text.viz-label {
+  fill: var(--viz-ink);
+  font-size: 12px;
+}
+.viz svg text.viz-inside {
+  fill: #ffffff;
+  font-size: 12px;
+}
+.viz .viz-grid {
+  stroke: var(--viz-grid);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.viz .viz-axis {
+  stroke: var(--viz-axis);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.viz .viz-crosshair {
+  stroke: var(--viz-ink-2);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.viz .viz-zero {
+  stroke: var(--viz-ink-2);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.viz .viz-hit {
+  fill: transparent;
+  outline: none;
+}
+.viz .viz-hit:focus-visible {
+  stroke: var(--viz-ink-2);
+  stroke-width: 1;
+}
+.viz .viz-mark {
+  transition: opacity 120ms;
+}
+.viz .viz-plot {
+  outline: none;
+}
+.viz .viz-plot:focus-visible .viz-hit {
+  stroke: var(--viz-ink-2);
+  stroke-width: 1;
+}
+.viz figcaption {
+  margin-top: 4px;
+}
+.viz-tooltip {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  min-width: 120px;
+  max-width: 300px;
+  background: var(--viz-tooltip-bg);
+  border: 1px solid var(--viz-tooltip-border);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  padding: 6px 8px;
+  font-size: 12px;
+  color: var(--viz-ink-2);
+}
+.viz-tooltip .viz-tt-title {
+  color: var(--viz-ink-2);
+  margin-bottom: 4px;
+}
+.viz-tooltip .viz-tt-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.viz-tooltip .viz-tt-row strong {
+  color: var(--viz-ink);
+  font-weight: 600;
+}
+.viz-tooltip .viz-tt-sub {
+  color: var(--viz-muted);
+}
+.viz-key-line {
+  display: inline-block;
+  width: 12px;
+  height: 2px;
+  border-radius: 1px;
+  flex: none;
+}
+.viz-key-rect {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex: none;
+}
+.viz-key-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+  box-sizing: border-box;
+}
+.viz-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 0 0 6px;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  color: var(--viz-ink-2);
+}
+.viz-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.viz-table {
+  margin: 4px 0 8px;
+}
+.viz-table table {
+  width: 100%;
+}
+.viz-table caption {
+  text-align: left;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 6px 8px 4px;
+}
+.viz-table td.num,
+.viz-table th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.viz-table tbody th {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 400;
+}
+.stat-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 120px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.stat-tile .stat-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+.stat-tile .stat-value {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+}
+.stat-tile .stat-caption {
+  font-size: 12px;
+  color: var(--muted);
+}
+.stat-tile .stat-delta-good {
+  color: var(--success-fg);
+}
+.stat-tile .stat-delta-bad {
+  color: var(--danger-fg);
+}

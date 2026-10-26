@@ -17,7 +17,14 @@ const TABS: { id: Tab; label: string }[] = [
 
 export function App() {
   const [loginRequired, setLoginRequired] = useState(false);
-  const [tab, setTab] = useState<Tab>("runs");
+  const [tab, setTabState] = useState<Tab>("runs");
+  // Leaving the Runs tab drops a `#run=<id>` dashboard address, so the hash always names what is shown.
+  const setTab = (t: Tab) => {
+    if (t !== "runs" && window.location.hash.startsWith("#run=")) {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+    setTabState(t);
+  };
 
   useEffect(() => onAuthChange(setLoginRequired), []);
 
@@ -47,7 +54,7 @@ export function App() {
         </button>
       </header>
       <main className="main">
-        {tab === "runs" && <RunsTab />}
+        {tab === "runs" && <RunsTab onOpenExport={() => setTab("export")} />}
         {tab === "participants" && <ParticipantsTab />}
         {tab === "export" && <ExportTab />}
         {tab === "configs" && <ConfigsTab />}
