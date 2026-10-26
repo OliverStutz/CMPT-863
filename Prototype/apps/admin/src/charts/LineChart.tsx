@@ -189,6 +189,8 @@ export function LineChart(props: LineChartProps) {
         };
 
   function onMove(e: PointerEvent<SVGRectElement>) {
+    // Only a real move shows the crosshair; a layout shift under a resting pointer must not (see hoverProps).
+    if (!e.isTrusted || (e.movementX === 0 && e.movementY === 0)) return;
     const { x: px } = localPoint(e, ref.current);
     const i = Math.round((px - M.left) / step);
     setIdx(Math.max(0, Math.min(xs.length - 1, i)));

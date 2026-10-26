@@ -150,3 +150,21 @@ export function localPoint(e: { clientX: number; clientY: number }, el: Element 
   const r = el.getBoundingClientRect();
   return { x: e.clientX - r.left, y: e.clientY - r.top };
 }
+
+/**
+ * Hover and focus handlers of one mark. The tooltip opens on a real pointer move over the mark or on keyboard
+ * focus, never on pointerenter: a layout shift under a resting pointer (page load, a refetch) fires pointerenter
+ * without any movement, and the tooltip must stay hidden until the reader reaches a mark. A mark with nothing to
+ * show (`enabled` false, e.g. a zero-length bar) never opens one; its value stays in the label and the table.
+ */
+export function hoverProps(open: () => void, close: () => void, enabled = true) {
+  if (!enabled) return {};
+  return {
+    onPointerMove: (e: { movementX: number; movementY: number; isTrusted: boolean }) => {
+      if (e.isTrusted && (e.movementX !== 0 || e.movementY !== 0)) open();
+    },
+    onPointerLeave: close,
+    onFocus: open,
+    onBlur: close,
+  };
+}

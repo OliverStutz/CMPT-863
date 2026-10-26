@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { labelPlacement } from "./BarChart";
+import { hoverProps } from "./common";
 import { OTHER_ID, foldSlices } from "./Donut";
 import { dumbbellDomain } from "./Dumbbell";
 import { bandPolygons, orderedPoints, segments } from "./LineChart";
@@ -128,5 +129,32 @@ describe("bars and stacks", () => {
   it("makes round ticks", () => {
     expect(niceTicks(0, 10, 5)).toEqual([0, 2, 4, 6, 8, 10]);
     expect(niceTicks(1, 7, 6)).toEqual([1, 2, 3, 4, 5, 6, 7]);
+  });
+});
+
+describe("tooltip initial state", () => {
+  it("opens only on a real pointer move or on focus, and never for an empty mark", () => {
+    let open = 0;
+    let closed = 0;
+    const h = hoverProps(
+      () => open++,
+      () => closed++,
+    ) as Required<ReturnType<typeof hoverProps>>;
+    expect("onPointerEnter" in h).toBe(false);
+    h.onPointerMove({ movementX: 0, movementY: 0, isTrusted: true }); // a layout shift under a resting pointer
+    h.onPointerMove({ movementX: 3, movementY: 0, isTrusted: false });
+    expect(open).toBe(0);
+    h.onPointerMove({ movementX: 3, movementY: 1, isTrusted: true });
+    h.onFocus();
+    expect(open).toBe(2);
+    h.onBlur();
+    expect(closed).toBe(1);
+    expect(
+      hoverProps(
+        () => open++,
+        () => closed++,
+        false,
+      ),
+    ).toEqual({});
   });
 });

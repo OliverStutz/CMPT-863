@@ -109,9 +109,12 @@ table.numbers caption {
 }
 table.numbers th,
 table.numbers td {
+  white-space: normal;
+  vertical-align: top;
   padding: 3px 6px;
 }
 table.numbers tbody th {
+  white-space: nowrap;
   font-weight: 400;
   color: var(--text);
 }
@@ -119,9 +122,16 @@ table.numbers .num {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
+/* Keeps a value and its CI, or one test statistic, on one line while the cell itself wraps. */
+.nw {
+  white-space: nowrap;
+}
 .numbers-line {
   font-size: 13px;
   line-height: 1.6;
+}
+table.numbers .chip {
+  white-space: normal;
 }
 .chip-muted {
   background: transparent;

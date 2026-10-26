@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { Legend, TableTwin, Tooltip, useWidth, type TableColumn, type TableData, type TipState } from "./common";
+import {
+  Legend,
+  TableTwin,
+  Tooltip,
+  useWidth,
+  type TableColumn,
+  type TableData,
+  type TipState,
+  hoverProps,
+} from "./common";
 import { fmtCi, fmtNum } from "./format";
 import { clip } from "./BarChart";
 import { linear, niceDomain, niceTicks, textWidth } from "./scale";
@@ -180,10 +189,10 @@ export function Dumbbell(props: DumbbellProps) {
                       height={24}
                       tabIndex={0}
                       aria-label={`${r.label}, ${s.label}: mean ${fmtNum(pt.mean)}`}
-                      onPointerEnter={() => setHot({ row: ri, key: s.key })}
-                      onPointerLeave={() => setHot(null)}
-                      onFocus={() => setHot({ row: ri, key: s.key })}
-                      onBlur={() => setHot(null)}
+                      {...hoverProps(
+                        () => setHot({ row: ri, key: s.key }),
+                        () => setHot(null),
+                      )}
                     />
                   </g>
                 );

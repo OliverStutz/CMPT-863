@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { Legend, TableTwin, Tooltip, useWidth, type TableColumn, type TableData, type TipState } from "./common";
+import {
+  Legend,
+  TableTwin,
+  Tooltip,
+  useWidth,
+  type TableColumn,
+  type TableData,
+  type TipState,
+  hoverProps,
+} from "./common";
 import { fmtInt, fmtPct } from "./format";
 import { textWidth } from "./scale";
 
@@ -161,10 +170,11 @@ export function Donut(props: DonutProps) {
             opacity={hot === null || hot === arc.i ? 1 : 0.5}
             tabIndex={0}
             aria-label={`${arc.s.label}: ${fmtInt(arc.s.value)}, ${fmtPct(arc.share)}`}
-            onPointerEnter={() => setHot(arc.i)}
-            onPointerLeave={() => setHot(null)}
-            onFocus={() => setHot(arc.i)}
-            onBlur={() => setHot(null)}
+            {...hoverProps(
+              () => setHot(arc.i),
+              () => setHot(null),
+              arc.s.value > 0,
+            )}
             style={{ outline: "none" }}
           />
         ))}

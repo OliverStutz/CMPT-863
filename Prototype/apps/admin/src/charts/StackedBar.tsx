@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Legend, TableTwin, Tooltip, useWidth, type TableData, type TipState } from "./common";
+import { Legend, TableTwin, Tooltip, useWidth, type TableData, type TipState, hoverProps } from "./common";
 import { fmtInt, fmtPct } from "./format";
 import { barPath, textWidth } from "./scale";
 import { clip } from "./BarChart";
@@ -167,10 +167,11 @@ export function StackedBar(props: StackedBarProps) {
                       height={ROW}
                       tabIndex={0}
                       aria-label={`${r.label}, ${k.label}: ${text} (${fmtPct(s.share)})`}
-                      onPointerEnter={() => setHot({ row: ri, key: s.key })}
-                      onPointerLeave={() => setHot(null)}
-                      onFocus={() => setHot({ row: ri, key: s.key })}
-                      onBlur={() => setHot(null)}
+                      {...hoverProps(
+                        () => setHot({ row: ri, key: s.key }),
+                        () => setHot(null),
+                        s.value > 0,
+                      )}
                     />
                   </g>
                 );

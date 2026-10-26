@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TableTwin, Tooltip, useWidth, type TableData, type TipState } from "./common";
+import { TableTwin, Tooltip, useWidth, type TableData, type TipState, hoverProps } from "./common";
 import { fmtInt } from "./format";
 import { linear, niceTicks } from "./scale";
 
@@ -101,10 +101,11 @@ export function Histogram(props: HistogramProps) {
                 height={height}
                 tabIndex={0}
                 aria-label={`${f(b.from)} to ${f(b.to)}: ${b.n}`}
-                onPointerEnter={() => setHot(i)}
-                onPointerLeave={() => setHot(null)}
-                onFocus={() => setHot(i)}
-                onBlur={() => setHot(null)}
+                {...hoverProps(
+                  () => setHot(i),
+                  () => setHot(null),
+                  b.n > 0,
+                )}
               />
             </g>
           );

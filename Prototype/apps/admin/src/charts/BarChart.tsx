@@ -9,6 +9,7 @@ import {
   type TipRow,
   type TipState,
   useWidth,
+  hoverProps,
 } from "./common";
 import { fmtNum } from "./format";
 import { barPath, linear, niceTicks, textWidth } from "./scale";
@@ -129,10 +130,11 @@ export function BarChart(props: BarChartProps) {
                 height={ROW}
                 tabIndex={0}
                 aria-label={`${d.label}: ${text}`}
-                onPointerEnter={() => setHot(i)}
-                onPointerLeave={() => setHot(null)}
-                onFocus={() => setHot(i)}
-                onBlur={() => setHot(null)}
+                {...hoverProps(
+                  () => setHot(i),
+                  () => setHot(null),
+                  (d.value ?? 0) > 0,
+                )}
               />
             </g>
           );
@@ -200,10 +202,11 @@ export function BarChart(props: BarChartProps) {
                 height={plotH + bottom}
                 tabIndex={0}
                 aria-label={`${d.label}: ${text}`}
-                onPointerEnter={() => setHot(i)}
-                onPointerLeave={() => setHot(null)}
-                onFocus={() => setHot(i)}
-                onBlur={() => setHot(null)}
+                {...hoverProps(
+                  () => setHot(i),
+                  () => setHot(null),
+                  (d.value ?? 0) > 0,
+                )}
               />
             </g>
           );

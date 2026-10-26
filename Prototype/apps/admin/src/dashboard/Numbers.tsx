@@ -24,7 +24,9 @@ function SummaryRows({ rows }: { rows: { label: string; s: Summary }[] }) {
           <td className="num">{s.n}</td>
           <td className="num">{fmtNum(s.mean)}</td>
           <td className="num">{fmtNum(s.sd)}</td>
-          <td className="num">{fmtCi(s.ci95)}</td>
+          <td className="num">
+            <span className="nw">{fmtCi(s.ci95)}</span>
+          </td>
         </tr>
       ))}
     </>
@@ -88,6 +90,7 @@ export function OneSampleLine({ o, label, hypothesis }: { o: OneSample; label: s
   );
 }
 
+// The paired table folds the test and its reading into one wrapping cell, so it fits a card at 1440 px.
 export function PairedTable({ rows, hypothesis }: { rows: { label: string; p: Paired }[]; hypothesis?: string }) {
   return (
     <div className="numbers-wrap">
@@ -99,16 +102,12 @@ export function PairedTable({ rows, hypothesis }: { rows: { label: string; p: Pa
               n
             </th>
             <th scope="col" className="num">
-              Reasoned
-            </th>
-            <th scope="col" className="num">
-              Denial
+              Reasoned, denial
             </th>
             <th scope="col" className="num">
               Difference [95% CI]
             </th>
-            <th scope="col">Paired t</th>
-            <th scope="col">Reading</th>
+            <th scope="col">Paired t and reading</th>
           </tr>
         </thead>
         <tbody>
@@ -116,14 +115,15 @@ export function PairedTable({ rows, hypothesis }: { rows: { label: string; p: Pa
             <tr key={label}>
               <th scope="row">{label}</th>
               <td className="num">{p.n}</td>
-              <td className="num">{fmtSigned(p.reasoned.mean)}</td>
-              <td className="num">{fmtSigned(p.denial.mean)}</td>
               <td className="num">
-                {fmtSigned(p.meanDiff)} {fmtCi(p.ci95)}
+                <span className="nw">{fmtSigned(p.reasoned.mean)},</span>{" "}
+                <span className="nw">{fmtSigned(p.denial.mean)}</span>
               </td>
-              <td>{testText("t", p.t, p.df, p.p)}</td>
+              <td className="num">
+                <span className="nw">{fmtSigned(p.meanDiff)}</span> <span className="nw">{fmtCi(p.ci95)}</span>
+              </td>
               <td>
-                <ReadingChip reading={p.reading} hypothesis={hypothesis} />
+                {testText("t", p.t, p.df, p.p)} <ReadingChip reading={p.reading} hypothesis={hypothesis} />
               </td>
             </tr>
           ))}
@@ -170,7 +170,7 @@ export function PerSlideTable({ rows, caption }: { rows: { label: string; c: Com
               <td className="num">{fmtNum(c.checker.mean)}</td>
               <td className="num">{fmtNum(c.neutral.mean)}</td>
               <td className="num">
-                {fmtSigned(c.diff)} {fmtCi(c.diffCi95)}
+                <span className="nw">{fmtSigned(c.diff)}</span> <span className="nw">{fmtCi(c.diffCi95)}</span>
               </td>
               <td>{testText("t", c.welchT, c.df, c.p)}</td>
               <td className="num">{fmtNum(c.hedgesG)}</td>
