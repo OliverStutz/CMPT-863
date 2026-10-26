@@ -117,15 +117,17 @@ E2E_CONFIG=test-sound-1.4.0 E2E_EXPECT_VIDEO=1 npx playwright test tests/flows.s
 
 ```json
 {"configVersion": "1.4.0",
- "clips": {"s2.answer.a": {"videoKey": "<sha256>.mp4", "durationMs": 15562, "width": 640, "height": 640},
+ "clips": {"s2.answer.a": {"role": "ciso", "videoKey": "<sha256>.mp4", "durationMs": 15562, "width": 640, "height": 640},
            "opening": {"durationMs": 59256, "segments": [{"role": "chair", "startMs": 0, "videoKey": "...", "durationMs": 56256},
                                                           {"role": "ciso", "startMs": 56256, "videoKey": "...", "durationMs": 3000}]}},
  "seats": {"member2": {"videoKey": "<sha256>.mp4", "durationMs": 9937, "width": 640, "height": 640}}}
 ```
 
 The server reads it beside the audio manifest, serves `video/<version>/*.mp4` publicly (the manifest never),
-puts `videoUrl` (or `videoSegments` for a multi-speaker clip) on the step, and `video.seats` in the public
-scene pack. The browser keeps the one audio element as the clock and plays the video muted in sync with it;
+puts `videoUrl` and `videoRole` (or `videoSegments` for a multi-speaker clip) on the step, and `video.seats` in
+the public scene pack. `role` says whose face speaks a clip (the chair asks the routine questions, so those
+clips carry `chair`); the browser lights that seat and shows the clip on it, and shows the seat's idle loop
+outside the clip. Every face in `IDLE` gets a loop, the CISO included. The browser keeps the one audio element as the clock and plays the video muted in sync with it;
 a missing or failing video changes nothing in the flow.
 
 ## Re-generating after a change
