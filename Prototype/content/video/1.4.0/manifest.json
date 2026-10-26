@@ -1,19 +1,136 @@
 {
  "configVersion": "1.4.0",
- "generatedAt": "2026-10-26T04:25:46+00:00",
- "_note": "Round one of the faces lab (2026-10-25): Wan 2.2 S2V, 640x640, 16 fps, 4-step LoRA; CISO = Flux portrait candidate 1; seat member2 = silent board member candidate 1. Rendered from the audio clip s2.answer.a (15552 ms); the video is trimmed to the audio length.",
+ "generatedAt": "2026-10-26T06:26:44+00:00",
+ "_note": "Talking heads rendered offline with Wan 2.2 S2V from the audio clips and synthetic portraits (tools/faces). Clips carry the same audio as the MP3; the browser plays them muted in sync with the audio element.",
  "clips": {
+  "s1.narration": {
+   "videoKey": "e0a88a83142794b8727dc91b524b58fc1217d7bed08d8bcd1ac5dd81c8d624b3.mp4",
+   "durationMs": 40688,
+   "width": 640,
+   "height": 640
+  },
+  "s2.narration": {
+   "videoKey": "4744ba811124ccdea4e6aa965de52d738def2b9cb22a8ea9f9d51c682e8cecd5.mp4",
+   "durationMs": 40188,
+   "width": 640,
+   "height": 640
+  },
+  "s3.narration": {
+   "videoKey": "e053cbe2c15212aa9728e154948c0b5f12c6b0b99d2ee5ef25bf5ce9b2286deb.mp4",
+   "durationMs": 36062,
+   "width": 640,
+   "height": 640
+  },
+  "s4.narration": {
+   "videoKey": "4164e55b91d04d8c1d203ce8ce6e7f58fd726fcb9eee3c6eb6eaba4ffdc53bf8.mp4",
+   "durationMs": 40062,
+   "width": 640,
+   "height": 640
+  },
   "s2.answer.a": {
-   "videoKey": "71ac796629f071af50c166270376cf0715133299426c77d291c89d90c82646d3.mp4",
+   "videoKey": "708b078f0038fab28c15a00a60a617119499f7b50955a56f9a1d354076554a50.mp4",
    "durationMs": 15562,
+   "width": 640,
+   "height": 640
+  },
+  "s5.narration": {
+   "videoKey": "0b821dbd62bd804201fa2a69d12fcb4b8e4ad919697b4390327ab10e547d9516.mp4",
+   "durationMs": 33312,
+   "width": 640,
+   "height": 640
+  },
+  "s2.answer.b": {
+   "videoKey": "4b0da9e66657f61efe98b7d0a55b9d291807a2607f7648ee9aadf8847863d413.mp4",
+   "durationMs": 15562,
+   "width": 640,
+   "height": 640
+  },
+  "s3.answers.denial": {
+   "videoKey": "dd8264e4b9875f19676027a526ab443f4db595e8e9d11111d3fbb51effdfc7c7.mp4",
+   "durationMs": 17312,
+   "width": 640,
+   "height": 640
+  },
+  "s3.answers.reason": {
+   "videoKey": "5493b9a820b57af9949b1141500a3477cca0fcdb2349b4937c2f654254dea4b2.mp4",
+   "durationMs": 17312,
+   "width": 640,
+   "height": 640
+  },
+  "s4.answer.a": {
+   "videoKey": "d9d309947b6a732635aafe6cfc5948e3d696a519c21b177bf8e0abec011daba9.mp4",
+   "durationMs": 17000,
+   "width": 640,
+   "height": 640
+  },
+  "opening": {
+   "segments": [
+    {
+     "role": "chair",
+     "startMs": 0,
+     "videoKey": "99739abf35586e015b920900c3543fefad6da1a915f1baeafa36d099104f38b9.mp4",
+     "durationMs": 56312,
+     "width": 640,
+     "height": 640
+    },
+    {
+     "role": "ciso",
+     "startMs": 56256,
+     "videoKey": "6883fa9cd7644041b537bac5c1b09a121d1aaf178ee4eac6bcda62e0cabc387f.mp4",
+     "durationMs": 3000,
+     "width": 640,
+     "height": 640
+    }
+   ],
+   "durationMs": 59256
+  },
+  "s4.answer.b": {
+   "videoKey": "8503f0bdd516d895d5cc483a44b9c5f0a50d692845a5eaea7f59d766ecfde1be.mp4",
+   "durationMs": 17000,
+   "width": 640,
+   "height": 640
+  },
+  "setup.exampleScene": {
+   "videoKey": "825085cc4377c8cb571063f09d82827ca1aeee870ac7a93ff14ff3392cf8d83f.mp4",
+   "durationMs": 10750,
    "width": 640,
    "height": 640
   }
  },
  "seats": {
+  "chair": {
+   "videoKey": "fdd498fb8b27723c8806e93df3467b3a5193018666ed5d0a5ae71c6d7cff39c1.mp4",
+   "durationMs": 9812,
+   "width": 640,
+   "height": 640
+  },
   "member2": {
-   "videoKey": "df61e7671a1b471fbbfd883975a41922976da477f66d353112f4a5b1f2fa8045.mp4",
-   "durationMs": 9938,
+   "videoKey": "f5c052f72a1e5b642f1537533585ea52f0686796ff56afdb84d2c1e01972bff6.mp4",
+   "durationMs": 9812,
+   "width": 640,
+   "height": 640
+  },
+  "member3": {
+   "videoKey": "35c4063e4a624d8155222c3bc72897701a40ce41bbe674f6d0306fe286654935.mp4",
+   "durationMs": 9812,
+   "width": 640,
+   "height": 640
+  },
+  "member4": {
+   "videoKey": "769dc8c1598abc12eb448c9d9b469ccc9de33228391f9f05b9c5e401589ffd24.mp4",
+   "durationMs": 9812,
+   "width": 640,
+   "height": 640
+  },
+  "member5": {
+   "videoKey": "b682d0b1ac5d51dcd208fe6d0c389a913e147e22e93d0f687f4ea957845c8533.mp4",
+   "durationMs": 9812,
+   "width": 640,
+   "height": 640
+  },
+  "member6": {
+   "videoKey": "70473f3bd4a54ce48a19096de3c61c4d56c910ac500cff61a74bcaa2684b4f66.mp4",
+   "durationMs": 9812,
    "width": 640,
    "height": 640
   }
