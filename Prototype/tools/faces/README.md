@@ -135,7 +135,11 @@ a missing or failing video changes nothing in the flow.
 2. Face changed: edit `characters.py`, delete `ref_<role>.png` and the role's result lines, run the batch.
 3. Quality: `--full` for 20 steps; width and height in `graphs.s2v()`; the chunk length stays 77 (the model
    needs at least 73 frames); the four frames trimmed after decoding compensate the doubled first latent
-   frame of the official workflow.
+   frame of the official workflow. Long clips drift: every extension re-reads the portrait, but colour and
+   sharpness still wander after about eight chunks (the chair's 56 s opening, twelve chunks, goes lighter
+   and softer in its last third, while the CISO's 41 s narration holds). A clip beyond about 40 s is better
+   split at a sentence boundary into two segments of the same role, which needs `publish.py` to take the
+   second segment's line offset (today it keys segments by role) and the browser already plays segments.
 4. Publish, mirror, roll a revision, run the checks. Keep `content/video/<version>/manifest.json` in git.
 
 ## Preview without deploying

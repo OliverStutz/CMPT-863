@@ -279,15 +279,22 @@ async function runSession(browser: Browser, request: APIRequestContext, runCode:
         }
         if ((step.videoUrl || step.videoSegments) && !handled.has(`v:${step.stepId}`)) {
           handled.add(`v:${step.stepId}`);
-          const vid = page.getByTestId("speaker-video").first();
-          await expect(vid, `${label}: speaker video on ${step.stepId}`).toBeVisible({ timeout: 10_000 });
+          // A two-speaker step (the opening) renders one video per segment; the later speaker's video waits paused
+          // on its first frame until its line starts, so the check follows whichever speaker video is playing.
+          const vids = page.getByTestId("speaker-video");
+          await expect(vids.first(), `${label}: speaker video on ${step.stepId}`).toBeVisible({ timeout: 10_000 });
+          const playing = () =>
+            vids.evaluateAll((els) => {
+              const v = (els as HTMLVideoElement[]).filter((e) => !e.paused).sort((a, b) => b.currentTime - a.currentTime)[0];
+              return v ? { currentTime: v.currentTime, width: v.videoWidth } : { currentTime: 0, width: 0 };
+            });
           await expect
-            .poll(async () => vid.evaluate((v: HTMLVideoElement) => (v.paused ? 0 : v.currentTime)), {
-              message: `${label}: speaker video advances with the audio on ${step.stepId}`,
+            .poll(async () => (await playing()).currentTime, {
+              message: `${label}: a speaker video advances with the audio on ${step.stepId}`,
               timeout: 15_000,
             })
             .toBeGreaterThan(0.5);
-          const info = await vid.evaluate((v: HTMLVideoElement) => ({ currentTime: v.currentTime, width: v.videoWidth }));
+          const info = await playing();
           expect(info.width, `${label}: speaker video decoded`).toBeGreaterThan(0);
           videoChecks.push({ label, stepId: step.stepId, scene: step.scene, kind: "speaker", ...info });
           mkdirSync(OUT, { recursive: true });
