@@ -78,3 +78,33 @@ export function barPath(
 }
 
 export const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+
+/** A value held inside [lo, hi] of the axis domain (either order of the bounds). */
+export function clampToDomain(v: number, domain: [number, number]): number {
+  const lo = Math.min(domain[0], domain[1]);
+  const hi = Math.max(domain[0], domain[1]);
+  return clamp(v, lo, hi);
+}
+
+/**
+ * A CI band polygon ([x, value] pairs) with its values clamped to the axis domain, so a CI wider than the scale
+ * (n = 2 gives df = 1, about +-12.7 standard errors) ends flat at the axis edge. The table twin keeps the exact numbers.
+ */
+export function clampBand(poly: [number, number][], domain: [number, number]): [number, number][] {
+  return poly.map(([x, v]) => [x, clampToDomain(v, domain)]);
+}
+
+/** Which end of an interval runs past the domain: -1 below, +1 above, both, or none. */
+export function overflowSides(lo: number | null, hi: number | null, domain: [number, number]): (-1 | 1)[] {
+  const min = Math.min(domain[0], domain[1]);
+  const max = Math.max(domain[0], domain[1]);
+  const out: (-1 | 1)[] = [];
+  if (lo !== null && lo < min) out.push(-1);
+  if (hi !== null && hi > max) out.push(1);
+  return out;
+}
+
+/** An id usable in `url(#...)`, from React's useId (which may contain colons or guillemets). */
+export function svgId(raw: string, prefix: string): string {
+  return `${prefix}-${raw.replace(/[^a-zA-Z0-9_-]/g, "")}`;
+}

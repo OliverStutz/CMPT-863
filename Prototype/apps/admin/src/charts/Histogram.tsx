@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { TableTwin, Tooltip, useWidth, type TableData, type TipState, hoverProps } from "./common";
 import { fmtInt } from "./format";
-import { linear, niceTicks } from "./scale";
+import { linear, niceTicks, svgId } from "./scale";
 
 export interface Bin {
   from: number;
@@ -34,6 +34,7 @@ export function Histogram(props: HistogramProps) {
   const f = props.formatEdge ?? String;
   const { ref, width } = useWidth<HTMLDivElement>();
   const [hot, setHot] = useState<number | null>(null);
+  const clipId = svgId(useId(), "hist");
   if (tableView) return <TableTwin {...histogramTable(props)} />;
   if (bins.length === 0) return <p className="muted">No finished sessions.</p>;
 
@@ -70,6 +71,9 @@ export function Histogram(props: HistogramProps) {
             </text>
           </g>
         ))}
+        <clipPath id={clipId}>
+          <rect x={left} y={top} width={plotW} height={height} />
+        </clipPath>
         <line className="viz-axis" x1={left} x2={left + plotW} y1={top + height} y2={top + height} />
         {xTicks.map((t) => (
           <text key={t} className="viz-tick" x={x(t)} y={top + height + 15} textAnchor="middle">
@@ -84,6 +88,7 @@ export function Histogram(props: HistogramProps) {
               {b.n > 0 && (
                 <rect
                   className="viz-mark"
+                  clipPath={`url(#${clipId})`}
                   x={x0}
                   y={y(b.n)}
                   width={w}

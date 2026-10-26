@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import {
   Legend,
   TableTwin,
@@ -11,7 +11,7 @@ import {
 } from "./common";
 import { fmtCi, fmtNum } from "./format";
 import { clip } from "./BarChart";
-import { linear, niceDomain, niceTicks, textWidth } from "./scale";
+import { clampToDomain, linear, niceDomain, niceTicks, svgId, textWidth } from "./scale";
 
 export interface DumbbellSeries {
   key: string;
@@ -84,6 +84,7 @@ const ROW = 40;
 export function Dumbbell(props: DumbbellProps) {
   const { title, series, rows, zeroLine = true, tableView } = props;
   const { ref, width } = useWidth<HTMLDivElement>(360);
+  const clipId = svgId(useId(), "dumbbell");
   const [hot, setHot] = useState<{ row: number; key: string } | null>(null);
 
   if (tableView) return <TableTwin {...dumbbellTable(props)} />;
@@ -127,6 +128,10 @@ export function Dumbbell(props: DumbbellProps) {
         />
       )}
       <svg width={width} height={h} role="img" aria-label={title}>
+        <clipPath id={clipId}>
+          {/* The plot band plus 6 px of slack for a marker on the edge; row labels sit outside it. */}
+          <rect x={labelW - 6} y={0} width={plotW + 12} height={rows.length * ROW} />
+        </clipPath>
         {ticks.map((t) => (
           <g key={t}>
             <line className="viz-grid" x1={x(t)} x2={x(t)} y1={0} y2={rows.length * ROW} />
@@ -150,8 +155,9 @@ export function Dumbbell(props: DumbbellProps) {
               </text>
               {means.length >= 2 && (
                 <line
-                  x1={x(Math.min(...means))}
-                  x2={x(Math.max(...means))}
+                  clipPath={`url(#${clipId})`}
+                  x1={x(clampToDomain(Math.min(...means), domain))}
+                  x2={x(clampToDomain(Math.max(...means), domain))}
                   y1={cy}
                   y2={cy}
                   stroke="var(--viz-axis)"
@@ -165,16 +171,12 @@ export function Dumbbell(props: DumbbellProps) {
                 const c = colorOf(r, s);
                 const isHot = hot?.row === ri && hot.key === s.key;
                 return (
-                  <g key={s.key} opacity={!hot || isHot ? 1 : 0.5}>
+                  <g key={s.key} opacity={!hot || isHot ? 1 : 0.5} clipPath={`url(#${clipId})`}>
                     {pt.lo !== null && pt.hi !== null && (
-                      <g stroke={c} strokeWidth={1.5}>
-                        <line x1={x(pt.lo)} x2={x(pt.hi)} y1={py} y2={py} />
-                        <line x1={x(pt.lo)} x2={x(pt.lo)} y1={py - 3} y2={py + 3} />
-                        <line x1={x(pt.hi)} x2={x(pt.hi)} y1={py - 3} y2={py + 3} />
-                      </g>
+                      <Whisker lo={pt.lo} hi={pt.hi} y={py} x={x} domain={domain} color={c} />
                     )}
                     <circle
-                      cx={x(pt.mean)}
+                      cx={x(clampToDomain(pt.mean, domain))}
                       cy={py}
                       r={s.hollow ? 4 : 5}
                       fill={s.hollow ? "var(--viz-surface)" : c}
@@ -203,5 +205,39 @@ export function Dumbbell(props: DumbbellProps) {
       </svg>
       <Tooltip tip={tip} width={width} />
     </figure>
+  );
+}
+
+/**
+ * A CI whisker clamped to the axis domain: a cap where the bound is inside the scale, an outward chevron where the
+ * CI runs past the axis (the table view keeps the exact bounds).
+ */
+function Whisker(props: {
+  lo: number;
+  hi: number;
+  y: number;
+  x: (v: number) => number;
+  domain: [number, number];
+  color: string;
+}) {
+  const { lo, hi, y, x, domain, color } = props;
+  const min = Math.min(...domain);
+  const max = Math.max(...domain);
+  const x0 = x(clampToDomain(lo, domain));
+  const x1 = x(clampToDomain(hi, domain));
+  const end = (px: number, over: boolean, dir: -1 | 1) =>
+    over ? (
+      <path d={`M${px - dir * 5},${y - 4}L${px},${y}L${px - dir * 5},${y + 4}`} fill="none">
+        <title>95% CI runs past the axis; exact bounds in the table view</title>
+      </path>
+    ) : (
+      <line x1={px} x2={px} y1={y - 3} y2={y + 3} />
+    );
+  return (
+    <g stroke={color} strokeWidth={1.5}>
+      <line x1={x0} x2={x1} y1={y} y2={y} />
+      {end(x0, lo < min, -1)}
+      {end(x1, hi > max, 1)}
+    </g>
   );
 }

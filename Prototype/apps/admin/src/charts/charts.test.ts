@@ -4,7 +4,7 @@ import { hoverProps } from "./common";
 import { OTHER_ID, foldSlices } from "./Donut";
 import { dumbbellDomain } from "./Dumbbell";
 import { bandPolygons, orderedPoints, segments } from "./LineChart";
-import { barPath, niceTicks } from "./scale";
+import { barPath, clampBand, clampToDomain, niceTicks, overflowSides, svgId } from "./scale";
 import { stackSegments } from "./StackedBar";
 
 const xs = [{ id: "T0" }, { id: "T1" }, { id: "T2a" }, { id: "T2b" }];
@@ -156,5 +156,46 @@ describe("tooltip initial state", () => {
         false,
       ),
     ).toEqual({});
+  });
+});
+
+describe("clamping CI bands and whiskers to the axis", () => {
+  it("clamps a band that runs past the domain and leaves one inside unchanged", () => {
+    // n = 2 per group: df = 1, the t-based CI is about +-12.7 standard errors.
+    const wide: [number, number][] = [
+      [0, 18.4],
+      [1, 15.2],
+      [1, -6.1],
+      [0, -9.9],
+    ];
+    expect(clampBand(wide, [0, 10])).toEqual([
+      [0, 10],
+      [1, 10],
+      [1, 0],
+      [0, 0],
+    ]);
+    const inside: [number, number][] = [
+      [0, 7],
+      [1, 6.5],
+      [1, 4.2],
+      [0, 5],
+    ];
+    expect(clampBand(inside, [0, 10])).toEqual(inside);
+    expect(clampBand([[0, 9]], [1, 7])).toEqual([[0, 7]]);
+  });
+
+  it("clamps single values in either domain order and names the overflowing side", () => {
+    expect(clampToDomain(12, [0, 10])).toBe(10);
+    expect(clampToDomain(-3, [10, 0])).toBe(0);
+    expect(clampToDomain(4.5, [0, 10])).toBe(4.5);
+    expect(overflowSides(-5, 15, [0, 10])).toEqual([-1, 1]);
+    expect(overflowSides(2, 15, [0, 10])).toEqual([1]);
+    expect(overflowSides(2, 8, [0, 10])).toEqual([]);
+    expect(overflowSides(null, null, [0, 10])).toEqual([]);
+  });
+
+  it("makes clip-path ids safe for url(#...)", () => {
+    expect(svgId(":r1:", "plot")).toBe("plot-r1");
+    expect(svgId("\u00abr2\u00bb", "plot")).toBe("plot-r2");
   });
 });

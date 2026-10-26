@@ -1,4 +1,4 @@
-import { useState, type KeyboardEvent, type PointerEvent } from "react";
+import { useId, useState, type KeyboardEvent, type PointerEvent } from "react";
 import {
   Legend,
   TableTwin,
@@ -10,7 +10,7 @@ import {
   type TipState,
 } from "./common";
 import { fmtCi, fmtNum } from "./format";
-import { linear, niceTicks, textWidth } from "./scale";
+import { clampBand, clampToDomain, linear, niceTicks, overflowSides, svgId, textWidth } from "./scale";
 
 export interface XPoint {
   id: string;
@@ -135,6 +135,7 @@ export function LineChart(props: LineChartProps) {
   const { title, xs, series, trajectories = [], yDomain, height = 260, tableView, note, yLabel } = props;
   const { ref, width } = useWidth<HTMLDivElement>();
   const [idx, setIdx] = useState<number | null>(null);
+  const clipId = svgId(useId(), "plot");
 
   if (tableView) {
     return (
@@ -163,7 +164,7 @@ export function LineChart(props: LineChartProps) {
   const ends = ordered
     .map(({ s, pts }) => {
       const last = [...pts].reverse().find((p) => p.y !== null);
-      return last ? { s, p: last, ty: y(last.y as number) } : null;
+      return last ? { s, p: last, ty: y(clampToDomain(last.y as number, yDomain)) } : null;
     })
     .filter((e): e is NonNullable<typeof e> => e !== null);
   const sortedEnds = [...ends].sort((a, b) => a.ty - b.ty);
@@ -243,68 +244,107 @@ export function LineChart(props: LineChartProps) {
             )}
           </g>
         ))}
-        <g aria-hidden>
-          {trajectories.map((t) => {
-            const pts = xs.map((p, index) => ({ index, y: t.values[p.id] ?? null }));
-            return (
-              <g key={t.id}>
-                <path
-                  d={linePath(pts)}
-                  fill="none"
-                  stroke="var(--viz-deemph)"
-                  strokeWidth={1}
-                  strokeOpacity={0.22}
-                  strokeLinejoin="round"
-                />
-                {(t.hollow ?? []).map((xid) => {
-                  const i = xs.findIndex((p) => p.id === xid);
-                  const v = t.values[xid];
-                  if (i < 0 || v === null || v === undefined) return null;
-                  return (
-                    <circle
-                      key={xid}
-                      cx={x(i)}
-                      cy={y(v)}
-                      r={3.5}
-                      fill="var(--viz-surface)"
-                      stroke="var(--viz-deemph)"
-                      strokeOpacity={0.7}
-                      strokeWidth={1}
-                    />
-                  );
-                })}
-              </g>
-            );
+        <clipPath id={clipId}>
+          {/* 6 px of slack, so a marker on the axis edge is not cut in half. */}
+          <rect x={M.left - 6} y={M.top - 6} width={plotW + 12} height={plotH + 12} />
+        </clipPath>
+        <g clipPath={`url(#${clipId})`}>
+          <g aria-hidden>
+            {trajectories.map((t) => {
+              const pts = xs.map((p, index) => ({ index, y: t.values[p.id] ?? null }));
+              return (
+                <g key={t.id}>
+                  <path
+                    d={linePath(pts)}
+                    fill="none"
+                    stroke="var(--viz-deemph)"
+                    strokeWidth={1}
+                    strokeOpacity={0.22}
+                    strokeLinejoin="round"
+                  />
+                  {(t.hollow ?? []).map((xid) => {
+                    const i = xs.findIndex((p) => p.id === xid);
+                    const v = t.values[xid];
+                    if (i < 0 || v === null || v === undefined) return null;
+                    return (
+                      <circle
+                        key={xid}
+                        cx={x(i)}
+                        cy={y(v)}
+                        r={3.5}
+                        fill="var(--viz-surface)"
+                        stroke="var(--viz-deemph)"
+                        strokeOpacity={0.7}
+                        strokeWidth={1}
+                      />
+                    );
+                  })}
+                </g>
+              );
+            })}
+          </g>
+          {ordered.map(({ s, pts }) =>
+            bandPolygons(pts).map((poly, k) => (
+              <path
+                key={`${s.id}-band-${k}`}
+                d={
+                  clampBand(poly, yDomain)
+                    .map(([i, v], j) => `${j === 0 ? "M" : "L"}${x(i)},${y(v)}`)
+                    .join("") + "Z"
+                }
+                fill={s.color}
+                fillOpacity={0.12}
+              />
+            )),
+          )}
+          {/* A CI that runs past the axis ends flat at the edge, with a small chevron pointing outward. */}
+          {ordered.map(({ s, pts }, si) =>
+            pts.flatMap((p) =>
+              overflowSides(p.lo ?? null, p.hi ?? null, yDomain).map((side) => {
+                const ey = y(side > 0 ? Math.max(...yDomain) : Math.min(...yDomain));
+                const base = ey + (side > 0 ? 5 : -5); // the tip sits on the axis edge, the base inside the plot
+                const cx = x(p.index) + (si - (ordered.length - 1) / 2) * 9; // one chevron per series, side by side
+                return (
+                  <path
+                    key={`${s.id}-over-${p.index}-${side}`}
+                    d={`M${cx - 4},${base}L${cx},${ey}L${cx + 4},${base}`}
+                    fill="none"
+                    stroke={s.color}
+                    strokeWidth={1.5}
+                  >
+                    <title>95% CI runs past the axis; exact bounds in the table view</title>
+                  </path>
+                );
+              }),
+            ),
+          )}
+          {ordered.map(({ s, pts }) => (
+            <path
+              key={s.id}
+              d={linePath(pts)}
+              fill="none"
+              stroke={s.color}
+              strokeWidth={2}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+          ))}
+          {idx !== null && <line className="viz-crosshair" x1={x(idx)} x2={x(idx)} y1={M.top} y2={M.top + plotH} />}
+          {ordered.map(({ s, pts }) => {
+            const p = idx !== null ? pts[idx] : null;
+            return p && p.y !== null ? (
+              <circle
+                key={s.id}
+                cx={x(idx!)}
+                cy={y(p.y)}
+                r={4}
+                fill={s.color}
+                stroke="var(--viz-ring)"
+                strokeWidth={2}
+              />
+            ) : null;
           })}
         </g>
-        {ordered.map(({ s, pts }) =>
-          bandPolygons(pts).map((poly, k) => (
-            <path
-              key={`${s.id}-band-${k}`}
-              d={poly.map(([i, v], j) => `${j === 0 ? "M" : "L"}${x(i)},${y(v)}`).join("") + "Z"}
-              fill={s.color}
-              fillOpacity={0.12}
-            />
-          )),
-        )}
-        {ordered.map(({ s, pts }) => (
-          <path
-            key={s.id}
-            d={linePath(pts)}
-            fill="none"
-            stroke={s.color}
-            strokeWidth={2}
-            strokeLinejoin="round"
-            strokeLinecap="round"
-          />
-        ))}
-        {idx !== null && <line className="viz-crosshair" x1={x(idx)} x2={x(idx)} y1={M.top} y2={M.top + plotH} />}
-        {ordered.map(({ s, pts }) => {
-          const p = idx !== null ? pts[idx] : null;
-          return p && p.y !== null ? (
-            <circle key={s.id} cx={x(idx!)} cy={y(p.y)} r={4} fill={s.color} stroke="var(--viz-ring)" strokeWidth={2} />
-          ) : null;
-        })}
         {!collide &&
           ends.map(({ s, p, ty }) => (
             <g key={s.id}>
