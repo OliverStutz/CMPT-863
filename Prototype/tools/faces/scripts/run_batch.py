@@ -147,7 +147,8 @@ def main():
     jobs = [j for j in build_jobs(only) if j["id"] not in done]
     total_chunks = sum(j["chunks"] for j in jobs)
     log(f"{len(jobs)} job(s), {total_chunks} chunks, steps={STEPS} lora={LORA}, servers {PORTS}, RAM guard {RAM_MIN_MB} MB")
-    pending = sorted(jobs, key=lambda j: (-j["chunks"], j["id"]))
+    # portraits first (every talking clip and idle loop of a role waits for its reference face), then longest first
+    pending = sorted(jobs, key=lambda j: (j["kind"] != "portrait", -j["chunks"], j["id"]))
     running = set(); failures = []
 
     def worker(port):
