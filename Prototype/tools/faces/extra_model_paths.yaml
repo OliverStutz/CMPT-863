@@ -1,0 +1,8 @@
+cmpt863:
+  base_path: /home/oliver/.cache/cmpt863-faces/models
+  diffusion_models: diffusion_models
+  text_encoders: text_encoders
+  vae: vae
+  audio_encoders: audio_encoders
+  loras: loras
+  checkpoints: checkpoints

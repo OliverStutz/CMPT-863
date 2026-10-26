@@ -22,6 +22,12 @@ import styles from "./BoardroomScene.module.css";
 
 export type Speaker = "ciso" | "chair" | "member" | null;
 
+interface SegmentVideo {
+  url: string;
+  startMs: number;
+  endMs?: number;
+}
+
 interface Props {
   layout?: Block[];
   template?: LayoutTemplate;
@@ -36,9 +42,16 @@ interface Props {
   controls?: ReactNode;
   /** A larger card at the bottom of the stage, between the table portraits and the CISO (action choice). */
   dialog?: ReactNode;
-  /** The rendered talking-head video of this step's clip, shown in the speaker's frame and kept in sync
-   *  with the audio element (talking heads, 2026-10-25). */
-  speakerVideo?: { role: Exclude<Speaker, null>; url: string };
+  /** The rendered talking-head videos of this step's clip, one per speaker, each shown in that speaker's
+   *  frame and kept in sync with the audio element (talking heads, 2026-10-25). A whole clip is one
+   *  segment starting at 0; the opening has the chair's and then the CISO's. */
+  speakerVideos?: SpeakerVideo[];
+}
+
+export interface SpeakerVideo {
+  role: Exclude<Speaker, null>;
+  url: string;
+  startMs: number;
 }
 
 const STAGE_W = 1600;
@@ -74,7 +87,13 @@ export function BoardroomScene(p: Props) {
   const slideScale = SCREEN.w / 1600;
   // Idle loops of the silent seats come with the public scene pack; the speaker's video with the step.
   const seats = pack.video?.seats ?? {};
-  const videoFor = (role: PortraitRole) => (p.speakerVideo && p.speakerVideo.role === role ? p.speakerVideo.url : undefined);
+  const segments = [...(p.speakerVideos ?? [])].sort((a, b) => a.startMs - b.startMs);
+  const videoFor = (role: PortraitRole): SegmentVideo | undefined => {
+    const i = segments.findIndex((s) => s.role === role);
+    if (i < 0) return undefined;
+    const next = segments[i + 1];
+    return { url: segments[i].url, startMs: segments[i].startMs, endMs: next ? next.startMs : undefined };
+  };
 
   return (
     <div ref={outerRef} className={styles.outer}>
@@ -294,14 +313,14 @@ function Portrait({
   you?: boolean;
   tone?: number;
   /** Talking-head video of the current clip for this role (muted, follows the audio element). */
-  video?: string;
+  video?: SegmentVideo;
   /** Silent idle loop for a seat that never speaks. */
   idle?: string;
 }) {
   const hasPhoto = useImage(IMAGE_URLS[role]);
   const t = TONES[tone % TONES.length];
   const [videoFailed, setVideoFailed] = useState<string | null>(null);
-  const showVideo = !!video && videoFailed !== video;
+  const showVideo = !!video && videoFailed !== video.url;
   const showIdle = !showVideo && !!idle && videoFailed !== idle;
   return (
     <figure
@@ -311,7 +330,7 @@ function Portrait({
     >
       <div className={styles.portraitImage}>
         {showVideo ? (
-          <SyncedVideo src={video!} onFailed={() => setVideoFailed(video!)} />
+          <SyncedVideo src={video!.url} startMs={video!.startMs} endMs={video!.endMs} onFailed={() => setVideoFailed(video!.url)} />
         ) : showIdle ? (
           <IdleVideo src={idle!} onFailed={() => setVideoFailed(idle!)} />
         ) : hasPhoto ? (

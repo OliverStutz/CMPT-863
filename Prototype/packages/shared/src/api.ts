@@ -64,6 +64,8 @@ export interface Step {
   audioUrl?: string;
   /** Rendered talking-head video of the same clip (talking heads, 2026-10-25); the client plays it muted in sync with the audio element. */
   videoUrl?: string;
+  /** One video per speaker for a clip with several speakers (the opening), each starting at its offset in the audio. */
+  videoSegments?: { role: string; url: string; startMs: number }[];
   replayable?: boolean;
   restart?: boolean;
   overlay?: StepOverlay;

@@ -43,7 +43,20 @@ type VideoManifest struct {
 }
 
 type VideoClip struct {
-	VideoKey   string `json:"videoKey"` // "<sha256 hex>.mp4"
+	VideoKey   string `json:"videoKey,omitempty"` // "<sha256 hex>.mp4"; empty for a clip made of segments
+	DurationMs Ms     `json:"durationMs"`
+	Width      int    `json:"width,omitempty"`
+	Height     int    `json:"height,omitempty"`
+	// Segments split a clip with several speakers (the opening: the chair, then
+	// the CISO) into one video per speaker, each starting at the recorded line
+	// offset of the audio clip. Ordered by StartMs.
+	Segments []VideoSegment `json:"segments,omitempty"`
+}
+
+type VideoSegment struct {
+	Role       string `json:"role"` // "chair", "ciso", "member"
+	StartMs    Ms     `json:"startMs"`
+	VideoKey   string `json:"videoKey"`
 	DurationMs Ms     `json:"durationMs"`
 	Width      int    `json:"width,omitempty"`
 	Height     int    `json:"height,omitempty"`

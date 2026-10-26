@@ -7,6 +7,13 @@ import (
 	sc "study/api/pkg/studyconfig"
 )
 
+// StepVideoSegment is one speaker's video within a multi-speaker clip.
+type StepVideoSegment struct {
+	Role    string `json:"role"`
+	URL     string `json:"url"`
+	StartMs int64  `json:"startMs"`
+}
+
 // Step is the step descriptor of section 8.1.
 type Step struct {
 	StepID   string `json:"stepId"`
@@ -15,19 +22,22 @@ type Step struct {
 	AudioURL string `json:"audioUrl,omitempty"`
 	// VideoURL is the rendered talking-head video of the same clip (muted in
 	// the browser, in sync with the audio element); absent when none exists.
-	VideoURL     string      `json:"videoUrl,omitempty"`
-	Replayable   bool        `json:"replayable,omitempty"`
-	Restart      bool        `json:"restart,omitempty"`
-	Overlay      *Overlay    `json:"overlay,omitempty"`
-	Options      []sc.Choice `json:"options,omitempty"`
-	Point        string      `json:"point,omitempty"`
-	Transcript   string      `json:"transcript,omitempty"`
-	PreStartText []string    `json:"preStartText,omitempty"`
-	Debrief      *Debrief    `json:"debrief,omitempty"`
-	OpensInMs    *int64      `json:"opensInMs,omitempty"`
-	ClosesInMs   *int64      `json:"closesInMs,omitempty"`
-	Prefetch     []string    `json:"prefetch,omitempty"`
-	Resumed      bool        `json:"resumed,omitempty"`
+	VideoURL string `json:"videoUrl,omitempty"`
+	// VideoSegments replaces VideoURL for a clip with several speakers: one
+	// video per speaker, each starting at its offset in the audio clip.
+	VideoSegments []StepVideoSegment `json:"videoSegments,omitempty"`
+	Replayable    bool               `json:"replayable,omitempty"`
+	Restart       bool               `json:"restart,omitempty"`
+	Overlay       *Overlay           `json:"overlay,omitempty"`
+	Options       []sc.Choice        `json:"options,omitempty"`
+	Point         string             `json:"point,omitempty"`
+	Transcript    string             `json:"transcript,omitempty"`
+	PreStartText  []string           `json:"preStartText,omitempty"`
+	Debrief       *Debrief           `json:"debrief,omitempty"`
+	OpensInMs     *int64             `json:"opensInMs,omitempty"`
+	ClosesInMs    *int64             `json:"closesInMs,omitempty"`
+	Prefetch      []string           `json:"prefetch,omitempty"`
+	Resumed       bool               `json:"resumed,omitempty"`
 
 	// DECISION: the Step type of 8.1 has no field for the action prompt and
 	// note, which differ between groups and so cannot be in the public scene
@@ -94,6 +104,7 @@ func (ct *Content) Describe(s *Session, now time.Time, resumed bool) *Step {
 		clip := ct.ClipFor(s, st)
 		step.AudioURL = ct.AudioURL(clip)
 		step.VideoURL = ct.VideoURL(clip)
+		step.VideoSegments = ct.VideoSegmentsFor(clip)
 		if clip != nil {
 			step.Transcript = clip.Transcript
 		}
@@ -166,6 +177,9 @@ func (ct *Content) Describe(s *Session, now time.Time, resumed bool) *Step {
 					}
 					if v := ct.VideoURL(cl); v != "" {
 						step.Prefetch = append(step.Prefetch, v)
+					}
+					for _, sg := range ct.VideoSegmentsFor(cl) {
+						step.Prefetch = append(step.Prefetch, sg.URL)
 					}
 				}
 				break

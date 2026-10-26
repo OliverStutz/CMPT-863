@@ -2,6 +2,7 @@ package domain
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 
 	sc "study/api/pkg/studyconfig"
@@ -24,6 +25,8 @@ type Content struct {
 	VideoBase  string
 	Videos     map[string]string
 	SeatVideos map[string]string
+	// VideoSegs holds the multi-speaker clips: clip id -> segments with URLs.
+	VideoSegs map[string][]StepVideoSegment
 	// Estimated lists clips whose duration is estimated (no manifest entry).
 	Estimated []string
 	// Warnings collected while loading.
@@ -134,13 +137,27 @@ func (ct *Content) AudioURL(cl *sc.Clip) string {
 // SetVideo attaches a video manifest (nil clears it): clip videos are looked
 // up by clip id, seat loops by seat role.
 func (ct *Content) SetVideo(base string, vm *sc.VideoManifest) {
-	ct.VideoBase, ct.Videos, ct.SeatVideos = "", nil, nil
+	ct.VideoBase, ct.Videos, ct.SeatVideos, ct.VideoSegs = "", nil, nil, nil
 	if vm == nil {
 		return
 	}
 	ct.VideoBase = base
 	ct.Videos = map[string]string{}
+	ct.VideoSegs = map[string][]StepVideoSegment{}
 	for id, v := range vm.Clips {
+		if len(v.Segments) > 0 {
+			segs := make([]StepVideoSegment, 0, len(v.Segments))
+			for _, sg := range v.Segments {
+				if sg.VideoKey != "" {
+					segs = append(segs, StepVideoSegment{Role: sg.Role, URL: base + sg.VideoKey, StartMs: int64(sg.StartMs)})
+				}
+			}
+			sort.Slice(segs, func(i, j int) bool { return segs[i].StartMs < segs[j].StartMs })
+			if len(segs) > 0 {
+				ct.VideoSegs[id] = segs
+			}
+			continue
+		}
 		if v.VideoKey != "" {
 			ct.Videos[id] = v.VideoKey
 		}
@@ -163,6 +180,15 @@ func (ct *Content) VideoURL(cl *sc.Clip) string {
 		return ct.VideoBase + k
 	}
 	return ""
+}
+
+// VideoSegmentsFor returns the per-speaker videos of a multi-speaker clip, or
+// nil. A clip has either one video (VideoURL) or segments, never both.
+func (ct *Content) VideoSegmentsFor(cl *sc.Clip) []StepVideoSegment {
+	if cl == nil || cl.AudioKey == "" || ct.VideoSegs == nil {
+		return nil
+	}
+	return ct.VideoSegs[cl.ID]
 }
 
 // ClipFor returns the clip an audio step plays in a session.

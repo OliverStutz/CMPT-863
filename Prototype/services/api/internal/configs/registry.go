@@ -214,7 +214,7 @@ func (r *Registry) add(ctx context.Context, data []byte, tag, srcPath, status st
 		rec.LintReport = append(rec.LintReport, "audio manifest missing: durations estimated")
 	}
 	if vm != nil {
-		rec.LintReport = append(rec.LintReport, fmt.Sprintf("video manifest: %d clip(s), %d seat loop(s)", len(ct.Videos), len(ct.SeatVideos)))
+		rec.LintReport = append(rec.LintReport, fmt.Sprintf("video manifest: %d clip(s), %d seat loop(s)", len(ct.Videos)+len(ct.VideoSegs), len(ct.SeatVideos)))
 	}
 	if keepBody {
 		rec.Body = string(data)

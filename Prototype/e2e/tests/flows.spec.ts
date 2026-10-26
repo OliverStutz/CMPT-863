@@ -274,9 +274,9 @@ async function runSession(browser: Browser, request: APIRequestContext, runCode:
         if (await cont.isVisible().catch(() => false)) {
           if (await cont.isEnabled().catch(() => false)) await cont.click().catch(() => undefined);
         }
-        if (step.videoUrl && !handled.has(`v:${step.stepId}`)) {
+        if ((step.videoUrl || step.videoSegments) && !handled.has(`v:${step.stepId}`)) {
           handled.add(`v:${step.stepId}`);
-          const vid = page.getByTestId("speaker-video");
+          const vid = page.getByTestId("speaker-video").first();
           await expect(vid, `${label}: speaker video on ${step.stepId}`).toBeVisible({ timeout: 10_000 });
           await expect
             .poll(async () => vid.evaluate((v: HTMLVideoElement) => (v.paused ? 0 : v.currentTime)), {

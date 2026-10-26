@@ -86,6 +86,43 @@ func TestVideoManifestOnSteps(t *testing.T) {
 			t.Fatalf("previous audio step does not prefetch the video: %v", prev.Prefetch)
 		}
 	}
+	// A multi-speaker clip (the opening) carries segments instead of one URL, and the step before it prefetches them.
+	var opening string
+	for _, sc0 := range c.Scenes {
+		if sc0.Kind == sc.SceneOpening {
+			opening = sc.OpeningClipID(sc0.ID)
+		}
+	}
+	if opening != "" {
+		ct.Clips[opening].AudioKey = strings.Repeat("d", 64) + ".mp3"
+		ct.Clips[opening].Estimated = false
+		ct.SetVideo("/assets/video/x/", &sc.VideoManifest{Clips: map[string]sc.VideoClip{
+			opening: {DurationMs: 59256, Segments: []sc.VideoSegment{
+				{Role: "ciso", StartMs: 56256, VideoKey: strings.Repeat("f", 64) + ".mp4", DurationMs: 3000},
+				{Role: "chair", StartMs: 0, VideoKey: strings.Repeat("e", 64) + ".mp4", DurationMs: 56256},
+			}}}})
+		for i, st := range ct.Plan.Steps {
+			if st.Kind == domain.KindOpening {
+				s.CurrentState = st.Key()
+				got := ct.Describe(s, time.Now(), false)
+				if got.VideoURL != "" || len(got.VideoSegments) != 2 || got.VideoSegments[0].Role != "chair" || got.VideoSegments[1].StartMs != 56256 ||
+					!strings.HasSuffix(got.VideoSegments[1].URL, strings.Repeat("f", 64)+".mp4") {
+					t.Fatalf("opening segments: url=%q segs=%+v", got.VideoURL, got.VideoSegments)
+				}
+				for j := i - 1; j >= 0 && j >= i-3; j-- {
+					if ct.Plan.Steps[j].Audio() {
+						s.CurrentState = ct.Plan.Steps[j].Key()
+						pf := ct.Describe(s, time.Now(), false).Prefetch
+						if len(pf) < 3 {
+							t.Fatalf("segments not prefetched from the previous audio step: %v", pf)
+						}
+						break
+					}
+				}
+				break
+			}
+		}
+	}
 	// Without a manifest nothing changes.
 	ct.SetVideo("", nil)
 	if got := ct.Describe(s, time.Now(), false).VideoURL; got != "" {
