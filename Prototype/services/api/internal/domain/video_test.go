@@ -37,7 +37,7 @@ func TestVideoManifestOnSteps(t *testing.T) {
 	ct.Clips[reasonID].AudioKey = strings.Repeat("a", 64) + ".mp3"
 	ct.Clips[reasonID].Estimated = false
 	ct.SetVideo("/assets/video/x/", &sc.VideoManifest{
-		Clips: map[string]sc.VideoClip{reasonID: {VideoKey: strings.Repeat("b", 64) + ".mp4", DurationMs: 15562}},
+		Clips: map[string]sc.VideoClip{reasonID: {Role: "ciso", VideoKey: strings.Repeat("b", 64) + ".mp4", DurationMs: 15562}},
 		Seats: map[string]sc.VideoClip{"member2": {VideoKey: strings.Repeat("c", 64) + ".mp4", DurationMs: 9937}},
 	})
 	if got := ct.VideoURL(ct.Clips[reasonID]); got != "/assets/video/x/"+strings.Repeat("b", 64)+".mp4" {
@@ -72,6 +72,9 @@ func TestVideoManifestOnSteps(t *testing.T) {
 	step := ct.Describe(s, time.Now(), false)
 	if step.VideoURL == "" || !strings.HasSuffix(step.VideoURL, ".mp4") {
 		t.Fatalf("answer step without videoUrl: %+v", step)
+	}
+	if step.VideoRole != "ciso" {
+		t.Fatalf("videoRole = %q, want ciso (the manifest names the seat whose face speaks the clip)", step.VideoRole)
 	}
 	if prevAudioIdx >= 0 && prevAudioIdx >= answerIdx-3 {
 		s.CurrentState = ct.Plan.Steps[prevAudioIdx].Key()

@@ -24,6 +24,7 @@ type Content struct {
 	// empty when the version has no video manifest (2026-10-25).
 	VideoBase  string
 	Videos     map[string]string
+	VideoRoles map[string]string // clip id -> speaking seat of its single video
 	SeatVideos map[string]string
 	// VideoSegs holds the multi-speaker clips: clip id -> segments with URLs.
 	VideoSegs map[string][]StepVideoSegment
@@ -137,12 +138,13 @@ func (ct *Content) AudioURL(cl *sc.Clip) string {
 // SetVideo attaches a video manifest (nil clears it): clip videos are looked
 // up by clip id, seat loops by seat role.
 func (ct *Content) SetVideo(base string, vm *sc.VideoManifest) {
-	ct.VideoBase, ct.Videos, ct.SeatVideos, ct.VideoSegs = "", nil, nil, nil
+	ct.VideoBase, ct.Videos, ct.VideoRoles, ct.SeatVideos, ct.VideoSegs = "", nil, nil, nil, nil
 	if vm == nil {
 		return
 	}
 	ct.VideoBase = base
 	ct.Videos = map[string]string{}
+	ct.VideoRoles = map[string]string{}
 	ct.VideoSegs = map[string][]StepVideoSegment{}
 	for id, v := range vm.Clips {
 		if len(v.Segments) > 0 {
@@ -160,6 +162,9 @@ func (ct *Content) SetVideo(base string, vm *sc.VideoManifest) {
 		}
 		if v.VideoKey != "" {
 			ct.Videos[id] = v.VideoKey
+			if v.Role != "" {
+				ct.VideoRoles[id] = v.Role
+			}
 		}
 	}
 	ct.SeatVideos = map[string]string{}
@@ -180,6 +185,16 @@ func (ct *Content) VideoURL(cl *sc.Clip) string {
 		return ct.VideoBase + k
 	}
 	return ""
+}
+
+// VideoRole returns the seat whose face speaks the single video of a clip
+// (manifest `role`), or "" when the clip has no video or the manifest does
+// not say; the browser then falls back to the scene's usual speaker.
+func (ct *Content) VideoRole(cl *sc.Clip) string {
+	if cl == nil || cl.AudioKey == "" || ct.VideoRoles == nil {
+		return ""
+	}
+	return ct.VideoRoles[cl.ID]
 }
 
 // VideoSegmentsFor returns the per-speaker videos of a multi-speaker clip, or

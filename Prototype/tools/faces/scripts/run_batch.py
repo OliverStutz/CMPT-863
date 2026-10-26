@@ -31,6 +31,8 @@ TALKING = {
     "s3.answers.reason": ("ciso", "s3_answers_reason.mp3"), "s3.answers.denial": ("ciso", "s3_answers_denial.mp3"),
     "s4.answer.a": ("ciso", "s4_answer_a.mp3"), "s4.answer.b": ("ciso", "s4_answer_b.mp3"),
     "opening.chair": ("chair", "opening_chair.mp3"), "opening.ciso": ("ciso", "opening_ciso.mp3"),
+    "s2.question.routine": ("chair", "s2_question_routine.mp3"), "s3.question.routine": ("chair", "s3_question_routine.mp3"),
+    "s4.question.routine": ("chair", "s4_question_routine.mp3"),  # the chair asks the routine question (config voice "chair")
     "setup.exampleScene": ("chair", "setup_exampleScene.mp3"),
 }
 IDLE = ["ciso", "chair", "member2", "member3", "member4", "member5", "member6"]  # every face gets a listening loop

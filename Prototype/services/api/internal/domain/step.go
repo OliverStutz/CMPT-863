@@ -23,6 +23,10 @@ type Step struct {
 	// VideoURL is the rendered talking-head video of the same clip (muted in
 	// the browser, in sync with the audio element); absent when none exists.
 	VideoURL string `json:"videoUrl,omitempty"`
+	// VideoRole is the seat whose face speaks VideoURL ("ciso", "chair", "member",
+	// or a seat such as "member3"); absent when the manifest does not say, the
+	// browser then uses the scene's usual speaker.
+	VideoRole string `json:"videoRole,omitempty"`
 	// VideoSegments replaces VideoURL for a clip with several speakers: one
 	// video per speaker, each starting at its offset in the audio clip.
 	VideoSegments []StepVideoSegment `json:"videoSegments,omitempty"`
@@ -104,6 +108,7 @@ func (ct *Content) Describe(s *Session, now time.Time, resumed bool) *Step {
 		clip := ct.ClipFor(s, st)
 		step.AudioURL = ct.AudioURL(clip)
 		step.VideoURL = ct.VideoURL(clip)
+		step.VideoRole = ct.VideoRole(clip)
 		step.VideoSegments = ct.VideoSegmentsFor(clip)
 		if clip != nil {
 			step.Transcript = clip.Transcript

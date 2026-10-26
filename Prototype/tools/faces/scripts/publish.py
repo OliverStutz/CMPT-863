@@ -13,7 +13,7 @@ for line in open(f"{LAB}/out/batch/results.jsonl"):
     if line.strip():
         r = json.loads(line); results[r["job"]] = r  # the last line for a job wins
 def sha(p): return hashlib.sha256(open(p, "rb").read()).hexdigest()
-def entry(r): return {"videoKey": sha(r["file"]) + ".mp4", "durationMs": r["durationMs"], "width": r["width"], "height": r["height"]}
+def entry(r): return {"role": r["role"], "videoKey": sha(r["file"]) + ".mp4", "durationMs": r["durationMs"], "width": r["width"], "height": r["height"]}
 for version in versions:
     audio = json.load(open(f"{P}/content/audio/{version}/manifest.json"))["clips"]
     d = f"{P}/content/video/{version}"; os.makedirs(d, exist_ok=True)
@@ -34,7 +34,7 @@ for version in versions:
             starts = audio["opening"]["lineStarts"]
             first = min(ms for lid, ms in starts.items() if f".{role}." in lid)
             seg = man["clips"].setdefault("opening", {"segments": []})
-            seg["segments"].append({"role": role, "startMs": first, **e})
+            seg["segments"].append({"startMs": first, **e})
         else:
             print("skipped (no audio clip):", r["clip"])
     if "opening" in man["clips"]:

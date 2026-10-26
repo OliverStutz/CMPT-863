@@ -43,6 +43,10 @@ type VideoManifest struct {
 }
 
 type VideoClip struct {
+	// Role is the seat whose face speaks this clip: "ciso", "chair", "member"
+	// or a silent seat such as "member3". Empty for a clip made of segments;
+	// a step then carries it as videoRole so the browser lights that seat.
+	Role       string `json:"role,omitempty"`
 	VideoKey   string `json:"videoKey,omitempty"` // "<sha256 hex>.mp4"; empty for a clip made of segments
 	DurationMs Ms     `json:"durationMs"`
 	Width      int    `json:"width,omitempty"`

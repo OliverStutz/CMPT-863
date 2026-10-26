@@ -64,6 +64,8 @@ export interface Step {
   audioUrl?: string;
   /** Rendered talking-head video of the same clip (talking heads, 2026-10-25); the client plays it muted in sync with the audio element. */
   videoUrl?: string;
+  /** The seat whose face speaks videoUrl ("ciso", "chair", "member", or a seat such as "member3"); absent = the scene's usual speaker. */
+  videoRole?: string;
   /** One video per speaker for a clip with several speakers (the opening), each starting at its offset in the audio. */
   videoSegments?: { role: string; url: string; startMs: number }[];
   replayable?: boolean;

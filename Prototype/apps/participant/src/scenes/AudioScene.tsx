@@ -9,17 +9,18 @@ import styles from "./scenes.module.css";
 
 /** The step's talking-head videos as segments: a whole clip is one segment at 0 for the step's speaker. */
 function segmentsOf(step: Step): SpeakerVideo[] | undefined {
-  const asRole = (r: string): Exclude<Speaker, null> => (r === "chair" || r === "member" ? r : "ciso");
+  const asRole = (r: string | undefined): Speaker => (r === "chair" || r === "member" || r === "ciso" ? r : null);
   if (step.videoSegments && step.videoSegments.length > 0) {
-    return step.videoSegments.map((s) => ({ role: asRole(s.role), url: s.url, startMs: s.startMs }));
+    return step.videoSegments.map((s) => ({ role: asRole(s.role) ?? "ciso", url: s.url, startMs: s.startMs }));
   }
-  if (step.videoUrl) return [{ role: speakerFor(step) ?? "ciso", url: step.videoUrl, startMs: 0 }];
+  // A single video names its seat (videoRole, e.g. the chair asking the routine question); else the scene's speaker.
+  if (step.videoUrl) return [{ role: asRole(step.videoRole) ?? speakerFor(step) ?? "ciso", url: step.videoUrl, startMs: 0 }];
   return undefined;
 }
 
-/** Who speaks now: the segment the audio clock is in, else the step's speaker. */
+/** Who speaks now: the segment the audio clock is in, else the one video's seat, else the step's speaker. */
 function activeSpeaker(step: Step, segments: SpeakerVideo[] | undefined, clockMs: number): Speaker {
-  if (!segments || segments.length < 2) return speakerFor(step);
+  if (!segments || segments.length < 2) return segments?.[0]?.role ?? speakerFor(step);
   let role: Speaker = speakerFor(step);
   for (const s of segments) if (clockMs >= s.startMs) role = s.role;
   return role;
