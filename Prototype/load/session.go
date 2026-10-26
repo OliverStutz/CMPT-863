@@ -375,7 +375,9 @@ func (s *Session) audio() error {
 	if s.persona != nil {
 		s.personaHears()
 	}
-	if st.Overlay != nil {
+	// marking_shown is only valid on the slide step; question and answer steps carry the
+	// overlay too (marks stay visible) but the server refuses the event there (wrong_state).
+	if st.Scene == "slide" && st.Overlay != nil {
 		s.Group = "checker"
 		if st.Overlay.Status == "flagged" {
 			for _, m := range st.Overlay.Markings {
