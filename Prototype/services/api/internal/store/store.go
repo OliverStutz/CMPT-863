@@ -80,7 +80,9 @@ type Store interface {
 	Events(ctx context.Context, sessionID string) ([]*domain.Event, error)
 	Ratings(ctx context.Context, sessionID string) ([]*domain.Rating, error)
 	Answers(ctx context.Context, sessionID string) ([]*domain.AnswerDoc, error)
-	Counters(ctx context.Context) (*domain.Counters, error)
+	// Counters returns the allocation counters of one run (per-run round robin,
+	// decision 1.19 revised 2026-10-25).
+	Counters(ctx context.Context, runID string) (*domain.Counters, error)
 
 	PutConfig(ctx context.Context, c *domain.ConfigRecord) error
 	GetConfig(ctx context.Context, version string) (*domain.ConfigRecord, error)
@@ -91,7 +93,7 @@ type Store interface {
 
 // Loader reads documents inside a transaction.
 type Loader interface {
-	LoadCounters() (*domain.Counters, error)
+	LoadCounters(runID string) (*domain.Counters, error)
 	LoadRating(point string) (*domain.Rating, error)
 	LoadAnswers(kind string) (*domain.AnswerDoc, error)
 	LoadConsumedEvent(clientSeq int64) (*domain.Event, error)
@@ -120,7 +122,7 @@ func (b *Buffer) Session() *domain.Session { return b.S }
 
 func (b *Buffer) Counters() (*domain.Counters, error) {
 	if b.counter == nil {
-		c, err := b.L.LoadCounters()
+		c, err := b.L.LoadCounters(b.S.RunID)
 		if err != nil {
 			return nil, err
 		}

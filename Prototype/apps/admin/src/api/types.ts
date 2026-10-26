@@ -26,6 +26,8 @@ export interface Run {
   configVersion: string;
   status: RunStatus;
   createdAt: string;
+  /** Test run: links may carry ?group= and ?denial=; such sessions are flagged forced_allocation. */
+  testOverrides?: boolean;
   counts: RunCounts;
   // DECISION: section 8.2 names `finishedByGroup` without a shape; read as { checker, neutral } counts,
   // matching counters/allocation.groups in 7.1.
@@ -37,6 +39,7 @@ export interface CreateRunRequest {
   name: string;
   source: string;
   configVersion: string;
+  testOverrides?: boolean;
 }
 export interface CreateRunResponse {
   id: string;
@@ -49,6 +52,7 @@ export interface PatchRunRequest {
   name?: string;
   source?: string;
   status?: RunStatus;
+  testOverrides?: boolean;
 }
 
 export interface AudioCheckResult {

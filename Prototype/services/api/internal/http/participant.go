@@ -16,6 +16,7 @@ import (
 	"study/api/internal/domain"
 	"study/api/internal/events"
 	"study/api/internal/store"
+	sc "study/api/pkg/studyconfig"
 )
 
 const (
@@ -168,6 +169,12 @@ type createRequest struct {
 		H int `json:"h"`
 	} `json:"screen"`
 	TZ string `json:"tz"`
+	// Test is honoured only on a run with TestOverrides (admin); otherwise it
+	// is ignored, so a participant adding ?group= to a real link changes nothing.
+	Test *struct {
+		Group       string `json:"group"`
+		DenialSlide string `json:"denialSlide"`
+	} `json:"test,omitempty"`
 }
 
 // AssetBaseURL is the prefix for image asset keys; the consent PDF is at
@@ -239,6 +246,32 @@ func (s *Server) createSession(w http.ResponseWriter, r *http.Request) {
 	}
 	var body createRequest
 	_ = json.NewDecoder(io.LimitReader(r.Body, 4096)).Decode(&body)
+	forcedGroup, forcedDenial := "", ""
+	if body.Test != nil && run.TestOverrides {
+		g := strings.ToLower(strings.TrimSpace(body.Test.Group))
+		if g != "" {
+			if g != string(sc.GroupChecker) && g != string(sc.GroupNeutral) {
+				writeErr(w, domain.ErrBadPayload, "test.group must be checker or neutral")
+				return
+			}
+			forcedGroup = g
+		}
+		if d := strings.TrimSpace(body.Test.DenialSlide); d != "" {
+			if forcedGroup == "" {
+				writeErr(w, domain.ErrBadPayload, "test.denialSlide needs test.group")
+				return
+			}
+			ok := false
+			for _, id := range ct.FlaggedSlides() {
+				ok = ok || id == d
+			}
+			if !ok {
+				writeErr(w, domain.ErrBadPayload, "test.denialSlide is not a flagged slide of this config")
+				return
+			}
+			forcedDenial = d
+		}
+	}
 
 	token := randomToken()
 	ua := r.UserAgent()
@@ -253,7 +286,7 @@ func (s *Server) createSession(w http.ResponseWriter, r *http.Request) {
 		OpenedAt:  now, LastEventAt: now, UpdatedAt: now,
 		TokenHash: hashToken(token), IP: ip, UserAgent: ua, UAFamily: UAFamily(ua),
 		Flags: []string{}, Screen: domain.Screen{W: body.Screen.W, H: body.Screen.H}, TZ: truncate(body.TZ, 64),
-		ActionChoices: map[string]string{},
+		ActionChoices: map[string]string{}, ForcedGroup: forcedGroup, ForcedDenialSlide: forcedDenial,
 	}
 	for _, st := range domain.PreAllocationSteps {
 		sess.Plan = append(sess.Plan, st.Key())

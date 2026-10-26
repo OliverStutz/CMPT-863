@@ -81,6 +81,11 @@ use `content/study-config.test-sound.json` (version `test-sound-1.4.0`): the sam
 (`content/audio/test-sound-1.4.0/`, built from the TTS cache at no cost) and 2 s views; one session takes
 about seven minutes, almost all of it audio.
 
+**Forcing a group by hand.** Mark a run "test overrides" in the admin (checkbox on creation or the
+"Overrides on" button), then open `<link>?group=checker` or `?group=neutral`, optionally with
+`&denial=s3` (a flagged slide id). The session is flagged `forced_allocation` and does not count in the
+run's round robin; on a run without the mark the parameters are ignored.
+
 `E2E_CONFIG=1.4.0` runs the same test on the real 1.4 timing (10 s views and the real clip lengths
 from `content/audio/1.4.0/manifest.json`, or about 400 ms per word without it); expect about 15
 minutes per session. `E2E_CONFIG_FILE` names the config file whose texts the leak

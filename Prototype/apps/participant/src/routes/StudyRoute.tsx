@@ -19,6 +19,18 @@ export interface StudyRouteProps {
   api?: ApiClient;
 }
 
+/**
+ * Test links: /s/<code>?group=checker|neutral&denial=<slide id>. The server honours these only on a run
+ * the admin marked for test overrides and flags such sessions forced_allocation; on any other run they
+ * are ignored (2026-10-25).
+ */
+export function testOverridesFromLocation(search: string = window.location.search): { group?: string; denialSlide?: string } | undefined {
+  const q = new URLSearchParams(search);
+  const group = q.get("group") ?? undefined;
+  const denialSlide = q.get("denial") ?? undefined;
+  return group || denialSlide ? { group, denialSlide } : undefined;
+}
+
 export function StudyRoute({ code, onBlocked, api: injected }: StudyRouteProps) {
   const apiRef = useRef<ApiClient>(injected ?? new ApiClient());
   const [state, setState] = useState<State>({ kind: "loading" });
@@ -30,7 +42,7 @@ export function StudyRoute({ code, onBlocked, api: injected }: StudyRouteProps) 
     const api = apiRef.current;
     (async () => {
       try {
-        const created = await api.createSession(code);
+        const created = await api.createSession(code, testOverridesFromLocation());
         const pack = await api.getJson<PublicScenePack>(created.scenePackUrl);
         const next = await api.next();
         setState({ kind: "ready", pack, assetBaseUrl: created.assetBaseUrl, step: next.next, progress: next.progress });

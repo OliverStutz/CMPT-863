@@ -535,7 +535,7 @@ A small Cloud Run job (`cmd/sweeper`), triggered by Cloud Scheduler every 5 minu
 
 ### 5.5 Group allocation and denial-slide balancing
 
-Allocation happens at `consent_accepted`, which can only follow a passed device gate (1.6). Visitors blocked by the device gate and people who do not consent never take a slot. Abandoned sessions keep their slot; it is not freed (1.6). Round robin is global across all run links (1.19). Allocation runs in one Firestore transaction on the global counter document `counters/allocation`, which holds one group counter per group and, per group, one denial counter per flagged slide id of the config version:
+Allocation happens at `consent_accepted`, which can only follow a passed device gate (1.6). Visitors blocked by the device gate and people who do not consent never take a slot. Abandoned sessions keep their slot; it is not freed (1.6). Round robin is per run link (1.19, revised 2026-10-25). Allocation runs in one Firestore transaction on the run's counter document `counters/run-<runId>`, which holds one group counter per group and, per group, one denial counter per flagged slide id of the config version. A run marked `testOverrides` (1.19b) lets a link fix the allocation with `?group=` and `?denial=`; such sessions are flagged `forced_allocation` and skip the counters:
 
 1. Read the counter document.
 2. Group: the group with the lower count; on a tie, the next in fixed order (checker, neutral). This is round robin as sign-ups arrive, as Abstract v8 says.
@@ -580,7 +580,7 @@ runs/{runId}
   status          "open" | "closed"
   createdAt, createdFromIp      (one shared admin password, so no per-person identity)
 
-counters/allocation              global across runs (1.19)
+counters/run-<runId>             one per run (1.19 revised 2026-10-25); counters/allocation is the retired global document
   groups          { checker: n, neutral: n }
   denial          { checker: { <flaggedSlideId>: n, ... }, neutral: { ... } }   per config version's flagged slides
   lastDenial      { checker, neutral }
@@ -944,7 +944,7 @@ Content writing (the slides, the VLM drafting run, flags, answers, voice choice)
 
 All of these were raised by the design and are now decided in `04 - Open Decisions.md` (decision number in brackets).
 
-- **FO-1. Scope of round robin.** Global across all run links (1.19).
+- **FO-1. Scope of round robin.** Per run link since 2026-10-25 (1.19 revised); test override per run (1.19b).
 - **FO-2. Checker display.** Highlighting on the slide while the CISO talks; the neutral group sees the same scene without highlighting (1.16).
 - **FO-3. Reload during audio.** Replay the interrupted clip from the start; log the reload on the session record; keep the session (2.5).
 - **FO-4. Abandonment.** 30 minutes without events; abandoned sessions keep their group and denial slot (1.6, 2.13).
@@ -1043,6 +1043,7 @@ Oliver answered every remaining point in `04 - Open Decisions.md`. The document 
 - **1.26** (2026-10-25): run link codes default to 12 characters (`RUN_CODE_LENGTH`, 6 to 32); the six characters of the first draft were this document's choice, not a requirement. Existing runs keep their codes.
 - **1.27** (2026-10-25): a config without an audio manifest plays silent placeholder clips (11.1); the admin Configs and Runs tabs now say so ("no audio: silent clips"), and `content/study-config.test-sound.json` (version `test-sound-1.4.0`) is a walk-through copy of v1.4 with the real clips and 2 s views, next to the silent `test-fast-1.4.0` used by the Playwright flows.
 - **1.28** (2026-10-25): background questions untimed (`timing.backgroundWindowMs: 0` in every config; the server sets no deadline and sends no `closesInMs`, the client shows no countdown); the budget vote keeps `formWindowMs`. Revises 2.12.
+- **1.30** (2026-10-25): round robin per run (`counters/run-<runId>`, `Store.Counters(ctx, runId)`), decision 1.19 revised; `Run.testOverrides` with `?group=`/`?denial=` on the link, sessions flagged `forced_allocation`, counters untouched (1.19b).
 - **1.29** (2026-10-25): boardroom table shows seven seats spread evenly: the chair, the participant's seat captioned "Board member (You)" (badge, lighter frame) and five more silent board members (optional images `member2.png` to `member6.png`, varied silhouettes until then); captions may wrap; the controls card (450 px) and the dialog sit over the middle seats when shown.
 - **2.1, 2.2**: 15 s action window; a timeout is stored as missing in both groups and the chair asks; `timeoutMapsTo` and `effectiveAction` removed; partial ratings kept; `ratingTimeoutPolicy` removed.
 - **2.3, 2.4**: both checks, flag only; audio check has one answer attempt, the test clip may be replayed freely (`audio_check_played`), result and play count shown in the admin view; `maxAttempts`, `onWrong`, `heardLabel` and `attentionChecks` removed.

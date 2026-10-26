@@ -25,6 +25,7 @@ const (
 	FlagRateLimited          = "rate_limited"
 	FlagTabHiddenDuringAudio = "tab_hidden_during_audio"
 	FlagReloaded             = "reloaded"
+	FlagForcedAllocation     = "forced_allocation" // group fixed by a test link, not by round robin
 )
 
 // Run is runs/{runId}.
@@ -37,6 +38,11 @@ type Run struct {
 	Status        string    `firestore:"status" json:"status"` // "open" | "closed"
 	CreatedAt     time.Time `firestore:"createdAt" json:"createdAt"`
 	CreatedFromIP string    `firestore:"createdFromIp" json:"createdFromIp"`
+	// TestOverrides lets a session of this run fix its group and denial slide
+	// from the link (?group=checker|neutral&denial=<slide id>). For test runs
+	// only (Oliver, 2026-10-25): such sessions are flagged forced_allocation
+	// and never touch the run's round-robin counters.
+	TestOverrides bool `firestore:"testOverrides" json:"testOverrides"`
 }
 
 const (
@@ -79,21 +85,25 @@ type LastResult struct {
 
 // Session is sessions/{sessionId}. Fields beyond section 7.1 are marked.
 type Session struct {
-	ID            string    `firestore:"-" json:"sessionId"`
-	RunID         string    `firestore:"runId" json:"runId"`
-	RunCode       string    `firestore:"runCode" json:"runCode"`
-	Source        string    `firestore:"source" json:"source"`
-	ConfigVersion string    `firestore:"configVersion" json:"configVersion"`
-	Group         string    `firestore:"group" json:"group"`
-	DenialSlide   string    `firestore:"denialSlide" json:"denialSlide"`
-	Status        string    `firestore:"status" json:"status"`
-	CurrentState  string    `firestore:"currentState" json:"currentState"`
-	Plan          []string  `firestore:"plan" json:"plan"`
-	ProgressIndex int       `firestore:"progressIndex" json:"progressIndex"`
-	ProgressTotal int       `firestore:"progressTotal" json:"progressTotal"`
-	LastClientSeq int64     `firestore:"lastClientSeq" json:"lastClientSeq"`
-	LastEventNo   int64     `firestore:"lastEventNo" json:"lastEventNo"`
-	Deadlines     Deadlines `firestore:"deadlines" json:"deadlines"`
+	ID            string `firestore:"-" json:"sessionId"`
+	RunID         string `firestore:"runId" json:"runId"`
+	RunCode       string `firestore:"runCode" json:"runCode"`
+	Source        string `firestore:"source" json:"source"`
+	ConfigVersion string `firestore:"configVersion" json:"configVersion"`
+	Group         string `firestore:"group" json:"group"`
+	DenialSlide   string `firestore:"denialSlide" json:"denialSlide"`
+	// ForcedGroup and ForcedDenialSlide come from a test link on a run with
+	// TestOverrides; applied at consent instead of the round robin.
+	ForcedGroup       string    `firestore:"forcedGroup,omitempty" json:"forcedGroup,omitempty"`
+	ForcedDenialSlide string    `firestore:"forcedDenialSlide,omitempty" json:"forcedDenialSlide,omitempty"`
+	Status            string    `firestore:"status" json:"status"`
+	CurrentState      string    `firestore:"currentState" json:"currentState"`
+	Plan              []string  `firestore:"plan" json:"plan"`
+	ProgressIndex     int       `firestore:"progressIndex" json:"progressIndex"`
+	ProgressTotal     int       `firestore:"progressTotal" json:"progressTotal"`
+	LastClientSeq     int64     `firestore:"lastClientSeq" json:"lastClientSeq"`
+	LastEventNo       int64     `firestore:"lastEventNo" json:"lastEventNo"`
+	Deadlines         Deadlines `firestore:"deadlines" json:"deadlines"`
 
 	OpenedAt    time.Time  `firestore:"openedAt" json:"openedAt"`
 	ConsentAt   *time.Time `firestore:"consentAt" json:"consentAt"`

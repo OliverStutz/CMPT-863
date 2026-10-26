@@ -123,7 +123,7 @@ export class ApiClient {
     if (body.next && this.onStep) this.onStep(body.next);
   }
 
-  createSession(code: string): Promise<CreateSessionResponse> {
+  createSession(code: string, test?: { group?: string; denialSlide?: string }): Promise<CreateSessionResponse> {
     return this.enqueue(async () => {
       const res = await this.request<CreateSessionResponse>(
         "POST",
@@ -131,6 +131,7 @@ export class ApiClient {
         {
           screen: { w: window.screen?.width ?? window.innerWidth, h: window.screen?.height ?? window.innerHeight },
           tz: Intl.DateTimeFormat().resolvedOptions().timeZone ?? "",
+          ...(test && (test.group || test.denialSlide) ? { test } : {}),
         },
       );
       this.sessionId = res.sessionId;

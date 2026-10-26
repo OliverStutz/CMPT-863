@@ -21,11 +21,11 @@ export function RunsTab() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
 
-  async function toggleStatus(run: Run) {
+  async function patch(run: Run, req: Parameters<typeof patchRun>[1]) {
     setBusyId(run.id);
     setActionError(null);
     try {
-      await patchRun(run.id, { status: run.status === "open" ? "closed" : "open" });
+      await patchRun(run.id, req);
       runs.reload();
     } catch (e) {
       setActionError(e instanceof Error ? e.message : String(e));
@@ -33,6 +33,8 @@ export function RunsTab() {
       setBusyId(null);
     }
   }
+  const toggleStatus = (run: Run) => patch(run, { status: run.status === "open" ? "closed" : "open" });
+  const toggleTest = (run: Run) => patch(run, { testOverrides: !run.testOverrides });
 
   return (
     <section>
@@ -89,6 +91,14 @@ export function RunsTab() {
                     </td>
                     <td>
                       <span className={`chip ${r.status === "open" ? "chip-success" : "chip-neutral"}`}>{r.status}</span>
+                      {r.testOverrides && (
+                        <>
+                          {" "}
+                          <span className="chip chip-info" title="Links may carry ?group=checker|neutral&denial=<slide id>; such sessions are flagged forced_allocation and skip the round robin">
+                            test overrides
+                          </span>
+                        </>
+                      )}
                     </td>
                     <td className="mono">
                       {r.counts
@@ -104,6 +114,14 @@ export function RunsTab() {
                     <td>
                       <button className="small" disabled={busyId === r.id} onClick={() => void toggleStatus(r)}>
                         {r.status === "open" ? "Close" : "Reopen"}
+                      </button>{" "}
+                      <button
+                        className="small"
+                        disabled={busyId === r.id}
+                        title="Test runs only: allow ?group= and ?denial= in the link"
+                        onClick={() => void toggleTest(r)}
+                      >
+                        {r.testOverrides ? "Overrides off" : "Overrides on"}
                       </button>
                     </td>
                   </tr>
@@ -128,6 +146,7 @@ function NewRunForm(props: { configs: ConfigSummary[]; configsError: string | nu
   const [name, setName] = useState("");
   const [source, setSource] = useState("");
   const [configVersion, setConfigVersion] = useState("");
+  const [testOverrides, setTestOverrides] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -136,9 +155,10 @@ function NewRunForm(props: { configs: ConfigSummary[]; configsError: string | nu
     setBusy(true);
     setError(null);
     try {
-      const res = await createRun({ name: name.trim(), source: source.trim(), configVersion });
+      const res = await createRun({ name: name.trim(), source: source.trim(), configVersion, testOverrides });
       setName("");
       setSource("");
+      setTestOverrides(false);
       props.onCreated(res.id);
     } catch (err) {
       setError(err instanceof ApiError ? `${err.code}: ${err.message}` : String(err));
@@ -174,6 +194,10 @@ function NewRunForm(props: { configs: ConfigSummary[]; configsError: string | nu
             </option>
           ))}
         </select>
+      </label>
+      <label className="checkbox" title="Sessions opened with ?group=checker|neutral&denial=<slide id> get that allocation, are flagged forced_allocation and do not count in the round robin. Never for a real run.">
+        <input type="checkbox" checked={testOverrides} onChange={(e) => setTestOverrides(e.target.checked)} />
+        Test run: allow group and denial overrides in the link
       </label>
       <button type="submit" disabled={busy || !name.trim() || !source.trim() || !configVersion}>
         {busy ? "Creating..." : "Create run"}

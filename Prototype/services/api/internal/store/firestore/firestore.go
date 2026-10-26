@@ -28,11 +28,13 @@ const (
 	colRuns     = "runs"
 	colSessions = "sessions"
 	colCounters = "counters"
-	docAlloc    = "allocation"
-	colConfigs  = "configs"
-	subEvents   = "events"
-	subRatings  = "ratings"
-	subAnswers  = "answers"
+	// docAlloc was the single global allocation document until 2026-10-25;
+	// counters are now one document per run, counters/run-<runId> (1.19).
+	docAlloc   = "allocation"
+	colConfigs = "configs"
+	subEvents  = "events"
+	subRatings = "ratings"
+	subAnswers = "answers"
 )
 
 // Store is the Firestore implementation.
@@ -264,11 +266,14 @@ type loader struct {
 	gate *allocGate
 }
 
-func (l loader) LoadCounters() (*domain.Counters, error) {
+// countersDoc is the per-run allocation document id.
+func countersDoc(runID string) string { return "run-" + runID }
+
+func (l loader) LoadCounters(runID string) (*domain.Counters, error) {
 	if err := l.gate.acquire(l.ctx); err != nil {
 		return nil, err
 	}
-	d, err := l.tx.Get(l.s.c.Collection(colCounters).Doc(docAlloc))
+	d, err := l.tx.Get(l.s.c.Collection(colCounters).Doc(countersDoc(runID)))
 	if notFound(err) {
 		return &domain.Counters{}, nil
 	}
@@ -367,7 +372,7 @@ func (s *Store) runTx(ctx context.Context, id string, attempt func(*store.Buffer
 			return err
 		}
 		if b.CountersDirty {
-			if err := tx.Set(s.c.Collection(colCounters).Doc(docAlloc), b.CountersValue()); err != nil {
+			if err := tx.Set(s.c.Collection(colCounters).Doc(countersDoc(b.S.RunID)), b.CountersValue()); err != nil {
 				return err
 			}
 		}
@@ -439,8 +444,8 @@ func (s *Store) Answers(ctx context.Context, id string) ([]*domain.AnswerDoc, er
 	return out, nil
 }
 
-func (s *Store) Counters(ctx context.Context) (*domain.Counters, error) {
-	d, err := s.c.Collection(colCounters).Doc(docAlloc).Get(ctx)
+func (s *Store) Counters(ctx context.Context, runID string) (*domain.Counters, error) {
+	d, err := s.c.Collection(colCounters).Doc(countersDoc(runID)).Get(ctx)
 	if notFound(err) {
 		return &domain.Counters{}, nil
 	}

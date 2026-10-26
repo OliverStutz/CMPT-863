@@ -113,7 +113,7 @@ func Run(t *testing.T, st store.Store, prefix string) {
 		t.Fatal(err)
 	}
 	got, _ = st.GetSession(ctx, sid)
-	c, _ := st.Counters(ctx)
+	c, _ := st.Counters(ctx, run.ID)
 	if got.Group == "" || c.Groups[got.Group] < 1 || c.Denial[got.Group][got.DenialSlide] < 1 {
 		t.Fatalf("allocation %s %s %+v", got.Group, got.DenialSlide, c)
 	}

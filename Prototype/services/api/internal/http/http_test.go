@@ -531,6 +531,90 @@ func TestAdminLoginRateLimit(t *testing.T) {
 	}
 }
 
+// Round robin is per run (1.19 revised 2026-10-25): the first consent of every
+// run gets the checker group, whatever other runs did. A run with test
+// overrides honours ?group=/?denial= (sent as test{}), flags the session
+// forced_allocation and leaves the run's counters alone; a run without them
+// ignores the fields; invalid values are 400 (bad_payload).
+func TestPerRunRoundRobinAndTestOverrides(t *testing.T) {
+	e := newEnv(t, true)
+	mk := func(id, code string, test bool) *domain.Run {
+		r := &domain.Run{ID: id, Code: code, Name: "T", Source: "Test", ConfigVersion: "test-fast", Status: domain.RunOpen,
+			CreatedAt: e.now, TestOverrides: test}
+		if err := e.st.CreateRun(context.Background(), r); err != nil {
+			t.Fatal(err)
+		}
+		return r
+	}
+	a, b, tr := mk("run-a", "aaaaaa", false), mk("run-b", "bbbbbb", false), mk("run-t", "tttttt", true)
+	create := func(code string, test map[string]any) (*httptest.ResponseRecorder, *participant) {
+		body := map[string]any{"screen": map[string]int{"w": 1440, "h": 900}, "tz": "UTC"}
+		if test != nil {
+			body["test"] = test
+		}
+		w := e.do("POST", "/api/v1/runs/"+code+"/sessions", body, hdr(clientHeader, "1"))
+		if w.Code != http.StatusCreated {
+			return w, nil
+		}
+		p := &participant{e: e, slideSeen: map[string]int{}, cookie: findCookie(w, sessionCookie)}
+		var cr CreateResponse
+		p.record(w.Body.String(), &cr)
+		p.id, p.seq = cr.SessionID, cr.ExpectedClientSeq
+		return w, p
+	}
+	group := func(p *participant) string {
+		p.walk("", func(st *domain.Step) bool { return st.Scene == domain.KindAudioCheck })
+		s, _ := e.st.GetSession(context.Background(), p.id)
+		return s.Group + "/" + s.DenialSlide + "/" + strings.Join(s.Flags, ",")
+	}
+	_, pa1 := create(a.Code, nil)
+	_, pa2 := create(a.Code, nil)
+	_, pb1 := create(b.Code, nil)
+	if g := group(pa1); !strings.HasPrefix(g, "checker/") {
+		t.Fatalf("run a first consent: %s", g)
+	}
+	if g := group(pa2); !strings.HasPrefix(g, "neutral/") {
+		t.Fatalf("run a second consent: %s", g)
+	}
+	if g := group(pb1); !strings.HasPrefix(g, "checker/") {
+		t.Fatalf("run b first consent must not continue run a's sequence: %s", g)
+	}
+	ca, _ := e.st.Counters(context.Background(), a.ID)
+	cb, _ := e.st.Counters(context.Background(), b.ID)
+	if ca.Groups["checker"] != 1 || ca.Groups["neutral"] != 1 || cb.Groups["checker"] != 1 || cb.Groups["neutral"] != 0 {
+		t.Fatalf("counters a=%+v b=%+v", ca.Groups, cb.Groups)
+	}
+
+	// Overrides ignored on an ordinary run.
+	_, pa3 := create(a.Code, map[string]any{"group": "neutral", "denialSlide": "s3"})
+	if g := group(pa3); !strings.HasPrefix(g, "checker/") || strings.Contains(g, domain.FlagForcedAllocation) {
+		t.Fatalf("override on an ordinary run must be ignored: %s", g)
+	}
+	// Honoured on a test run, flagged, counters untouched.
+	_, pt1 := create(tr.Code, map[string]any{"group": "neutral", "denialSlide": "s3"})
+	if g := group(pt1); !strings.HasPrefix(g, "neutral/s3/") || !strings.Contains(g, domain.FlagForcedAllocation) {
+		t.Fatalf("forced: %s", g)
+	}
+	_, pt2 := create(tr.Code, map[string]any{"group": "checker"})
+	if g := group(pt2); !strings.HasPrefix(g, "checker/s2/") || !strings.Contains(g, domain.FlagForcedAllocation) {
+		t.Fatalf("forced group only: %s", g)
+	}
+	ct, _ := e.st.Counters(context.Background(), tr.ID)
+	if ct.Groups["checker"] != 0 || ct.Groups["neutral"] != 0 {
+		t.Fatalf("forced sessions must not count: %+v", ct.Groups)
+	}
+	// Invalid values.
+	if w, _ := create(tr.Code, map[string]any{"group": "both"}); w.Code != 400 {
+		t.Fatalf("bad group: %d %s", w.Code, w.Body)
+	}
+	if w, _ := create(tr.Code, map[string]any{"group": "checker", "denialSlide": "s1"}); w.Code != 400 {
+		t.Fatalf("bad denial slide: %d %s", w.Code, w.Body)
+	}
+	if w, _ := create(tr.Code, map[string]any{"denialSlide": "s3"}); w.Code != 400 {
+		t.Fatalf("denial without group: %d %s", w.Code, w.Body)
+	}
+}
+
 // The background screen has no deadline when timing.backgroundWindowMs is 0
 // (2.12 revised 2026-10-25): no closesInMs, no lazy timeout however long it
 // stays open, background_timeout refused, background_submitted accepted. The
@@ -581,7 +665,7 @@ func TestBackgroundUntimed(t *testing.T) {
 		t.Fatal(err)
 	}
 	q := e.newParticipant(r2.Code)
-	q.walk("hasQuestion", func(st *domain.Step) bool { return st.Scene == domain.KindBackground }) // second consent: neutral group
+	q.walk("explain", func(st *domain.Step) bool { return st.Scene == domain.KindBackground }) // first consent of its own run: checker
 	if st := q.next(); st.ClosesInMs == nil {
 		t.Fatalf("background without backgroundWindowMs must keep formWindowMs: %+v", st)
 	}

@@ -551,14 +551,24 @@ func (r *run) onConsent(req *events.Request) (*rejection, error) {
 	if rej := r.tooEarly(r.s.Deadlines.StepStartedAt.Add(ConsentMinView), req.Type); rej != nil {
 		return rej, nil
 	}
-	c, err := r.tx.Counters()
-	if err != nil {
-		return nil, err
-	}
-	group, denial := Allocate(c, r.ct.FlaggedSlides())
-	r.tx.PutCounters(c)
 	s := r.s
-	s.Group, s.DenialSlide = string(group), denial
+	if s.ForcedGroup != "" {
+		// Test link: fixed group, fixed or first flagged slide, counters untouched.
+		denial := s.ForcedDenialSlide
+		if denial == "" && len(r.ct.FlaggedSlides()) > 0 {
+			denial = r.ct.FlaggedSlides()[0]
+		}
+		s.Group, s.DenialSlide = s.ForcedGroup, denial
+		s.AddFlag(FlagForcedAllocation)
+	} else {
+		c, err := r.tx.Counters()
+		if err != nil {
+			return nil, err
+		}
+		group, denial := Allocate(c, r.ct.FlaggedSlides())
+		r.tx.PutCounters(c)
+		s.Group, s.DenialSlide = string(group), denial
+	}
 	s.Plan = r.ct.Plan.Keys()
 	s.ProgressTotal = r.ct.Plan.Total
 	s.ConsentAt = tp(r.now)

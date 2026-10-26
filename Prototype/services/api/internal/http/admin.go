@@ -265,9 +265,10 @@ func (s *Server) createRun(w http.ResponseWriter, r *http.Request) {
 		Name          string `json:"name"`
 		Source        string `json:"source"`
 		ConfigVersion string `json:"configVersion"`
+		TestOverrides bool   `json:"testOverrides"`
 	}
 	if err := json.NewDecoder(io.LimitReader(r.Body, 8192)).Decode(&body); err != nil {
-		writeErr(w, domain.ErrBadRequest, "body must be { name, source, configVersion }")
+		writeErr(w, domain.ErrBadRequest, "body must be { name, source, configVersion, testOverrides? }")
 		return
 	}
 	body.Name, body.Source = strings.TrimSpace(body.Name), strings.TrimSpace(body.Source)
@@ -282,7 +283,7 @@ func (s *Server) createRun(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := reqCtx(r)
 	defer cancel()
 	run := &domain.Run{ID: randomCode(16), Name: body.Name, Source: body.Source, ConfigVersion: body.ConfigVersion,
-		Status: domain.RunOpen, CreatedAt: s.now(), CreatedFromIP: ClientIP(r, s.o.TrustedProxyHops)}
+		Status: domain.RunOpen, CreatedAt: s.now(), CreatedFromIP: ClientIP(r, s.o.TrustedProxyHops), TestOverrides: body.TestOverrides}
 	var err error
 	for i := 0; i < 8; i++ {
 		run.Code = randomCode(s.runCodeLength())
@@ -308,6 +309,7 @@ func (s *Server) patchRun(w http.ResponseWriter, r *http.Request) {
 		Source        *string `json:"source"`
 		Status        *string `json:"status"`
 		ConfigVersion *string `json:"configVersion"`
+		TestOverrides *bool   `json:"testOverrides"`
 	}
 	if err := json.NewDecoder(io.LimitReader(r.Body, 8192)).Decode(&body); err != nil {
 		writeErr(w, domain.ErrBadRequest, "invalid body")
@@ -336,6 +338,9 @@ func (s *Server) patchRun(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		run.Status = *body.Status
+	}
+	if body.TestOverrides != nil {
+		run.TestOverrides = *body.TestOverrides
 	}
 	if body.ConfigVersion != nil && *body.ConfigVersion != run.ConfigVersion {
 		has, err := s.runHasSessions(ctx, run.ID)

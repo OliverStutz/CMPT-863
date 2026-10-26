@@ -193,6 +193,11 @@ Status 2026-10-24: all 53 points answered. Flags selected from the VLM run (see 
 **Recommendation:** global. Abstract v8 wants the groups equal in size overall.
 **Changes if decided later:** one option in the config.
 **Answer:** Across all links (global round robin). (Oliver, 2026-10-24)
+**Revised:** Per run. Each run link keeps its own group and denial-slide counters (`counters/run-<runId>`), so test sessions on one link never shift the balance of another, and every run is balanced on its own. The old global document is left untouched; sessions allocated before 2026-10-25 keep their groups. (Oliver, 2026-10-25)
+
+### 1.19b Test override of the allocation `DECIDED`
+**Question:** How can a tester get a chosen group without waiting for the round robin?
+**Answer:** A run can be marked "test overrides" in the admin (checkbox when creating, button in the Runs table). On such a run the link may carry `?group=checker` or `?group=neutral`, optionally `&denial=<flagged slide id>` (for example `s3`); the session gets exactly that allocation, is flagged `forced_allocation` so it is excluded from analysis, and does not count in the run's round robin. On any other run the parameters are ignored, so a participant adding them to a real link changes nothing. Invalid values are refused at session creation. (Oliver, 2026-10-25)
 
 ### 1.20 Exclusion rules [FO-9] `CAN WAIT`
 **Question:** Which flags (duplicate, honeypot, wrong audio word, many rating timeouts, tab hidden during audio) exclude a session from analysis?

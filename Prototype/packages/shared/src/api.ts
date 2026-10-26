@@ -99,6 +99,8 @@ export interface Progress {
 export interface CreateSessionRequest {
   screen: { w: number; h: number };
   tz: string;
+  /** Test links only (run with testOverrides): fixes the group and the denial slide; ignored otherwise. */
+  test?: { group?: string; denialSlide?: string };
 }
 export interface CreateSessionResponse {
   sessionId: string;

@@ -25,12 +25,13 @@ type Store struct {
 	mu       sync.Mutex
 	runs     map[string]*domain.Run
 	sessions map[string]*sessionData
-	counters *domain.Counters
+	counters map[string]*domain.Counters // per run id (1.19 revised)
 	configs  map[string]*domain.ConfigRecord
 }
 
 func New() *Store {
-	return &Store{runs: map[string]*domain.Run{}, sessions: map[string]*sessionData{}, configs: map[string]*domain.ConfigRecord{}}
+	return &Store{runs: map[string]*domain.Run{}, sessions: map[string]*sessionData{}, configs: map[string]*domain.ConfigRecord{},
+		counters: map[string]*domain.Counters{}}
 }
 
 // clone deep-copies through JSON so callers never share memory with the store.
@@ -180,7 +181,9 @@ type loader struct {
 	sd *sessionData
 }
 
-func (l loader) LoadCounters() (*domain.Counters, error) { return clone(l.m.counters), nil }
+func (l loader) LoadCounters(runID string) (*domain.Counters, error) {
+	return clone(l.m.counters[runID]), nil
+}
 func (l loader) LoadRating(p string) (*domain.Rating, error) {
 	return clone(l.sd.ratings[p]), nil
 }
@@ -216,7 +219,7 @@ func (m *Store) RunTx(_ context.Context, id string, fn func(domain.Tx) error) er
 	}
 	sd.s = cloneSession(b.S)
 	if b.CountersDirty {
-		m.counters = clone(b.CountersValue())
+		m.counters[b.S.RunID] = clone(b.CountersValue())
 	}
 	for p, r := range b.Ratings {
 		sd.ratings[p] = clone(r)
@@ -275,13 +278,13 @@ func (m *Store) Answers(_ context.Context, id string) ([]*domain.AnswerDoc, erro
 	return out, nil
 }
 
-func (m *Store) Counters(_ context.Context) (*domain.Counters, error) {
+func (m *Store) Counters(_ context.Context, runID string) (*domain.Counters, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	if m.counters == nil {
+	if m.counters[runID] == nil {
 		return &domain.Counters{}, nil
 	}
-	return clone(m.counters), nil
+	return clone(m.counters[runID]), nil
 }
 
 func (m *Store) PutConfig(_ context.Context, c *domain.ConfigRecord) error {

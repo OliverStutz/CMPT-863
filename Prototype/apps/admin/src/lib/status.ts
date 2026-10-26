@@ -28,6 +28,7 @@ const FLAG_TONES: Record<string, ChipTone> = {
   possible_duplicate: "danger",
   audio_check_wrong: "warning",
   reloaded: "info",
+  forced_allocation: "info",
 };
 
 export function flagChip(flag: string): Chip {
