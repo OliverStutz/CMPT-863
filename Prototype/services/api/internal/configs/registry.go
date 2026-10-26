@@ -170,9 +170,40 @@ func (r *Registry) add(ctx context.Context, data []byte, tag, srcPath, status st
 	for _, w := range ct.Warnings {
 		r.Log.Warn("config warning", "version", cfg.Version, "warning", w)
 	}
+	// Optional video manifest (talking heads, 2026-10-25): video/<version>/ or video/<tag>/.
+	var vm *sc.VideoManifest
+	vdir := ""
+	for _, d := range []string{cfg.Version, tag} {
+		if d == "" {
+			continue
+		}
+		p := "video/" + d + "/manifest.json"
+		obj, err := r.Source.Read(ctx, p)
+		if err != nil {
+			continue
+		}
+		var m sc.VideoManifest
+		if err := json.Unmarshal(obj.Data, &m); err != nil {
+			return nil, fmt.Errorf("%s: %w", p, err)
+		}
+		vm, vdir = &m, d
+		break
+	}
+	ct.SetVideo(r.AssetURLPrefix+"video/"+vdir+"/", vm)
 	pack, err := sc.PublicScenePack(cfg)
 	if err != nil {
 		return nil, err
+	}
+	if len(ct.SeatVideos) > 0 {
+		// The idle loops of the silent seats travel with the public scene pack.
+		var pm map[string]any
+		if err := json.Unmarshal(pack, &pm); err != nil {
+			return nil, err
+		}
+		pm["video"] = map[string]any{"seats": ct.SeatVideos}
+		if pack, err = json.Marshal(pm); err != nil {
+			return nil, err
+		}
 	}
 	sum := sha256.Sum256(data)
 	now := time.Now().UTC()
@@ -181,6 +212,9 @@ func (r *Registry) add(ctx context.Context, data []byte, tag, srcPath, status st
 		LintReport: ct.Warnings}
 	if man == nil {
 		rec.LintReport = append(rec.LintReport, "audio manifest missing: durations estimated")
+	}
+	if vm != nil {
+		rec.LintReport = append(rec.LintReport, fmt.Sprintf("video manifest: %d clip(s), %d seat loop(s)", len(ct.Videos), len(ct.SeatVideos)))
 	}
 	if keepBody {
 		rec.Body = string(data)

@@ -6,6 +6,8 @@ services/api/web/admin/
 *.log
 # generated audio (manifest.json is committed)
 content/audio/**/*.mp3
+# rendered talking-head videos (manifest.json is committed)
+content/video/**/*.mp4
 # terraform
 .terraform/
 *.tfstate

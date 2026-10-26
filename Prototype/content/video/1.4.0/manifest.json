@@ -1,0 +1,21 @@
+{
+ "configVersion": "1.4.0",
+ "generatedAt": "2026-10-26T04:25:46+00:00",
+ "_note": "Round one of the faces lab (2026-10-25): Wan 2.2 S2V, 640x640, 16 fps, 4-step LoRA; CISO = Flux portrait candidate 1; seat member2 = silent board member candidate 1. Rendered from the audio clip s2.answer.a (15552 ms); the video is trimmed to the audio length.",
+ "clips": {
+  "s2.answer.a": {
+   "videoKey": "71ac796629f071af50c166270376cf0715133299426c77d291c89d90c82646d3.mp4",
+   "durationMs": 15562,
+   "width": 640,
+   "height": 640
+  }
+ },
+ "seats": {
+  "member2": {
+   "videoKey": "df61e7671a1b471fbbfd883975a41922976da477f66d353112f4a5b1f2fa8045.mp4",
+   "durationMs": 9938,
+   "width": 640,
+   "height": 640
+  }
+ }
+}

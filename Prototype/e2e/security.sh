@@ -39,6 +39,9 @@ traversal "/assets/%2e%2e/services/api/go.mod" "$B/assets/%2e%2e/services/api/go
 check 404 $(c $B/a/vlm-drafts/v1.3/s2.raw.md) "/a/vlm-drafts/v1.3/s2.raw.md"
 check 404 $(c $B/assets/configs/1.4.0.json) "/assets/configs/1.4.0.json"
 check 200 $(c $B/assets/slides/v1.3/s1.svg) "/assets/slides/v1.3/s1.svg"
+check 404 $(c $B/assets/video/1.4.0/manifest.json) "/assets/video/1.4.0/manifest.json (video manifest never served)"
+check 404 $(c $B/assets/video/manifest.json) "/assets/video/manifest.json"
+check 200 $(c $B/assets/video/1.4.0/71ac796629f071af50c166270376cf0715133299426c77d291c89d90c82646d3.mp4) "/assets/video/1.4.0/<hash>.mp4 (public, hashed)"
 check 200 $(c $B/assets/slides/v1.3/s1.png) "/assets/slides/v1.3/s1.png"
 check 200 $(c $B/api/v1/healthz) "/api/v1/healthz"
 rm -rf $T

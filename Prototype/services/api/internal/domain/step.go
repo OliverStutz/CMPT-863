@@ -9,10 +9,13 @@ import (
 
 // Step is the step descriptor of section 8.1.
 type Step struct {
-	StepID       string      `json:"stepId"`
-	Scene        string      `json:"scene"`
-	SceneRef     string      `json:"sceneRef,omitempty"`
-	AudioURL     string      `json:"audioUrl,omitempty"`
+	StepID   string `json:"stepId"`
+	Scene    string `json:"scene"`
+	SceneRef string `json:"sceneRef,omitempty"`
+	AudioURL string `json:"audioUrl,omitempty"`
+	// VideoURL is the rendered talking-head video of the same clip (muted in
+	// the browser, in sync with the audio element); absent when none exists.
+	VideoURL     string      `json:"videoUrl,omitempty"`
 	Replayable   bool        `json:"replayable,omitempty"`
 	Restart      bool        `json:"restart,omitempty"`
 	Overlay      *Overlay    `json:"overlay,omitempty"`
@@ -90,6 +93,7 @@ func (ct *Content) Describe(s *Session, now time.Time, resumed bool) *Step {
 	if st.Audio() {
 		clip := ct.ClipFor(s, st)
 		step.AudioURL = ct.AudioURL(clip)
+		step.VideoURL = ct.VideoURL(clip)
 		if clip != nil {
 			step.Transcript = clip.Transcript
 		}
@@ -156,8 +160,13 @@ func (ct *Content) Describe(s *Session, now time.Time, resumed bool) *Step {
 				break
 			}
 			if nx.Audio() {
-				if u := ct.AudioURL(ct.ClipFor(s, nx)); u != "" {
-					step.Prefetch = []string{u}
+				if cl := ct.ClipFor(s, nx); cl != nil {
+					if u := ct.AudioURL(cl); u != "" {
+						step.Prefetch = []string{u}
+					}
+					if v := ct.VideoURL(cl); v != "" {
+						step.Prefetch = append(step.Prefetch, v)
+					}
 				}
 				break
 			}

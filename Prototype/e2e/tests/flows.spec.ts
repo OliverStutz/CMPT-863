@@ -102,6 +102,10 @@ interface SessionResult {
   persist: PersistCheck[];
 }
 
+/** Talking-head videos seen on audio steps (2026-10-26): the muted video in the speaker's frame must decode
+ *  and advance with the audio; the idle loop of a silent seat must decode and loop. */
+const videoChecks: { label: string; stepId: string; scene: string; kind: "speaker" | "idle"; currentTime: number; width: number }[] = [];
+
 async function runSession(browser: Browser, request: APIRequestContext, runCode: string, label: string): Promise<SessionResult> {
   const ctx = await browser.newContext();
   const page = await ctx.newPage();
@@ -270,6 +274,36 @@ async function runSession(browser: Browser, request: APIRequestContext, runCode:
         if (await cont.isVisible().catch(() => false)) {
           if (await cont.isEnabled().catch(() => false)) await cont.click().catch(() => undefined);
         }
+        if (step.videoUrl && !handled.has(`v:${step.stepId}`)) {
+          handled.add(`v:${step.stepId}`);
+          const vid = page.getByTestId("speaker-video");
+          await expect(vid, `${label}: speaker video on ${step.stepId}`).toBeVisible({ timeout: 10_000 });
+          await expect
+            .poll(async () => vid.evaluate((v: HTMLVideoElement) => (v.paused ? 0 : v.currentTime)), {
+              message: `${label}: speaker video advances with the audio on ${step.stepId}`,
+              timeout: 15_000,
+            })
+            .toBeGreaterThan(0.5);
+          const info = await vid.evaluate((v: HTMLVideoElement) => ({ currentTime: v.currentTime, width: v.videoWidth }));
+          expect(info.width, `${label}: speaker video decoded`).toBeGreaterThan(0);
+          videoChecks.push({ label, stepId: step.stepId, scene: step.scene, kind: "speaker", ...info });
+          mkdirSync(OUT, { recursive: true });
+          await page.screenshot({ path: resolve(OUT, `${label}-video-${step.stepId}.png`) }).catch(() => undefined);
+        }
+        if (!handled.has("idle-check") && ["example", "opening", "slide"].includes(step.scene)) {
+          handled.add("idle-check");
+          const idle = page.getByTestId("idle-video").first();
+          if ((await idle.count()) > 0) {
+            await expect
+              .poll(async () => idle.evaluate((v: HTMLVideoElement) => (v.paused ? 0 : v.currentTime)), {
+                message: `${label}: idle seat loop plays`,
+                timeout: 15_000,
+              })
+              .toBeGreaterThan(0.2);
+            const info = await idle.evaluate((v: HTMLVideoElement) => ({ currentTime: v.currentTime, width: v.videoWidth }));
+            videoChecks.push({ label, stepId: step.stepId, scene: step.scene, kind: "idle", ...info });
+          }
+        }
         break;
       }
       case "rating": {
@@ -416,6 +450,11 @@ test("checker and neutral sessions, admin view, export, leak check", async ({ br
     const r = await runSession(browser, request, run.code, `s${i}`);
     console.log(`session ${i}: ${r.sessionId} group=${r.group} actions=${r.actions.join(",")}`);
     results.push(r);
+  }
+  console.log(`video checks: ${JSON.stringify(videoChecks)}`);
+  if (process.env.E2E_EXPECT_VIDEO === "1") {
+    expect(videoChecks.filter((v) => v.kind === "speaker").length, "a speaker video played in at least one session").toBeGreaterThan(0);
+    expect(videoChecks.filter((v) => v.kind === "idle").length, "an idle seat loop played in at least one session").toBeGreaterThan(0);
   }
   const checker = results.find((r) => r.group === "checker")!;
   const neutral = results.find((r) => r.group === "neutral")!;

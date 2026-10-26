@@ -17,6 +17,13 @@ type Content struct {
 	// "/assets/audio/1.3.0/". Estimated clips use SilenceBase instead.
 	AudioBase   string
 	SilenceBase string
+	// VideoBase is the URL prefix of the rendered talking-head videos named by
+	// videoKey, e.g. "/assets/video/1.4.0/"; Videos maps a clip id to its
+	// videoKey and SeatVideos a seat role to the URL of its idle loop. All
+	// empty when the version has no video manifest (2026-10-25).
+	VideoBase  string
+	Videos     map[string]string
+	SeatVideos map[string]string
 	// Estimated lists clips whose duration is estimated (no manifest entry).
 	Estimated []string
 	// Warnings collected while loading.
@@ -122,6 +129,40 @@ func (ct *Content) AudioURL(cl *sc.Clip) string {
 		return ct.AudioBase + cl.AudioKey
 	}
 	return ct.SilenceBase + strconv.FormatInt(cl.DurationMs, 10) + ".wav"
+}
+
+// SetVideo attaches a video manifest (nil clears it): clip videos are looked
+// up by clip id, seat loops by seat role.
+func (ct *Content) SetVideo(base string, vm *sc.VideoManifest) {
+	ct.VideoBase, ct.Videos, ct.SeatVideos = "", nil, nil
+	if vm == nil {
+		return
+	}
+	ct.VideoBase = base
+	ct.Videos = map[string]string{}
+	for id, v := range vm.Clips {
+		if v.VideoKey != "" {
+			ct.Videos[id] = v.VideoKey
+		}
+	}
+	ct.SeatVideos = map[string]string{}
+	for role, v := range vm.Seats {
+		if v.VideoKey != "" {
+			ct.SeatVideos[role] = base + v.VideoKey
+		}
+	}
+}
+
+// VideoURL returns the URL of the talking-head video of a clip, or "" when the
+// clip has none. Estimated clips (dev silence) never have one.
+func (ct *Content) VideoURL(cl *sc.Clip) string {
+	if cl == nil || cl.AudioKey == "" || ct.Videos == nil {
+		return ""
+	}
+	if k, ok := ct.Videos[cl.ID]; ok {
+		return ct.VideoBase + k
+	}
+	return ""
 }
 
 // ClipFor returns the clip an audio step plays in a session.

@@ -17,8 +17,8 @@ import (
 )
 
 // Public reports whether a content path may be served to anyone. Only these
-// prefixes are public: audio/<version>/*.mp3, images/*, slides/**/*.svg,
-// slides/**/*.png and consent/*.pdf. Everything else under the content root
+// prefixes are public: audio/<version>/*.mp3, video/<version>/*.mp4, images/*,
+// slides/**/*.svg, slides/**/*.png and consent/*.pdf. Everything else under the content root
 // (configs, the schema, vlm-drafts, manifests, notes, scripts) is never served.
 func Public(p string) bool {
 	cp := CleanPath(p)
@@ -30,6 +30,9 @@ func Public(p string) bool {
 	switch segs[0] {
 	case "audio":
 		return len(segs) == 3 && ext == ".mp3"
+	case "video":
+		// Rendered talking-head clips (2026-10-25); the manifest stays private.
+		return len(segs) == 3 && ext == ".mp4"
 	case "images":
 		if len(segs) < 2 {
 			return false
@@ -48,6 +51,14 @@ func Public(p string) bool {
 }
 
 var hashedName = regexp.MustCompile(`^[0-9a-f]{64}\.[A-Za-z0-9]+$`)
+
+// The container image has no /etc/mime.types, so the media types the study
+// serves are registered here rather than sniffed.
+func init() {
+	_ = mime.AddExtensionType(".mp3", "audio/mpeg")
+	_ = mime.AddExtensionType(".mp4", "video/mp4")
+	_ = mime.AddExtensionType(".wav", "audio/wav")
+}
 
 // Generated serves content that the server builds itself: the public scene
 // packs (scenes/<version>.json) and, for dev without TTS, silent clips.

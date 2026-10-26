@@ -59,6 +59,7 @@ export function AudioScene({ step }: { step: Step }) {
         overlay={step.overlay}
         clockMs={clockMs}
         speaking={playing ? speakerFor(step) : null}
+        speakerVideo={step.videoUrl ? { role: speakerFor(step) ?? "ciso", url: step.videoUrl } : undefined}
         onMarkingShown={onMarkingShown}
         controls={controls}
       />

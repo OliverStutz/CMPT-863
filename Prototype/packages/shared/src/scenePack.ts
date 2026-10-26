@@ -37,6 +37,8 @@ export interface PublicScenePack {
   setup: PublicSetup;
   rating: RatingSpec;
   scenes: PublicScene[];
+  /** Idle loops of the silent seats (seat role -> video URL), present when the version has a video manifest (2026-10-25). */
+  video?: { seats?: Record<string, string> };
 }
 
 export interface PublicSetup {

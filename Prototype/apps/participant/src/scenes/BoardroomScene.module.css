@@ -71,6 +71,7 @@
   filter: brightness(0.85);
 }
 .portraitImage svg,
+.portraitImage video,
 .portraitImage img {
   width: 100%;
   height: 100%;

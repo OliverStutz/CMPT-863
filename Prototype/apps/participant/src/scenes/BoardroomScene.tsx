@@ -16,6 +16,7 @@ import type {
 import { SlideRenderer } from "../slide/SlideRenderer";
 import { CheckerMarks, CheckerPanel } from "../slide/CheckerOverlay";
 import { IMAGE_URLS, type PortraitRole } from "../assets";
+import { IdleVideo, SyncedVideo } from "./SceneVideo";
 import { useStudy } from "../study";
 import styles from "./BoardroomScene.module.css";
 
@@ -35,6 +36,9 @@ interface Props {
   controls?: ReactNode;
   /** A larger card at the bottom of the stage, between the table portraits and the CISO (action choice). */
   dialog?: ReactNode;
+  /** The rendered talking-head video of this step's clip, shown in the speaker's frame and kept in sync
+   *  with the audio element (talking heads, 2026-10-25). */
+  speakerVideo?: { role: Exclude<Speaker, null>; url: string };
 }
 
 const STAGE_W = 1600;
@@ -68,6 +72,9 @@ export function BoardroomScene(p: Props) {
 
   const hasSlide = !!p.layout && p.layout.length > 0;
   const slideScale = SCREEN.w / 1600;
+  // Idle loops of the silent seats come with the public scene pack; the speaker's video with the step.
+  const seats = pack.video?.seats ?? {};
+  const videoFor = (role: PortraitRole) => (p.speakerVideo && p.speakerVideo.role === role ? p.speakerVideo.url : undefined);
 
   return (
     <div ref={outerRef} className={styles.outer}>
@@ -146,6 +153,7 @@ export function BoardroomScene(p: Props) {
           label="CISO"
           speaking={p.speaking === "ciso"}
           className={styles.ciso}
+          video={videoFor("ciso")}
         />
         <div className={styles.table} />
         <Portrait
@@ -154,6 +162,8 @@ export function BoardroomScene(p: Props) {
           speaking={p.speaking === "chair"}
           className={styles.chair}
           tone={0}
+          video={videoFor("chair")}
+          idle={seats.chair}
         />
         <Portrait
           role="member"
@@ -162,6 +172,7 @@ export function BoardroomScene(p: Props) {
           speaking={p.speaking === "member"}
           className={styles.member}
           tone={1}
+          video={videoFor("member")}
         />
         <Portrait
           role="member2"
@@ -169,6 +180,7 @@ export function BoardroomScene(p: Props) {
           speaking={false}
           className={styles.member2}
           tone={2}
+          idle={seats.member2}
         />
         <Portrait
           role="member3"
@@ -176,6 +188,7 @@ export function BoardroomScene(p: Props) {
           speaking={false}
           className={styles.member3}
           tone={3}
+          idle={seats.member3}
         />
         <Portrait
           role="member4"
@@ -183,6 +196,7 @@ export function BoardroomScene(p: Props) {
           speaking={false}
           className={styles.member4}
           tone={4}
+          idle={seats.member4}
         />
         <Portrait
           role="member5"
@@ -190,6 +204,7 @@ export function BoardroomScene(p: Props) {
           speaking={false}
           className={styles.member5}
           tone={5}
+          idle={seats.member5}
         />
         <Portrait
           role="member6"
@@ -197,6 +212,7 @@ export function BoardroomScene(p: Props) {
           speaking={false}
           className={styles.member6}
           tone={6}
+          idle={seats.member6}
         />
 
         {p.controls && <div className={styles.controls}>{p.controls}</div>}
@@ -267,6 +283,8 @@ function Portrait({
   className,
   you = false,
   tone = 0,
+  video,
+  idle,
 }: {
   role: PortraitRole;
   label: string;
@@ -275,9 +293,16 @@ function Portrait({
   /** The participant's own seat: badge and lighter frame (2026-10-25). */
   you?: boolean;
   tone?: number;
+  /** Talking-head video of the current clip for this role (muted, follows the audio element). */
+  video?: string;
+  /** Silent idle loop for a seat that never speaks. */
+  idle?: string;
 }) {
   const hasPhoto = useImage(IMAGE_URLS[role]);
   const t = TONES[tone % TONES.length];
+  const [videoFailed, setVideoFailed] = useState<string | null>(null);
+  const showVideo = !!video && videoFailed !== video;
+  const showIdle = !showVideo && !!idle && videoFailed !== idle;
   return (
     <figure
       className={`${styles.portrait} ${className} ${speaking ? styles.speaking : ""} ${you ? styles.you : ""}`}
@@ -285,7 +310,11 @@ function Portrait({
       data-you={you || undefined}
     >
       <div className={styles.portraitImage}>
-        {hasPhoto ? (
+        {showVideo ? (
+          <SyncedVideo src={video!} onFailed={() => setVideoFailed(video!)} />
+        ) : showIdle ? (
+          <IdleVideo src={idle!} onFailed={() => setVideoFailed(idle!)} />
+        ) : hasPhoto ? (
           <img src={IMAGE_URLS[role]} alt="" />
         ) : (
           <svg viewBox="0 0 200 200" aria-hidden="true">

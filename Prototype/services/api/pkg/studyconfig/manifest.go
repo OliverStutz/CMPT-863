@@ -29,6 +29,26 @@ type ManifestClip struct {
 	LineStarts map[string]Ms `json:"lineStarts,omitempty"` // line id -> start offset in this clip
 }
 
+// VideoManifest is content/video/<version>/manifest.json, written by the faces
+// pipeline (talking heads rendered offline from the audio clips, 2026-10-25).
+// Clips are keyed like the audio manifest (clip id -> rendered MP4 that carries
+// the same audio track); Seats maps a boardroom seat role (member2 ... member6,
+// chair) to a silent idle loop. Both parts are optional. A version without a
+// video manifest plays audio only, exactly as before.
+type VideoManifest struct {
+	ConfigVersion string               `json:"configVersion"`
+	GeneratedAt   string               `json:"generatedAt,omitempty"`
+	Clips         map[string]VideoClip `json:"clips,omitempty"`
+	Seats         map[string]VideoClip `json:"seats,omitempty"`
+}
+
+type VideoClip struct {
+	VideoKey   string `json:"videoKey"` // "<sha256 hex>.mp4"
+	DurationMs Ms     `json:"durationMs"`
+	Width      int    `json:"width,omitempty"`
+	Height     int    `json:"height,omitempty"`
+}
+
 // ExampleClipID is the clip id of the setup example scene (all its lines joined).
 const ExampleClipID = "setup.exampleScene"
 
