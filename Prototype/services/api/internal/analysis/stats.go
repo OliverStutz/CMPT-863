@@ -253,6 +253,10 @@ func welchT(x, y []float64) welchResult {
 		r.t = fp(*r.diff / se)
 		r.p = fp(tTwoSided(*r.t, df))
 		r.ci = ci95(*r.diff, se, df)
+	} else {
+		// Zero variance in both groups: t and p are undefined, the interval
+		// collapses to the difference (as ci95 does for one sample).
+		r.ci = &[2]float64{*r.diff, *r.diff}
 	}
 	sp := math.Sqrt(((n1-1)**vx + (n2-1)**vy) / (n1 + n2 - 2))
 	if sp > 0 {

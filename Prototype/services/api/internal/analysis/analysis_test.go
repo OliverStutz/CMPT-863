@@ -89,7 +89,8 @@ func TestReadings(t *testing.T) {
 		want Reading
 	}{
 		{"supports", -1, neg, p01, []int{8, 8}, Supports},
-		{"wrong sign", -1, pos, p01, []int{8, 8}, DoesNotSupport},
+		{"significant against", -1, pos, p01, []int{8, 8}, Opposite},
+		{"not significant against", -1, pos, p20, []int{8, 8}, DoesNotSupport},
 		{"not significant", +1, pos, p20, []int{8, 9}, DoesNotSupport},
 		{"too few in one group", +1, pos, p01, []int{8, 7}, TooFew},
 		{"too few beats n_a", 0, nil, nil, []int{3}, TooFew},
@@ -412,16 +413,29 @@ func TestReadingsFollowThresholds(t *testing.T) {
 	ss, rts, ans := build(mk(3))
 	a := Compute(&domain.Run{ID: "run1"}, ct, ss, rts, ans, Options{}, t0)
 	h := a.Hypotheses
-	if h.H1.Pooled.Reading != Supports || h.H1.CheckerBelowZero.Reading != Supports || h.H4a.SlidesTest.Reading != Supports {
-		t.Errorf("readings %s %s %s", h.H1.Pooled.Reading, h.H1.CheckerBelowZero.Reading, h.H4a.SlidesTest.Reading)
+	if h.H1.Pooled.Reading != Supports || h.H1.CheckerBelowZero.Reading != Supports || h.H4a.ParticipantsTest.Reading != NA {
+		// H4a participants test: every checker share is 1 and every neutral
+		// share 0, so zero variance leaves t and p null.
+		t.Errorf("readings %s %s %s", h.H1.Pooled.Reading, h.H1.CheckerBelowZero.Reading, h.H4a.ParticipantsTest.Reading)
+	}
+	// The slides test keeps its numbers but never reads.
+	if h.H4a.SlidesTest.Reading != NA || h.H4a.SlidesTest.P == nil || *h.H4a.SlidesTest.P >= Alpha {
+		t.Errorf("slides test %+v", h.H4a.SlidesTest)
+	}
+	if ci := h.H4a.ParticipantsTest.DiffCI95; ci == nil || ci[0] != 1 || ci[1] != 1 || h.H4a.ParticipantsTest.WelchT != nil {
+		t.Errorf("zero-variance comparison: ci %v t %v", ci, h.H4a.ParticipantsTest.WelchT)
+	}
+	// Per-slide breakdowns never read, however clear the effect.
+	if r := h.H1.PerSlide["s2"].Reading; r != NA {
+		t.Errorf("per-slide reading %s", r)
 	}
 	if h.Baseline.Reading != NA {
 		t.Errorf("baseline reading %s", h.Baseline.Reading)
 	}
 	ss, rts, ans = build(mk(-3))
 	a = Compute(&domain.Run{ID: "run1"}, ct, ss, rts, ans, Options{}, t0)
-	if r := a.Hypotheses.H1.Pooled.Reading; r != DoesNotSupport {
-		t.Errorf("reverse effect reading %s", r)
+	if r, r1 := a.Hypotheses.H1.Pooled.Reading, a.Hypotheses.H1.CheckerBelowZero.Reading; r != Opposite || r1 != Opposite {
+		t.Errorf("significant reverse effect reads %s / %s, want opposite", r, r1)
 	}
 }
 
@@ -443,12 +457,105 @@ func TestJSONShape(t *testing.T) {
 	}
 	s := string(b)
 	for _, bad := range []string{`"participants":null`, `"countries":null`, `"histogram":null`, `"byFlag":null`, `"exclude":null`,
-		`"cyberKnowledge":null`, `"aiUse":null`, `"flaggedSlides":null`} {
+		`"cyberKnowledge":null`, `"aiUse":null`, `"flaggedSlides":null`,
+		`"levelPerSlide":null`, `"byLastTrustTercile":null`} {
 		if strings.Contains(s, bad) {
 			t.Errorf("JSON has %s", bad)
 		}
 	}
 	if !strings.Contains(s, `"mean":null`) {
 		t.Error("an empty summary has a null mean")
+	}
+}
+
+// The review additions (plan 06, 2026-10-25) on the small case, hand-computed:
+//
+//	H2 level T{n}b over reasoned slides: checker 6, 5, 5; neutral 5, 5, 5.
+//	Overall T4 - T0: checker -2, -2, 1; neutral 0, 2, -1.
+//	Above baseline T{n}b - T0: checker 0, -2, 0; neutral -1, 0, -2.
+func TestReviewAdditions(t *testing.T) {
+	ss, rts, ans := build(smallCase())
+	h := Compute(&domain.Run{ID: "run1"}, content(t), ss, rts, ans, Options{}, t0).Hypotheses
+	for _, c := range []struct {
+		name string
+		got  *float64
+		want float64
+	}{
+		{"h2 level checker mean", h.H2.Level.Checker.Mean, 16.0 / 3},
+		{"h2 level neutral mean", h.H2.Level.Neutral.Mean, 5},
+		{"h2 level diff", h.H2.Level.Diff, 1.0 / 3},
+		{"h2 level t", h.H2.Level.WelchT, 1},
+		{"h2 level df", h.H2.Level.DF, 2},
+		{"h2 level p", h.H2.Level.P, 0.42264973081038015},
+		{"h2 level g", h.H2.Level.HedgesG, 0.6531972647421802},
+		{"h2 level per slide s2 checker", h.H2.LevelPerSlide["s2"].Checker.Mean, 5.5},
+		{"h2 level per slide s3 neutral", h.H2.LevelPerSlide["s3"].Neutral.Mean, 5},
+		{"above baseline checker mean", h.H2.AboveBaseline.Checker.Mean, -2.0 / 3},
+		{"above baseline checker t", h.H2.AboveBaseline.Checker.T, -1},
+		{"above baseline neutral t", h.H2.AboveBaseline.Neutral.T, -1.7320508075688774},
+		{"above baseline neutral p", h.H2.AboveBaseline.Neutral.P, 0.22540333075851926},
+		{"overall diff", h.Overall.Diff, -4.0 / 3},
+		{"overall t", h.Overall.WelchT, -1},
+		{"overall df", h.Overall.DF, 3.9384615384615382},
+		{"overall p", h.Overall.P, 0.37472219294788767},
+		{"overall g", h.Overall.HedgesG, -0.6531972647421809},
+		{"h4a slides z kept", h.H4a.SlidesTest.Z, (0.75 - 1.0/6) / math.Sqrt(0.4*0.6*(1.0/4+1.0/6))},
+	} {
+		near(t, c.name, c.got, c.want)
+	}
+	for _, c := range []struct {
+		name      string
+		got, want Reading
+	}{
+		{"h2 level (3 per group)", h.H2.Level.Reading, TooFew},
+		{"h2 level per slide", h.H2.LevelPerSlide["s2"].Reading, NA},
+		{"h2 per slide", h.H2.PerSlide["s3"].Reading, NA},
+		{"h1 per slide", h.H1.PerSlide["s2"].Reading, NA},
+		{"h1 level at flag", h.H1.LevelAtFlag["s3"].Reading, NA},
+		{"h4a slides test", h.H4a.SlidesTest.Reading, NA},
+		{"above baseline", h.H2.AboveBaseline.Checker.Reading, TooFew},
+		{"overall", h.Overall.Reading, TooFew},
+	} {
+		if c.got != c.want {
+			t.Errorf("%s: %s, want %s", c.name, c.got, c.want)
+		}
+	}
+	// Last trust (T4): c1 4, c2 5, c3 6, n1 6, n2 7, n3 6; cut points 5.667
+	// and 6, a 6 goes to the middle tercile.
+	want := []TercileCount{
+		{Tercile: 1, From: 0, To: 5 + 2.0/3, Approve: 1, Reject: 1},
+		{Tercile: 2, From: 5 + 2.0/3, To: 6, Approve: 1, Missing: 2},
+		{Tercile: 3, From: 6, To: 10, Approve: 1},
+	}
+	got := h.Budget.ByLastTrustTercile
+	if len(got) != 3 {
+		t.Fatalf("terciles %+v", got)
+	}
+	for i, w := range want {
+		g := got[i]
+		if g.Tercile != w.Tercile || math.Abs(g.From-w.From) > tol || math.Abs(g.To-w.To) > tol || g.Approve != w.Approve ||
+			g.Reject != w.Reject || g.Missing != w.Missing {
+			t.Errorf("tercile %d: %+v, want %+v", i+1, g, w)
+		}
+	}
+}
+
+// With 8 per group and a level difference in the hypothesised direction,
+// H2 reads from the level, while the change comparison (H4b1) reads
+// opposite: the checker group fell further after the flag and recovered
+// less, yet ends higher.
+func TestH2LevelCarriesTheReading(t *testing.T) {
+	var fs []fake
+	for i := 0; i < 8; i++ {
+		j := int64(i % 3)
+		fs = append(fs,
+			// checker: T2a 7, T2b 8 + j (change 1 + j); neutral: T2a 2, T2b 5 + j (change 3 + j).
+			fake{id: "c" + string(rune('a'+i)), group: "checker", denial: "s3", trust: []int64{7, 7, 7, 8 + j, 7, 7, 7}},
+			fake{id: "n" + string(rune('a'+i)), group: "neutral", denial: "s3", trust: []int64{7, 7, 2, 5 + j, 7, 7, 7}})
+	}
+	ss, rts, ans := build(fs)
+	h := Compute(&domain.Run{ID: "run1"}, content(t), ss, rts, ans, Options{}, t0).Hypotheses
+	if h.H2.Level.Reading != Supports || h.H2.Pooled.Reading != Opposite || h.H4b.AfterReason.Reading != Opposite {
+		t.Errorf("level %s, change %s, h4b1 %s", h.H2.Level.Reading, h.H2.Pooled.Reading, h.H4b.AfterReason.Reading)
 	}
 }

@@ -52,6 +52,7 @@ type Reading string
 
 const (
 	Supports       Reading = "supports"
+	Opposite       Reading = "opposite" // p < .05 with the sign against the hypothesis
 	DoesNotSupport Reading = "does_not_support"
 	TooFew         Reading = "too_few"
 	NA             Reading = "n_a"
@@ -296,6 +297,7 @@ type TwoProportion struct {
 type Hypotheses struct {
 	Baseline   Comparison `json:"baseline"`
 	Slide1     Comparison `json:"slide1"`
+	Overall    Comparison `json:"overall"`
 	H1         H1         `json:"h1"`
 	H2         H2         `json:"h2"`
 	H3         H3         `json:"h3"`
@@ -316,6 +318,9 @@ type H2 struct {
 	Pooled           Comparison            `json:"pooled"`
 	CheckerAboveZero OneSample             `json:"checkerAboveZero"`
 	PerSlide         map[string]Comparison `json:"perSlide"`
+	Level            Comparison            `json:"level"`
+	LevelPerSlide    map[string]Comparison `json:"levelPerSlide"`
+	AboveBaseline    ByGroup[OneSample]    `json:"aboveBaseline"`
 	ExploratoryNet   Comparison            `json:"exploratoryNet"`
 }
 
@@ -339,6 +344,18 @@ type H4b struct {
 type BudgetStat struct {
 	ByGroup     ByGroup[BudgetGroup] `json:"byGroup"`
 	ApproveTest TwoProportion        `json:"approveTest"`
+	// ByLastTrustTercile splits the votes by the tercile of the participant's
+	// last available trust rating.
+	ByLastTrustTercile []TercileCount `json:"byLastTrustTercile"`
+}
+
+type TercileCount struct {
+	Tercile int     `json:"tercile"`
+	From    float64 `json:"from"`
+	To      float64 `json:"to"`
+	Approve int     `json:"approve"`
+	Reject  int     `json:"reject"`
+	Missing int     `json:"missing"`
 }
 
 type BudgetGroup struct {
@@ -851,10 +868,13 @@ func read(dir int, v, p *float64, ns ...int) Reading {
 	if dir == 0 || v == nil || p == nil {
 		return NA
 	}
-	if (dir > 0 && *v > 0 || dir < 0 && *v < 0) && *p < Alpha {
+	if *p >= Alpha || *v == 0 {
+		return DoesNotSupport
+	}
+	if dir > 0 && *v > 0 || dir < 0 && *v < 0 {
 		return Supports
 	}
-	return DoesNotSupport
+	return Opposite
 }
 
 func summary(xs []float64) Summary {
@@ -863,6 +883,14 @@ func summary(xs []float64) Summary {
 		s.CI95 = ci95(*s.Mean, *s.SD/math.Sqrt(float64(len(xs))), float64(len(xs)-1))
 	}
 	return s
+}
+
+// descriptive is a comparison shown without a reading (per-slide breakdowns:
+// about twenty uncorrected readings would turn up a chance "supports").
+func descriptive(x ByGroup[[]float64]) Comparison {
+	c := compare(x, 0)
+	c.Reading = NA
+	return c
 }
 
 func compare(x ByGroup[[]float64], dir int) Comparison {
@@ -958,11 +986,16 @@ func hypotheses(ct *domain.Content, points []domain.PlanStep, flagged []string, 
 	prev := previousPoint(points)
 	var h Hypotheses
 	h.H1.PerSlide, h.H1.LevelAtFlag, h.H2.PerSlide = map[string]Comparison{}, map[string]Comparison{}, map[string]Comparison{}
+	h.H2.LevelPerSlide = map[string]Comparison{}
 
 	// Baseline and slide 1.
 	// DECISION: "slide 1" is the first rating point of the first slide (T1,
 	// or T1a if slide 1 were flagged) minus T0.
-	var t0, s1 ByGroup[[]float64]
+	var t0, s1, overall ByGroup[[]float64]
+	lastPoint := ""
+	if len(points) > 0 {
+		lastPoint = points[len(points)-1].Point
+	}
 	firstSlidePoint := ""
 	if slides := cfg.Slides(); len(slides) > 0 {
 		for _, pt := range points {
@@ -979,23 +1012,30 @@ func hypotheses(ct *domain.Content, points []domain.PlanStep, flagged []string, 
 		if d := p.delta("T0", firstSlidePoint); d != nil {
 			*s1.get(p.s.Group) = append(*s1.get(p.s.Group), *d)
 		}
+		if d := p.delta("T0", lastPoint); d != nil {
+			*overall.get(p.s.Group) = append(*overall.get(p.s.Group), *d)
+		}
 	}
 	h.Baseline = compare(t0, 0)
 	h.Slide1 = compare(s1, 0)
+	// The research question: T_last - T0, no stated direction.
+	h.Overall = compare(overall, 0)
 
 	// Per-participant deltas.
-	var h1Pool, h2Pool, h2Net, denialD ByGroup[[]float64]
+	var h1Pool, h2Pool, h2Net, h2Level, h2AboveT0, denialD ByGroup[[]float64]
 	type pair struct{ reasoned, denial float64 }
 	var h3 ByGroup[[]pair]
 	perSlideH1 := map[string]*ByGroup[[]float64]{}
 	levelH1 := map[string]*ByGroup[[]float64]{}
 	perSlideH2 := map[string]*ByGroup[[]float64]{}
+	levelH2 := map[string]*ByGroup[[]float64]{}
 	for _, sl := range flagged {
 		perSlideH1[sl], levelH1[sl], perSlideH2[sl] = &ByGroup[[]float64]{}, &ByGroup[[]float64]{}, &ByGroup[[]float64]{}
+		levelH2[sl] = &ByGroup[[]float64]{}
 	}
 	for _, p := range ps {
 		g := p.s.Group
-		var flagDs, reasonDs, netDs []float64
+		var flagDs, reasonDs, netDs, levels, aboveT0 []float64
 		var denial *float64
 		for _, sl := range flagged {
 			a, b := flagPoints(points, sl)
@@ -1020,6 +1060,13 @@ func hypotheses(ct *domain.Content, points []domain.PlanStep, flagged []string, 
 			if n := p.delta(prev[a], b); n != nil {
 				netDs = append(netDs, *n)
 			}
+			if v := p.trust(b); v != nil {
+				levels = append(levels, *v)
+				*levelH2[sl].get(g) = append(*levelH2[sl].get(g), *v)
+			}
+			if d := p.delta("T0", b); d != nil {
+				aboveT0 = append(aboveT0, *d)
+			}
 		}
 		p.h1Pooled, p.h2Pooled = meanOf(flagDs), meanOf(reasonDs)
 		if p.h1Pooled != nil {
@@ -1030,6 +1077,12 @@ func hypotheses(ct *domain.Content, points []domain.PlanStep, flagged []string, 
 		}
 		if n := meanOf(netDs); n != nil {
 			*h2Net.get(g) = append(*h2Net.get(g), *n)
+		}
+		if v := meanOf(levels); v != nil {
+			*h2Level.get(g) = append(*h2Level.get(g), *v)
+		}
+		if v := meanOf(aboveT0); v != nil {
+			*h2AboveT0.get(g) = append(*h2AboveT0.get(g), *v)
 		}
 		if denial != nil {
 			*denialD.get(g) = append(*denialD.get(g), *denial)
@@ -1042,16 +1095,21 @@ func hypotheses(ct *domain.Content, points []domain.PlanStep, flagged []string, 
 	h.H1.Pooled = compare(h1Pool, -1)
 	h.H1.CheckerBelowZero = oneSample(h1Pool.Checker, -1)
 	for _, sl := range flagged {
-		h.H1.PerSlide[sl] = compare(*perSlideH1[sl], -1)
-		// DECISION: the raw level at the flag point reads in the H1
-		// direction too (checker below neutral).
-		h.H1.LevelAtFlag[sl] = compare(*levelH1[sl], -1)
-		// perSlide of H2 covers only the participants for whom the slide was
-		// reasoned; the denial slide's delta is in H3 and H4b.
-		h.H2.PerSlide[sl] = compare(*perSlideH2[sl], +1)
+		// Per-slide breakdowns carry no reading (plan 06, section 2).
+		h.H1.PerSlide[sl] = descriptive(*perSlideH1[sl])
+		h.H1.LevelAtFlag[sl] = descriptive(*levelH1[sl])
+		// The H2 per-slide numbers cover only the participants for whom the
+		// slide was reasoned; the denial slide's delta is in H3 and H4b.
+		h.H2.PerSlide[sl] = descriptive(*perSlideH2[sl])
+		h.H2.LevelPerSlide[sl] = descriptive(*levelH2[sl])
 	}
+	// h2.pooled compares changes (the same data as h4b.afterReason, shown as
+	// H4b1); the H2(b) reading comes from the level T{n}b, since a comparison
+	// of changes would favour the group that fell further.
 	h.H2.Pooled = compare(h2Pool, +1)
 	h.H2.CheckerAboveZero = oneSample(h2Pool.Checker, +1)
+	h.H2.Level = compare(h2Level, +1)
+	h.H2.AboveBaseline = ByGroup[OneSample]{Checker: oneSample(h2AboveT0.Checker, +1), Neutral: oneSample(h2AboveT0.Neutral, +1)}
 	// DECISION: the exploratory net change (T{n}b minus the rating before the
 	// flag, pooled over reasoned slides) has no direction: reading "n_a"
 	// unless too few.
@@ -1106,10 +1164,13 @@ func hypotheses(ct *domain.Content, points []domain.PlanStep, flagged []string, 
 		return s
 	}
 	h.H4a.Checker, h.H4a.Neutral = share(GroupChecker), share(GroupNeutral)
-	h.H4a.SlidesTest = twoProp(withQ.Checker, slidesN.Checker, withQ.Neutral, slidesN.Neutral, +1, len(shares.Checker), len(shares.Neutral))
+	// The slides test is descriptive: a participant's slides are not
+	// independent, so the reading comes from participantsTest only.
+	h.H4a.SlidesTest = twoProp(withQ.Checker, slidesN.Checker, withQ.Neutral, slidesN.Neutral, 0)
+	h.H4a.SlidesTest.Reading = NA
 	h.H4a.ParticipantsTest = compare(shares, +1)
 
-	h.Budget = budget(cfg, ps)
+	h.Budget = budget(cfg, points, ps)
 	h.Moderators = moderators(cfg, ps)
 	return h
 }
@@ -1132,7 +1193,7 @@ func approveID(cfg *sc.StudyConfig) string {
 // DECISION: the approve test compares approve / (approve + reject) between
 // the groups (missing answers left out) and has no direction; reading "n_a"
 // unless too few answers.
-func budget(cfg *sc.StudyConfig, ps []*subject) BudgetStat {
+func budget(cfg *sc.StudyConfig, points []domain.PlanStep, ps []*subject) BudgetStat {
 	approve := approveID(cfg)
 	var out BudgetStat
 	var conf ByGroup[[]float64]
@@ -1158,6 +1219,72 @@ func budget(cfg *sc.StudyConfig, ps []*subject) BudgetStat {
 	out.ByGroup.Neutral.Confidence = summary(conf.Neutral)
 	c, n := out.ByGroup.Checker, out.ByGroup.Neutral
 	out.ApproveTest = twoProp(c.Approve, c.Approve+c.Reject, n.Approve, n.Approve+n.Reject, 0, c.Approve+c.Reject, n.Approve+n.Reject)
+	out.ByLastTrustTercile = terciles(cfg, points, ps, approve)
+	return out
+}
+
+// lastTrust is the participant's last available trust rating in plan order.
+func (p *subject) lastTrust(points []domain.PlanStep) *float64 {
+	for i := len(points) - 1; i >= 0; i-- {
+		if v := p.trust(points[i].Point); v != nil {
+			return v
+		}
+	}
+	return nil
+}
+
+// terciles splits the budget votes by the tercile of the last trust rating.
+// The cut points are the 1/3 and 2/3 percentiles of the analysed
+// participants' last ratings; a rating equal to a cut point goes to the lower
+// tercile. from/to are the bounds: the trust scale's minimum, the two cut
+// points and the scale's maximum.
+// DECISION: participants without any trust rating are left out; with none
+// at all the list is empty.
+func terciles(cfg *sc.StudyConfig, points []domain.PlanStep, ps []*subject, approve string) []TercileCount {
+	out := []TercileCount{}
+	var last []float64
+	for _, p := range ps {
+		if v := p.lastTrust(points); v != nil {
+			last = append(last, *v)
+		}
+	}
+	if len(last) == 0 {
+		return out
+	}
+	lo, hi := 0.0, 10.0
+	for _, it := range cfg.Rating.Items {
+		if it.ID == "trust" {
+			lo, hi = it.Scale.Min, it.Scale.Max
+		}
+	}
+	q1, q2 := *percentile(last, 1.0/3), *percentile(last, 2.0/3)
+	out = append(out, TercileCount{Tercile: 1, From: lo, To: q1}, TercileCount{Tercile: 2, From: q1, To: q2},
+		TercileCount{Tercile: 3, From: q2, To: hi})
+	for _, p := range ps {
+		v := p.lastTrust(points)
+		if v == nil {
+			continue
+		}
+		t := &out[2]
+		switch {
+		case *v <= q1:
+			t = &out[0]
+		case *v <= q2:
+			t = &out[1]
+		}
+		var id string
+		if p.budget != nil {
+			id, _ = p.budget.Values["optionId"].(string)
+		}
+		switch {
+		case id == "":
+			t.Missing++
+		case id == approve:
+			t.Approve++
+		default:
+			t.Reject++
+		}
+	}
 	return out
 }
 
