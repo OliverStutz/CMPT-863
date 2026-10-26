@@ -104,7 +104,67 @@ interface SessionResult {
 
 /** Talking-head videos seen on audio steps (2026-10-26): the muted video in the speaker's frame must decode
  *  and advance with the audio; the idle loop of a silent seat must decode and loop. */
-const videoChecks: { label: string; stepId: string; scene: string; kind: "speaker" | "idle"; currentTime: number; width: number }[] = [];
+const videoChecks: { label: string; stepId: string; scene: string; kind: "speaker" | "idle" | "seat"; currentTime?: number; width?: number; seat?: string; expectedRole?: string }[] = [];
+const videoTasks: Promise<void>[] = [];
+const videoFailures: string[] = [];
+
+/** The muted video in the speaker's frame must decode, advance with the audio, and sit in the speaker's own seat. A
+ *  two-speaker step (the opening) renders one video per segment and the later speaker waits paused on its first
+ *  frame; a speaker outside their own segment keeps the video mounted but hidden behind the idle loop. */
+async function checkSpeakerVideo(page: Page, step: Json, label: string): Promise<void> {
+  const where = `${label} ${step.stepId} (${step.scene})`;
+  try {
+    const vids = page.getByTestId("speaker-video");
+    await expect(vids.locator("visible=true").first(), `${where}: speaker video visible`).toBeVisible({ timeout: 15_000 });
+    const playing = () =>
+      vids.evaluateAll((els) => {
+        const v = (els as HTMLVideoElement[]).filter((e) => !e.paused).sort((a, b) => b.currentTime - a.currentTime)[0];
+        return v
+          ? { currentTime: v.currentTime, width: v.videoWidth, seat: v.closest("figure")?.querySelector("figcaption")?.textContent?.trim() ?? "" }
+          : { currentTime: 0, width: 0, seat: "" };
+      });
+    // Keep the best reading seen while polling: a second look after the poll can land after the clip ended, when no
+    // video plays any more (seen on a 33 s narration, 2026-10-26).
+    let info = { currentTime: 0, width: 0, seat: "" };
+    await expect
+      .poll(
+        async () => {
+          const now = await playing();
+          if (now.currentTime > info.currentTime) info = now;
+          return info.currentTime;
+        },
+        { message: `${where}: a speaker video advances with the audio`, timeout: 15_000 },
+      )
+      .toBeGreaterThan(0.5);
+    expect(info.width, `${where}: speaker video decoded`).toBeGreaterThan(0);
+    // The seat the step names (videoRole, e.g. the chair asking the routine question), else the scene's usual speaker.
+    const captions: Record<string, string> = { chair: "Chair", ciso: "CISO", member: "Board member (You)" };
+    const expectedRole = step.videoRole ?? (["example", "opening"].includes(step.scene) ? "chair" : "ciso");
+    expect(info.seat, `${where}: the video plays in the speaker's own seat (${expectedRole})`).toBe(captions[expectedRole]);
+    videoChecks.push({ label, stepId: step.stepId, scene: step.scene, kind: "seat", seat: info.seat, expectedRole });
+    videoChecks.push({ label, stepId: step.stepId, scene: step.scene, kind: "speaker", currentTime: info.currentTime, width: info.width });
+    mkdirSync(OUT, { recursive: true });
+    await page.screenshot({ path: resolve(OUT, `${label}-video-${step.stepId}.png`) }).catch(() => undefined);
+  } catch (e) {
+    videoFailures.push(`${where}: ${(e as Error).message.split("\n")[0]}`);
+  }
+}
+
+/** The idle loop of a silent seat must decode and play. */
+async function checkIdleVideo(page: Page, step: Json, label: string): Promise<void> {
+  const where = `${label} ${step.stepId} (${step.scene})`;
+  try {
+    const idle = page.getByTestId("idle-video").first();
+    if ((await idle.count()) === 0) return;
+    await expect
+      .poll(async () => idle.evaluate((v: HTMLVideoElement) => (v.paused ? 0 : v.currentTime)), { message: `${where}: idle seat loop plays`, timeout: 15_000 })
+      .toBeGreaterThan(0.2);
+    const info = await idle.evaluate((v: HTMLVideoElement) => ({ currentTime: v.currentTime, width: v.videoWidth }));
+    videoChecks.push({ label, stepId: step.stepId, scene: step.scene, kind: "idle", ...info });
+  } catch (e) {
+    videoFailures.push(`${where}: ${(e as Error).message.split("\n")[0]}`);
+  }
+}
 
 async function runSession(browser: Browser, request: APIRequestContext, runCode: string, label: string): Promise<SessionResult> {
   const ctx = await browser.newContext();
@@ -201,7 +261,9 @@ async function runSession(browser: Browser, request: APIRequestContext, runCode:
   };
   const actions: string[] = [];
   const handled = new Set<string>();
-  const deadline = Date.now() + (CONFIG_VERSION.startsWith("test") ? 8 * 60_000 : 85 * 60_000);
+  // A session on a test config takes about 6 min with real clips; with the talking heads headless Firefox decodes up
+  // to eight videos at once in software and a session took 15 min on 2026-10-26, so the video walk gets 25 min.
+  const deadline = Date.now() + (CONFIG_VERSION.startsWith("test") ? (process.env.E2E_EXPECT_VIDEO === "1" ? 25 : 8) * 60_000 : 85 * 60_000);
   let finishedSeen = false;
 
   while (Date.now() < deadline) {
@@ -277,43 +339,15 @@ async function runSession(browser: Browser, request: APIRequestContext, runCode:
         if (await cont.isVisible().catch(() => false)) {
           if (await cont.isEnabled().catch(() => false)) await cont.click().catch(() => undefined);
         }
+        // The video checks run beside the step loop: headless Firefox decodes every seat's video in software, so a
+        // check can take seconds, and the loop must keep up with the 15 s rating and action windows (2026-10-26).
         if ((step.videoUrl || step.videoSegments) && !handled.has(`v:${step.stepId}`)) {
           handled.add(`v:${step.stepId}`);
-          // A two-speaker step (the opening) renders one video per segment; the later speaker's video waits paused
-          // on its first frame until its line starts, so the check follows whichever speaker video is playing.
-          // A speaker outside their own segment keeps the video mounted but hidden behind the idle loop.
-          const vids = page.getByTestId("speaker-video");
-          await expect(vids.locator("visible=true").first(), `${label}: speaker video on ${step.stepId}`).toBeVisible({ timeout: 15_000 });
-          const playing = () =>
-            vids.evaluateAll((els) => {
-              const v = (els as HTMLVideoElement[]).filter((e) => !e.paused).sort((a, b) => b.currentTime - a.currentTime)[0];
-              return v ? { currentTime: v.currentTime, width: v.videoWidth } : { currentTime: 0, width: 0 };
-            });
-          await expect
-            .poll(async () => (await playing()).currentTime, {
-              message: `${label}: a speaker video advances with the audio on ${step.stepId}`,
-              timeout: 15_000,
-            })
-            .toBeGreaterThan(0.5);
-          const info = await playing();
-          expect(info.width, `${label}: speaker video decoded`).toBeGreaterThan(0);
-          videoChecks.push({ label, stepId: step.stepId, scene: step.scene, kind: "speaker", ...info });
-          mkdirSync(OUT, { recursive: true });
-          await page.screenshot({ path: resolve(OUT, `${label}-video-${step.stepId}.png`) }).catch(() => undefined);
+          videoTasks.push(checkSpeakerVideo(page, step, label));
         }
         if (!handled.has("idle-check") && ["example", "opening", "slide"].includes(step.scene)) {
           handled.add("idle-check");
-          const idle = page.getByTestId("idle-video").first();
-          if ((await idle.count()) > 0) {
-            await expect
-              .poll(async () => idle.evaluate((v: HTMLVideoElement) => (v.paused ? 0 : v.currentTime)), {
-                message: `${label}: idle seat loop plays`,
-                timeout: 15_000,
-              })
-              .toBeGreaterThan(0.2);
-            const info = await idle.evaluate((v: HTMLVideoElement) => ({ currentTime: v.currentTime, width: v.videoWidth }));
-            videoChecks.push({ label, stepId: step.stepId, scene: step.scene, kind: "idle", ...info });
-          }
+          videoTasks.push(checkIdleVideo(page, step, label));
         }
         break;
       }
@@ -367,7 +401,9 @@ async function runSession(browser: Browser, request: APIRequestContext, runCode:
     await page.waitForTimeout(150);
   }
   await Promise.all(pending.splice(0));
+  await Promise.all(videoTasks.splice(0));
   expect(finishedSeen, `${label}: session reached "done"`).toBe(true);
+  expect(videoFailures, `${label}: video checks`).toEqual([]);
   await expect(page.getByText(config.scenes.find((s: Json) => s.kind === "debrief").doNotDiscuss)).toBeVisible();
   const transcripts = steps.map((s) => s.transcript).filter((t): t is string => typeof t === "string");
   await ctx.close();

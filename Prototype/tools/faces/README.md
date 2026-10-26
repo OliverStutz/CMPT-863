@@ -110,7 +110,7 @@ venv/bin/python <repo>/Prototype/tools/faces/scripts/publish.py 1.4.0 test-sound
 cd <repo>/Prototype && gcloud storage rsync content gs://cmpt863-study-content --recursive --exclude='.*/\.cache/.*|.*\.py$'
 # then build, push and roll a revision as in "05 - Progress.md" (the service reads the manifests at start)
 e2e/security.sh https://study-api-pju4jz7m4a-nn.a.run.app <run code>          # includes three video checks
-E2E_CONFIG=test-sound-1.4.0 E2E_EXPECT_VIDEO=1 npx playwright test tests/flows.spec.ts --timeout 1500000
+E2E_CONFIG=test-sound-1.4.0 E2E_EXPECT_VIDEO=1 npx playwright test tests/flows.spec.ts --timeout 2700000   # ~30 min, two sessions
 ```
 
 `publish.py` writes `content/video/<version>/manifest.json` and copies each MP4 as `<sha256>.mp4`:
