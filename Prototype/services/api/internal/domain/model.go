@@ -243,6 +243,17 @@ type AnswerDoc struct {
 	LateEventNo *int64                  `firestore:"lateEventNo,omitempty" json:"lateEventNo,omitempty"`
 }
 
+// Deleted is deleted/{sessionId}: the tombstone of a participant's data
+// removed on request (plan 06, section 5). It holds no address, user agent
+// or answers, so the count of deletions stays auditable without personal data.
+type Deleted struct {
+	SessionID string    `firestore:"-" json:"sessionId"`
+	RunID     string    `firestore:"runId" json:"runId"`
+	Group     string    `firestore:"group" json:"group"`
+	DeletedAt time.Time `firestore:"deletedAt" json:"deletedAt"`
+	Reason    string    `firestore:"reason" json:"reason"`
+}
+
 // Counters is counters/allocation (5.5).
 type Counters struct {
 	Groups     map[string]int64            `firestore:"groups" json:"groups"`

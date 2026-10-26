@@ -54,8 +54,8 @@ func (a *Admin) call(method, path string, body []byte) ([]byte, int, error) {
 	return b, resp.StatusCode, err
 }
 
-func (a *Admin) CreateRun(name, config string) (string, error) {
-	b, _ := json.Marshal(map[string]string{"name": name, "source": "load test", "configVersion": config})
+func (a *Admin) CreateRun(name, source, config string) (string, error) {
+	b, _ := json.Marshal(map[string]string{"name": name, "source": source, "configVersion": config})
 	out, status, err := a.call("POST", "/api/admin/runs", b)
 	if err != nil || status != 201 {
 		return "", fmt.Errorf("HTTP %d %s %v", status, out, err)

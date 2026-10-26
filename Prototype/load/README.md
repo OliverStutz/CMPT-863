@@ -35,11 +35,34 @@ Every response's `expectedClientSeq` and `next` are taken as the new state. A 5x
 | `-think` | 1 | Think time multiplier (0 = as fast as the server allows) |
 | `-check` | true | Admin check at the end |
 | `-ip-base` | 1 | Varies the fake client addresses between runs |
-| `-seed` | time | Random seed |
+| `-seed` | time | Random seed (personas and their answers follow from it; printed in persona mode) |
+| `-persona` | 0 | Persona mode: N emulated participants with modelled answers (overrides `-sessions`); 0 keeps the random answers |
+| `-run-name` | `Dashboard pilot (emulated)` | Name of a run the generator creates in persona mode |
+| `-source` | `Emulated` | Source of a run the generator creates in persona mode |
+| `-audio-choice` | empty | Option id every session answers at the audio check (v1.4: `lantern`). The public scene pack hides the correct option, so without it 3 of 4 sessions are flagged `audio_check_wrong` and the dashboard excludes them by default |
 
 Environment for the admin check (and run creation): `LOAD_GATE_KEY` (the admin gate key) and `LOAD_ADMIN_PASSWORD`.
 
 **Server settings the generator needs:** `TRUSTED_PROXY_HOPS=1`, so each session's `X-Forwarded-For` address is its client IP (otherwise all sessions share 127.0.0.1 and the per-IP limit of 30 sessions an hour returns 429, and every session after the first is flagged `possible_duplicate`); `INSECURE_COOKIES=true` over plain http; `ALLOW_TEST_CONFIGS=true` for the fast config.
+
+## Persona mode
+
+`-persona N` fills a run with N emulated participants for the analysis dashboard (`06 - Analysis Dashboard Plan.md` section 7). The flow, the timing and the event handling are those above; only the answers and think times change. Each persona is drawn once at start from its own stream of `-seed` (`persona.go`):
+
+- **Trust and METI.** A baseline trust of 5 to 9 (normal around 7, sd 0.75, so mostly 6 to 8). Competence, benevolence and integrity follow the trust line (1 + 0.6 x trust) with a per-item offset (sd 0.5), clamped to 1 to 7. Every rating value gets noise (sd 0.35) and is clamped to the item's scale. 3 % of ratings are left to time out: the persona waits until the window closes and sends `rating_timeout` with every item null, as the app does.
+- **Group.** Learned during the session: a flagged slide (one with an action scene in the scene pack) with a checker overlay means checker, without one neutral; the action options (`nothing`/`explain`/`challenge` or `hasQuestion`/`noQuestion`) confirm it. Trust then moves by the group's response, drawn per persona: after a flagged slide (the rating whose scene pack `after` is that slide, the a-point) checker -1 to -2.5, neutral 0 to -0.8; after a reasoned answer (the b-point) checker +0.5 to +1.8, neutral +0.2 to +0.8; after the denial checker -1.0 to +0.3, neutral -0.5 to +0.3.
+- **Denial slide.** The scene pack carries no answers, so the persona reads the answer step's `transcript`: an answer under 25 words (a joined answer without its body) or one that states confidence ("confident", "stand behind") is the denial; after it the other answers are reasons; if none was found, the last answer is the denial (each session has exactly one). Without a transcript the persona takes a random one of the three answers, drawn at start. The table shows which rule decided.
+- **Actions.** Checker personas have a style, quiet 30 % (mostly `nothing`), curious 40 % (mostly `explain`), challenger 30 % (mostly `challenge`): the style's option with 0.7 on each slide, each other with 0.15. Neutral personas say `hasQuestion` with their own probability of 0.2 to 0.6.
+- **Budget.** Approve with 0.85 when the last trust rating is 6 or more, otherwise 0.35; sureness 4 to 9, growing with that rating's distance from 5.
+- **Background.** Option ids come from the scene pack at run time and are weighted by their id (field towards business, IT, cyber and finance; age towards 25 to 54; job level towards employee and leadership; education towards bachelor and master; AI use towards weekly and daily; unknown ids weigh 1); cyber knowledge 1 to 5 with mode 3; country (ISO alpha-2) CA 35 %, DE 20 %, US 15 %, CH 10 %, GB 8 %, IN 5 %, others 7 %; each item "preferNotToSay" with 0.05; the honeypot stays empty.
+- **Think times** (times `-think`): rating 2 to 8 s, action 2 to 10 s, budget 4 to 15 s, background 30 to 90 s, always capped before a window closes.
+
+A created run is named by `-run-name` with source `-source`. After the summary the generator prints a persona table: group, baseline, METI profile, style (or the neutral ask probability), actions per slide, inferred denial slide and rule, timed-out ratings, budget vote and sureness, country.
+
+```sh
+LOAD_GATE_KEY=... LOAD_ADMIN_PASSWORD=... go run . -base <url> -config 1.4.0 -persona 3 -seed 1
+LOAD_PORT=18090 ./run-local.sh memory 3 1 -persona 3 -think 0.3   # own server, fast config
+```
 
 ## Output
 

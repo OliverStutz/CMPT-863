@@ -23,6 +23,7 @@ type Step struct {
 	SceneRef   string   `json:"sceneRef"`
 	AudioURL   string   `json:"audioUrl"`
 	Point      string   `json:"point"`
+	Transcript string   `json:"transcript"`
 	OpensInMs  *int64   `json:"opensInMs"`
 	ClosesInMs *int64   `json:"closesInMs"`
 	Blocked    bool     `json:"blocked"`
@@ -72,6 +73,7 @@ type Session struct {
 	Done    atomic.Bool
 	Err     error
 	Group   string       // learned from the descriptors: checker sessions get overlays
+	persona *Persona     // persona mode only; nil keeps the random behaviour
 	Events  atomic.Int64 // events the server accepted
 	Elapsed time.Duration
 }
@@ -284,7 +286,13 @@ func (s *Session) handle() error {
 		}
 		time.Sleep(s.think(1, 3))
 		opts := s.pack.Setup.AudioCheck.Options
-		_, err = s.event("audio_check_answered", map[string]any{"choiceId": opts[s.rng.IntN(len(opts))].ID})
+		choice := opts[s.rng.IntN(len(opts))].ID
+		for _, o := range opts {
+			if s.g.audioChoice != "" && o.ID == s.g.audioChoice {
+				choice = o.ID
+			}
+		}
+		_, err = s.event("audio_check_answered", map[string]any{"choiceId": choice})
 	case "example", "opening", "slide", "question", "answer":
 		err = s.audio()
 	case "preStart":
@@ -300,6 +308,9 @@ func (s *Session) handle() error {
 		if st.OpensInMs != nil && *st.OpensInMs > 0 {
 			time.Sleep(time.Duration(*st.OpensInMs) * time.Millisecond)
 		}
+		if s.persona != nil {
+			return s.personaRating()
+		}
 		s.sleepWithin(s.think(1.5, 5))
 		p := map[string]any{"point": st.Point}
 		for _, it := range s.pack.Rating.Items {
@@ -307,10 +318,22 @@ func (s *Session) handle() error {
 		}
 		_, err = s.event("rating_submitted", p)
 	case "action":
+		if s.persona != nil {
+			s.persona.learnGroup(groupOfOptions(st.Options))
+			s.sleepWithin(s.think(2, 10))
+			slide := s.pack.forSlide(st.SceneRef)
+			_, err = s.event("action_chosen", map[string]any{"slideId": slide, "actionId": s.persona.action(slide, st.Options)})
+			break
+		}
 		s.sleepWithin(s.think(1, 5))
 		slide := s.pack.forSlide(st.SceneRef)
 		_, err = s.event("action_chosen", map[string]any{"slideId": slide, "actionId": st.Options[s.rng.IntN(len(st.Options))].ID})
 	case "budget":
+		if s.persona != nil {
+			s.sleepWithin(s.think(4, 15))
+			_, err = s.event("budget_submitted", s.persona.budget(s.pack.scene(st.SceneRef)))
+			break
+		}
 		s.sleepWithin(s.think(3, 10))
 		sc := s.pack.scene(st.SceneRef)
 		p := map[string]any{"optionId": sc.Options[s.rng.IntN(len(sc.Options))].ID, "confidence": nil}
@@ -319,6 +342,11 @@ func (s *Session) handle() error {
 		}
 		_, err = s.event("budget_submitted", p)
 	case "background":
+		if s.persona != nil {
+			s.sleepWithin(s.think(30, 90))
+			_, err = s.event("background_submitted", map[string]any{"items": s.persona.background(s.pack.scene(st.SceneRef)), "hp": ""})
+			break
+		}
 		s.sleepWithin(s.think(5, 15))
 		_, err = s.event("background_submitted", map[string]any{"items": s.background(), "hp": ""})
 	case "debrief":
@@ -344,6 +372,9 @@ func (s *Session) audio() error {
 	}
 	started := time.Now()
 	d, known := s.g.clipMs(st.AudioURL)
+	if s.persona != nil {
+		s.personaHears()
+	}
 	if st.Overlay != nil {
 		s.Group = "checker"
 		if st.Overlay.Status == "flagged" {
@@ -410,12 +441,14 @@ type Pack struct {
 		} `json:"audioCheck"`
 	} `json:"setup"`
 	Rating struct {
-		Items []struct {
-			ID    string `json:"id"`
-			Scale Scale  `json:"scale"`
-		} `json:"items"`
+		Items []RatingItem `json:"items"`
 	} `json:"rating"`
 	Scenes []PackScene `json:"scenes"`
+}
+
+type RatingItem struct {
+	ID    string `json:"id"`
+	Scale Scale  `json:"scale"`
 }
 
 type Scale struct {
@@ -427,6 +460,8 @@ type PackScene struct {
 	ID         string   `json:"id"`
 	Kind       string   `json:"kind"`
 	ForSlide   string   `json:"forSlide"`
+	After      string   `json:"after"` // rating: the scene it follows
+	Point      string   `json:"point"`
 	Options    []Choice `json:"options"`
 	Confidence *struct {
 		Scale Scale `json:"scale"`
@@ -447,6 +482,17 @@ func (p *Pack) scene(id string) *PackScene {
 		}
 	}
 	return &PackScene{}
+}
+
+// flagged returns the flagged slides: those with an action scene.
+func (p *Pack) flagged() map[string]bool {
+	out := map[string]bool{}
+	for _, sc := range p.Scenes {
+		if sc.Kind == "action" && sc.ForSlide != "" {
+			out[sc.ForSlide] = true
+		}
+	}
+	return out
 }
 
 func (p *Pack) forSlide(ref string) string {
@@ -475,4 +521,75 @@ func (g *Gen) scenePack(url string) (*Pack, error) {
 	}
 	g.packs[url] = &p
 	return &p, nil
+}
+
+// personaHears lets a persona learn from an audio step: on a flagged slide,
+// an overlay means checker and none means neutral; an answer step's
+// transcript tells reason from denial.
+func (s *Session) personaHears() {
+	st, p := s.step, s.persona
+	flagged := s.pack.flagged()
+	switch st.Scene {
+	case "slide":
+		if st.Overlay != nil && st.Overlay.Status == "flagged" {
+			flagged[st.SceneRef] = true
+		}
+		if flagged[st.SceneRef] && p.Group == "" {
+			if st.Overlay != nil {
+				p.learnGroup("checker")
+			} else {
+				p.learnGroup("neutral")
+			}
+		}
+	case "answer":
+		n := len(flagged)
+		if n == 0 {
+			n = 3
+		}
+		p.observeAnswer(s.pack.forSlide(st.SceneRef), st.Transcript, n)
+	}
+}
+
+// personaRating answers a rating step as the persona: the latent trust moves
+// for what the rating follows (a flagged slide, or an answer to one, from the
+// scene pack's "after"; without it the point's last letter, a or b), then
+// the values with noise, or, for 3 % of ratings, nothing until the window
+// closes and rating_timeout with every item null, as the participant app does.
+func (s *Session) personaRating() error {
+	st, p := s.step, s.persona
+	after, slide := afterOther, ""
+	if sc := s.pack.scene(st.SceneRef); sc.After != "" {
+		ref := s.pack.scene(sc.After)
+		switch {
+		case ref.Kind == "answer":
+			after, slide = afterAnswer, ref.ForSlide
+		case s.pack.flagged()[sc.After]:
+			after, slide = afterFlagged, sc.After
+		}
+	} else if n := len(st.Point); n > 2 {
+		slide = "s" + st.Point[1:n-1]
+		switch st.Point[n-1] {
+		case 'a':
+			after = afterFlagged
+		case 'b':
+			after = afterAnswer
+		}
+	}
+	p.applyRating(after, slide)
+	values := p.ratingValues(s.pack.Rating.Items)
+	if values == nil {
+		if st.ClosesInMs != nil {
+			time.Sleep(time.Duration(*st.ClosesInMs) * time.Millisecond)
+		}
+		partial := map[string]any{}
+		for _, it := range s.pack.Rating.Items {
+			partial[it.ID] = nil
+		}
+		_, err := s.event("rating_timeout", map[string]any{"point": st.Point, "partial": partial})
+		return err
+	}
+	s.sleepWithin(s.think(2, 8))
+	values["point"] = st.Point
+	_, err := s.event("rating_submitted", values)
+	return err
 }

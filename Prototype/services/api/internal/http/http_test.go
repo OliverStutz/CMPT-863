@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log/slog"
 	"net/http"
@@ -211,7 +212,8 @@ func (p *participant) next() *domain.Step {
 }
 
 // walk drives the session to the end; stop, if set, ends the walk early when
-// it returns true for the current step.
+// it returns true for the current step. action "auto" picks "explain" for a
+// checker session and "hasQuestion" for a neutral one.
 func (p *participant) walk(action string, stop func(*domain.Step) bool) {
 	t := p.e.t
 	t.Helper()
@@ -258,7 +260,14 @@ func (p *participant) walk(action string, stop func(*domain.Step) bool) {
 			s, _ := p.e.st.GetSession(context.Background(), p.id)
 			ct, _ := p.e.reg.Content(s.ConfigVersion)
 			slide := ct.Plan.Steps[ct.Plan.Index(s.CurrentState)].SlideID
-			p.mustOK("action_chosen", map[string]any{"slideId": slide, "actionId": action})
+			a := action
+			if a == "auto" { // a valid option of the session's group
+				a = "hasQuestion"
+				if s.Group == "checker" {
+					a = "explain"
+				}
+			}
+			p.mustOK("action_chosen", map[string]any{"slideId": slide, "actionId": a})
 		case domain.KindBudget:
 			p.mustOK("budget_submitted", map[string]any{"optionId": nil, "confidence": 5})
 		case domain.KindBackground:
@@ -892,5 +901,181 @@ func TestParticipantResponsesLeakNothing(t *testing.T) {
 				}
 			}
 		}
+	}
+}
+
+// ---------- analysis and participant deletion (plan 06) ----------
+
+// newTestParticipant opens a session, with test{} overrides when given.
+func (e *env) newTestParticipant(code string, test map[string]any) *participant {
+	body := map[string]any{"screen": map[string]int{"w": 1440, "h": 900}, "tz": "UTC"}
+	if test != nil {
+		body["test"] = test
+	}
+	w := e.do("POST", "/api/v1/runs/"+code+"/sessions", body, hdr(clientHeader, "1"))
+	if w.Code != http.StatusCreated {
+		e.t.Fatalf("create: %d %s", w.Code, w.Body)
+	}
+	p := &participant{e: e, slideSeen: map[string]int{}, cookie: findCookie(w, sessionCookie)}
+	var cr CreateResponse
+	p.record(w.Body.String(), &cr)
+	p.id, p.seq = cr.SessionID, cr.ExpectedClientSeq
+	return p
+}
+
+// analysisEnv walks two round-robin participants (checker, neutral) and one
+// forced_allocation participant through a test-overrides run.
+func analysisEnv(t *testing.T) (*env, func(method, path string, body any) *httptest.ResponseRecorder, []*participant) {
+	e := newEnv(t, true)
+	gate := e.gate()
+	adm := e.login(gate)
+	admin := func(method, path string, body any) *httptest.ResponseRecorder {
+		return e.do(method, path, body, cookie(gate), cookie(adm), hdr(adminHeader, "1"))
+	}
+	r := &domain.Run{ID: "run-t", Code: "tttttt", Name: "Dashboard pilot", Source: "Emulated", ConfigVersion: "test-fast",
+		Status: domain.RunOpen, CreatedAt: e.now, TestOverrides: true}
+	if err := e.st.CreateRun(context.Background(), r); err != nil {
+		t.Fatal(err)
+	}
+	ps := []*participant{e.newTestParticipant(r.Code, nil), e.newTestParticipant(r.Code, nil),
+		e.newTestParticipant(r.Code, map[string]any{"group": "neutral"})}
+	for _, p := range ps {
+		p.walk("auto", nil)
+	}
+	return e, admin, ps
+}
+
+func decodeMap(t *testing.T, w *httptest.ResponseRecorder) map[string]any {
+	t.Helper()
+	if w.Code != 200 {
+		t.Fatalf("%d %s", w.Code, w.Body)
+	}
+	var m map[string]any
+	if err := json.Unmarshal(w.Body.Bytes(), &m); err != nil {
+		t.Fatal(err)
+	}
+	return m
+}
+
+// at walks a decoded JSON value by keys.
+func at(v any, keys ...string) any {
+	for _, k := range keys {
+		m, ok := v.(map[string]any)
+		if !ok {
+			return nil
+		}
+		v = m[k]
+	}
+	return v
+}
+
+func TestAdminRunAnalysis(t *testing.T) {
+	_, admin, ps := analysisEnv(t)
+	// Defaults: every walked session answered the audio check wrongly
+	// ("river"), so audio_check_wrong excludes all of them.
+	m := decodeMap(t, admin("GET", "/api/admin/runs/run-t/analysis", nil))
+	for _, k := range []string{"run", "generatedAt", "filters", "config", "counts", "participants", "ratingStats", "hypotheses",
+		"actions", "background", "countries", "quality"} {
+		if _, ok := m[k]; !ok {
+			t.Errorf("missing key %s", k)
+		}
+	}
+	for k, want := range map[string]float64{"total": 3, "consented": 3, "analysed": 0} {
+		if got := at(m, "counts", k); got != want {
+			t.Errorf("counts.%s = %v, want %v", k, got, want)
+		}
+	}
+	if at(m, "counts", "excluded", "forced") != 1.0 || at(m, "counts", "excluded", "byFlag", "audio_check_wrong") != 2.0 {
+		t.Errorf("excluded %v", at(m, "counts", "excluded"))
+	}
+	if at(m, "run", "testOverrides") != true || at(m, "filters", "include") != "finished" {
+		t.Errorf("run/filters %v %v", m["run"], m["filters"])
+	}
+	if pts, _ := at(m, "config", "ratingPoints").([]any); len(pts) != 7 {
+		t.Errorf("ratingPoints %v", at(m, "config", "ratingPoints"))
+	}
+
+	// exclude= (empty): only forced_allocation is excluded.
+	m = decodeMap(t, admin("GET", "/api/admin/runs/run-t/analysis?exclude=", nil))
+	if at(m, "counts", "analysed") != 2.0 || at(m, "counts", "byGroup", "checker", "analysed") != 1.0 || at(m, "counts", "byGroup", "neutral", "analysed") != 1.0 {
+		t.Errorf("counts %v", m["counts"])
+	}
+	parts, _ := m["participants"].([]any)
+	if len(parts) != 2 {
+		t.Fatalf("participants %d", len(parts))
+	}
+	for _, p := range parts {
+		if at(p, "sessionId") == ps[2].id {
+			t.Error("forced_allocation session analysed")
+		}
+	}
+	if at(m, "ratingStats", "trust", "T0", "checker", "n") != 1.0 || at(m, "ratingStats", "trust", "T0", "checker", "mean") != 6.0 {
+		t.Errorf("ratingStats %v", at(m, "ratingStats", "trust", "T0"))
+	}
+	if at(m, "hypotheses", "h1", "pooled", "reading") != "too_few" || at(m, "hypotheses", "h4a", "checker", "withQuestion") != 2.0 {
+		t.Errorf("hypotheses %v", at(m, "hypotheses", "h1", "pooled"))
+	}
+	if at(m, "actions", "s2", "checker", "explain") != 1.0 || at(m, "actions", "s2", "neutral", "hasQuestion") != 1.0 {
+		t.Errorf("actions %v", m["actions"])
+	}
+
+	// group filters the participant list only.
+	m = decodeMap(t, admin("GET", "/api/admin/runs/run-t/analysis?exclude=&group=checker&include=consented", nil))
+	if parts, _ := m["participants"].([]any); len(parts) != 1 || at(m, "hypotheses", "baseline", "neutral", "n") != 1.0 {
+		t.Errorf("group filter: %d participants, neutral n %v", len(parts), at(m, "hypotheses", "baseline", "neutral", "n"))
+	}
+	if w := admin("GET", "/api/admin/runs/run-t/analysis?include=all", nil); w.Code != 400 {
+		t.Errorf("bad include %d", w.Code)
+	}
+	if w := admin("GET", "/api/admin/runs/run-t/analysis?group=x", nil); w.Code != 400 {
+		t.Errorf("bad group %d", w.Code)
+	}
+	if w := admin("GET", "/api/admin/runs/nosuch/analysis", nil); w.Code != 404 {
+		t.Errorf("unknown run %d", w.Code)
+	}
+}
+
+func TestAdminDeleteSession(t *testing.T) {
+	e, admin, ps := analysisEnv(t)
+	id := ps[0].id
+	before, _ := e.st.Counters(context.Background(), "run-t")
+	for _, c := range []struct {
+		id   string
+		body any
+		code int
+	}{
+		{id, map[string]string{"confirm": "wrong", "reason": "asked"}, 400},
+		{id, map[string]string{"confirm": id, "reason": "  "}, 400},
+		{id, map[string]string{"confirm": id, "reason": strings.Repeat("x", 501)}, 400},
+		{id, []byte("not json"), 400},
+		{"nosuch", map[string]string{"confirm": "nosuch", "reason": "asked"}, 404},
+		{id, map[string]string{"confirm": id, "reason": "participant asked by e-mail on 2026-10-25"}, 204},
+		{id, map[string]string{"confirm": id, "reason": "again"}, 404},
+	} {
+		if w := admin("DELETE", "/api/admin/sessions/"+c.id, c.body); w.Code != c.code {
+			t.Errorf("delete %s %v: %d %s, want %d", c.id, c.body, w.Code, w.Body, c.code)
+		}
+	}
+	if w := admin("GET", "/api/admin/participants/"+id, nil); w.Code != 404 {
+		t.Errorf("detail after delete: %d", w.Code)
+	}
+	if w := admin("GET", "/api/admin/participants?runId=run-t", nil); strings.Contains(w.Body.String(), id) {
+		t.Error("deleted session still listed")
+	}
+	m := decodeMap(t, admin("GET", "/api/admin/runs/run-t/analysis?exclude=", nil))
+	if at(m, "counts", "total") != 2.0 || at(m, "counts", "analysed") != 1.0 || strings.Contains(fmt.Sprint(m["participants"]), id) {
+		t.Errorf("analysis after delete: %v", m["counts"])
+	}
+	after, _ := e.st.Counters(context.Background(), "run-t")
+	if fmt.Sprint(before) != fmt.Sprint(after) {
+		t.Errorf("counters changed: %v -> %v", before, after)
+	}
+	dels, _ := e.st.ListDeleted(context.Background())
+	if len(dels) != 1 || dels[0].SessionID != id || dels[0].RunID != "run-t" || dels[0].Group != "checker" {
+		t.Errorf("tombstones %+v", dels)
+	}
+	b, _ := json.Marshal(dels[0])
+	if strings.Contains(string(b), "203.0.113") || strings.Contains(string(b), "Mozilla") {
+		t.Errorf("tombstone holds personal data: %s", b)
 	}
 }

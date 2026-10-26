@@ -80,6 +80,12 @@ type Store interface {
 	Events(ctx context.Context, sessionID string) ([]*domain.Event, error)
 	Ratings(ctx context.Context, sessionID string) ([]*domain.Rating, error)
 	Answers(ctx context.Context, sessionID string) ([]*domain.AnswerDoc, error)
+	// DeleteSession removes a session with its events, ratings and answers
+	// and writes the tombstone t (deleted/{id}); ErrNotFound when unknown.
+	// The run's counters are untouched: the slot stays used (decision 1.6).
+	DeleteSession(ctx context.Context, id string, t *domain.Deleted) error
+	// ListDeleted returns the tombstones, newest first.
+	ListDeleted(ctx context.Context) ([]*domain.Deleted, error)
 	// Counters returns the allocation counters of one run (per-run round robin,
 	// decision 1.19 revised 2026-10-25).
 	Counters(ctx context.Context, runID string) (*domain.Counters, error)

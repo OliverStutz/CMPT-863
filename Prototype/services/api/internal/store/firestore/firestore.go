@@ -32,6 +32,7 @@ const (
 	// counters are now one document per run, counters/run-<runId> (1.19).
 	docAlloc   = "allocation"
 	colConfigs = "configs"
+	colDeleted = "deleted"
 	subEvents  = "events"
 	subRatings = "ratings"
 	subAnswers = "answers"
@@ -441,6 +442,72 @@ func (s *Store) Answers(ctx context.Context, id string) ([]*domain.AnswerDoc, er
 		}
 		out = append(out, &a)
 	}
+	return out, nil
+}
+
+// DeleteSession deletes every document of the session's events, ratings and
+// answers subcollections through a BulkWriter (it batches the deletes itself,
+// at most 20 per request), then, in one transaction, the session document and
+// the tombstone deleted/{id}. A failure part way leaves the session document
+// in place, so the delete can be repeated.
+func (s *Store) DeleteSession(ctx context.Context, id string, t *domain.Deleted) error {
+	ref := s.c.Collection(colSessions).Doc(id)
+	if _, err := ref.Get(ctx); err != nil {
+		if notFound(err) {
+			return store.ErrNotFound
+		}
+		return err
+	}
+	bw := s.c.BulkWriter(ctx)
+	var jobs []*firestore.BulkWriterJob
+	var listErr error
+	for _, sub := range []string{subEvents, subRatings, subAnswers} {
+		refs, err := ref.Collection(sub).DocumentRefs(ctx).GetAll()
+		if err != nil {
+			listErr = err
+			break
+		}
+		for _, d := range refs {
+			j, err := bw.Delete(d)
+			if err != nil {
+				listErr = err
+				break
+			}
+			jobs = append(jobs, j)
+		}
+	}
+	bw.End()
+	if listErr != nil {
+		return listErr
+	}
+	for _, j := range jobs {
+		if _, err := j.Results(); err != nil && !notFound(err) {
+			return err
+		}
+	}
+	return s.c.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		if err := tx.Delete(ref); err != nil {
+			return err
+		}
+		return tx.Set(s.c.Collection(colDeleted).Doc(id), t)
+	})
+}
+
+func (s *Store) ListDeleted(ctx context.Context) ([]*domain.Deleted, error) {
+	docs, err := s.c.Collection(colDeleted).Documents(ctx).GetAll()
+	if err != nil {
+		return nil, err
+	}
+	out := []*domain.Deleted{}
+	for _, d := range docs {
+		var x domain.Deleted
+		if err := d.DataTo(&x); err != nil {
+			return nil, err
+		}
+		x.SessionID = d.Ref.ID
+		out = append(out, &x)
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].DeletedAt.After(out[j].DeletedAt) })
 	return out, nil
 }
 

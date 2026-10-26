@@ -27,11 +27,12 @@ type Store struct {
 	sessions map[string]*sessionData
 	counters map[string]*domain.Counters // per run id (1.19 revised)
 	configs  map[string]*domain.ConfigRecord
+	deleted  map[string]*domain.Deleted // tombstones by session id
 }
 
 func New() *Store {
 	return &Store{runs: map[string]*domain.Run{}, sessions: map[string]*sessionData{}, configs: map[string]*domain.ConfigRecord{},
-		counters: map[string]*domain.Counters{}}
+		counters: map[string]*domain.Counters{}, deleted: map[string]*domain.Deleted{}}
 }
 
 // clone deep-copies through JSON so callers never share memory with the store.
@@ -275,6 +276,30 @@ func (m *Store) Answers(_ context.Context, id string) ([]*domain.AnswerDoc, erro
 		out = append(out, clone(a))
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Kind < out[j].Kind })
+	return out, nil
+}
+
+func (m *Store) DeleteSession(_ context.Context, id string, t *domain.Deleted) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	if _, ok := m.sessions[id]; !ok {
+		return store.ErrNotFound
+	}
+	delete(m.sessions, id) // the session and its events, ratings and answers
+	d := clone(t)
+	d.SessionID = id
+	m.deleted[id] = d
+	return nil
+}
+
+func (m *Store) ListDeleted(_ context.Context) ([]*domain.Deleted, error) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	out := []*domain.Deleted{}
+	for _, d := range m.deleted {
+		out = append(out, clone(d))
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].DeletedAt.After(out[j].DeletedAt) })
 	return out, nil
 }
 

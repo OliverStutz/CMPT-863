@@ -20,6 +20,7 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
+	"study/api/internal/analysis"
 	"study/api/internal/configs"
 	"study/api/internal/domain"
 	"study/api/internal/export"
@@ -143,8 +144,10 @@ func (s *Server) adminAPI() http.Handler {
 	m.HandleFunc("POST /api/admin/runs", s.requireAdmin(s.createRun))
 	m.HandleFunc("PATCH /api/admin/runs/{id}", s.requireAdmin(s.patchRun))
 	m.HandleFunc("DELETE /api/admin/runs/{id}", s.requireAdmin(s.deleteRun))
+	m.HandleFunc("GET /api/admin/runs/{id}/analysis", s.requireAdmin(s.runAnalysis))
 	m.HandleFunc("GET /api/admin/participants", s.requireAdmin(s.listParticipants))
 	m.HandleFunc("GET /api/admin/participants/{id}", s.requireAdmin(s.participantDetail))
+	m.HandleFunc("DELETE /api/admin/sessions/{id}", s.requireAdmin(s.deleteSession))
 	m.HandleFunc("GET /api/admin/export", s.requireAdmin(s.export))
 	m.HandleFunc("GET /api/admin/configs", s.requireAdmin(s.listConfigs))
 	m.HandleFunc("POST /api/admin/configs", s.requireAdmin(s.uploadConfig))
@@ -486,6 +489,131 @@ func (s *Server) participantDetail(w http.ResponseWriter, r *http.Request) {
 	}
 	writeJSON(w, http.StatusOK, map[string]any{"session": sess, "progress": domain.ProgressOf(sess),
 		"events": evs, "ratings": rts, "answers": ans})
+}
+
+// maxDeleteReason is the longest reason a participant deletion takes.
+const maxDeleteReason = 500
+
+// deleteSession removes one participant's data on request (plan 06, section
+// 6): the session with its events, ratings and answers; a tombstone without
+// personal data remains. The run's counters are untouched (decision 1.6).
+func (s *Server) deleteSession(w http.ResponseWriter, r *http.Request) {
+	id := r.PathValue("id")
+	var body struct {
+		Confirm string `json:"confirm"`
+		Reason  string `json:"reason"`
+	}
+	if err := json.NewDecoder(io.LimitReader(r.Body, 8192)).Decode(&body); err != nil {
+		writeErr(w, domain.ErrBadRequest, "body must be { confirm, reason }")
+		return
+	}
+	body.Reason = strings.TrimSpace(body.Reason)
+	if body.Confirm != id {
+		writeErr(w, domain.ErrBadRequest, "confirm must repeat the session id")
+		return
+	}
+	// DECISION: the limit counts characters (runes), not bytes.
+	if body.Reason == "" || len([]rune(body.Reason)) > maxDeleteReason {
+		writeErr(w, domain.ErrBadRequest, "reason must be 1 to 500 characters")
+		return
+	}
+	ctx, cancel := reqCtx(r)
+	defer cancel()
+	sess, err := s.o.Store.GetSession(ctx, id)
+	if errors.Is(err, store.ErrNotFound) {
+		writeErr(w, domain.ErrNotFound, "no such session")
+		return
+	}
+	if err != nil {
+		writeErr(w, domain.ErrUnavailable, "store unavailable")
+		return
+	}
+	t := &domain.Deleted{SessionID: id, RunID: sess.RunID, Group: sess.Group, DeletedAt: s.now(), Reason: body.Reason}
+	switch err := s.o.Store.DeleteSession(ctx, id, t); {
+	case errors.Is(err, store.ErrNotFound):
+		writeErr(w, domain.ErrNotFound, "no such session")
+		return
+	case err != nil:
+		s.o.Log.Error("session delete failed", "session", id, "err", err)
+		writeErr(w, domain.ErrUnavailable, "store unavailable")
+		return
+	}
+	s.o.Log.Info("participant data deleted", "session", id, "run", sess.RunID,
+		"admin", ClientIP(r, s.o.TrustedProxyHops))
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// runAnalysis is the run dashboard document (plan 06, section 6).
+func (s *Server) runAnalysis(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	opts := analysis.Options{Include: q.Get("include"), Group: q.Get("group")}
+	switch opts.Include {
+	case "":
+		opts.Include = analysis.IncludeFinished
+	case analysis.IncludeFinished, analysis.IncludeConsented:
+	default:
+		writeErr(w, domain.ErrBadRequest, "include must be finished or consented")
+		return
+	}
+	switch opts.Group {
+	case "":
+		opts.Group = analysis.GroupBoth
+	case analysis.GroupBoth, analysis.GroupChecker, analysis.GroupNeutral:
+	default:
+		writeErr(w, domain.ErrBadRequest, "group must be both, checker or neutral")
+		return
+	}
+	// DECISION: exclude= present but empty excludes no flag (forced_allocation
+	// still is); exclude absent means the defaults.
+	if q.Has("exclude") {
+		opts.Exclude = []string{}
+		for _, f := range strings.Split(q.Get("exclude"), ",") {
+			if f = strings.TrimSpace(f); f != "" {
+				opts.Exclude = append(opts.Exclude, f)
+			}
+		}
+	}
+	ctx, cancel := reqCtx(r)
+	defer cancel()
+	run, err := s.o.Store.GetRun(ctx, r.PathValue("id"))
+	if errors.Is(err, store.ErrNotFound) {
+		writeErr(w, domain.ErrNotFound, "no such run")
+		return
+	}
+	if err != nil {
+		writeErr(w, domain.ErrUnavailable, "store unavailable")
+		return
+	}
+	ct, err := s.o.Registry.Content(run.ConfigVersion)
+	if err != nil {
+		writeErr(w, domain.ErrUnavailable, "the run's config version is not loaded")
+		return
+	}
+	sessions, err := s.o.Store.ListSessions(ctx, store.SessionFilter{RunID: run.ID})
+	if err != nil {
+		writeErr(w, domain.ErrUnavailable, "store unavailable")
+		return
+	}
+	// DECISION: ratings and answers are read only for consented sessions;
+	// a session without a group has none.
+	ratings := map[string][]*domain.Rating{}
+	answers := map[string][]*domain.AnswerDoc{}
+	for _, x := range sessions {
+		if x.Group == "" {
+			continue
+		}
+		rts, err1 := s.o.Store.Ratings(ctx, x.ID)
+		ans, err2 := s.o.Store.Answers(ctx, x.ID)
+		if err := errors.Join(err1, err2); err != nil {
+			if errors.Is(err, store.ErrNotFound) {
+				continue // deleted while reading
+			}
+			writeErr(w, domain.ErrUnavailable, "store unavailable")
+			return
+		}
+		ratings[x.ID], answers[x.ID] = rts, ans
+	}
+	writeJSON(w, http.StatusOK, analysis.Compute(run, ct, sessions, ratings, answers, opts, s.now()))
 }
 
 func (s *Server) export(w http.ResponseWriter, r *http.Request) {

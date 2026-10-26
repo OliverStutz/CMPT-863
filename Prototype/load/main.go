@@ -19,15 +19,18 @@ import (
 
 // Gen holds what all sessions share.
 type Gen struct {
-	base      string
-	runCode   string
-	thinkMul  float64
-	transport *http.Transport
-	plain     *http.Client
-	stats     *Stats
-	clipCache sync.Map
-	packs     map[string]*Pack
-	failed    atomic.Int64
+	// audioChoice is the audio check option every session answers (the public
+	// scene pack hides the correct one); empty picks at random.
+	audioChoice string
+	base        string
+	runCode     string
+	thinkMul    float64
+	transport   *http.Transport
+	plain       *http.Client
+	stats       *Stats
+	clipCache   sync.Map
+	packs       map[string]*Pack
+	failed      atomic.Int64
 }
 
 func main() {
@@ -40,10 +43,17 @@ func main() {
 	check := flag.Bool("check", true, "check the result through the admin API (LOAD_GATE_KEY, LOAD_ADMIN_PASSWORD)")
 	seed := flag.Uint64("seed", uint64(time.Now().UnixNano()), "random seed")
 	ipBase := flag.Int("ip-base", 1, "first octet offset for the fake X-Forwarded-For addresses (use different values across runs within an hour)")
+	personas := flag.Int("persona", 0, "persona mode: N emulated participants with modelled answers (overrides -sessions); 0 keeps the random answers")
+	runName := flag.String("run-name", "Dashboard pilot (emulated)", "name of a run created in persona mode")
+	source := flag.String("source", "Emulated", "source of a run created in persona mode")
+	audioChoice := flag.String("audio-choice", "", "option id every session answers at the audio check (for v1.4: lantern); empty picks at random, which flags 3 of 4 sessions audio_check_wrong")
 	flag.Parse()
+	if *personas > 0 {
+		*n = *personas
+	}
 
 	*base = strings.TrimSuffix(*base, "/")
-	g := &Gen{base: *base, runCode: *runCode, thinkMul: *think, stats: NewStats(), packs: map[string]*Pack{}}
+	g := &Gen{base: *base, runCode: *runCode, thinkMul: *think, stats: NewStats(), packs: map[string]*Pack{}, audioChoice: *audioChoice}
 	g.transport = &http.Transport{MaxIdleConns: 4 * *n, MaxIdleConnsPerHost: 4 * *n, MaxConnsPerHost: 0, IdleConnTimeout: 90 * time.Second}
 	g.plain = &http.Client{Transport: g.transport, Timeout: 60 * time.Second}
 
@@ -56,19 +66,30 @@ func main() {
 		}
 	}
 	if g.runCode == "" {
-		code, err := adm.CreateRun(fmt.Sprintf("load %d sessions %s", *n, time.Now().Format("15:04:05")), *config)
+		name, src := fmt.Sprintf("load %d sessions %s", *n, time.Now().Format("15:04:05")), "load test"
+		if *personas > 0 {
+			name, src = *runName, *source
+		}
+		code, err := adm.CreateRun(name, src, *config)
 		if err != nil {
 			fatal("create run: %v", err)
 		}
 		g.runCode = code
 	}
-	fmt.Printf("Load: %d sessions, ramp %.1f s, think x%.2f, run %s, base %s\n", *n, *ramp, *think, g.runCode, g.base)
+	if *personas > 0 {
+		fmt.Printf("Load: %d personas, ramp %.1f s, think x%.2f, run %s, base %s, seed %d\n", *n, *ramp, *think, g.runCode, g.base, *seed)
+	} else {
+		fmt.Printf("Load: %d sessions, ramp %.1f s, think x%.2f, run %s, base %s\n", *n, *ramp, *think, g.runCode, g.base)
+	}
 
 	sessions := make([]*Session, *n)
 	var wg sync.WaitGroup
 	start := time.Now()
 	for i := range sessions {
 		s := &Session{g: g, n: i, ip: fakeIP(*ipBase, i), seq: 1, rng: rand.New(rand.NewPCG(*seed, uint64(i)))}
+		if *personas > 0 {
+			s.persona = NewPersona(*seed, i)
+		}
 		sessions[i] = s
 		delay := time.Duration(0)
 		if *n > 1 {
@@ -111,6 +132,9 @@ func main() {
 		fmt.Printf("; session duration p50 %.1f s, max %.1f s", pct(durs, .5).Seconds(), durs[len(durs)-1].Seconds())
 	}
 	fmt.Println()
+	if *personas > 0 {
+		WritePersonas(os.Stdout, sessions)
+	}
 
 	pass := failed == 0
 	if *check {

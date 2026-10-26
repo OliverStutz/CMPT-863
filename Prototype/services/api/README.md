@@ -16,6 +16,7 @@ One Go service that serves the participant SPA, the admin SPA, the public conten
 | `internal/assets` | Content source (local directory or GCS) and the public asset handler |
 | `internal/http` | Routes, participant and admin authentication, admin API, SPA serving |
 | `internal/export` | CSV and JSON export (8.4) |
+| `internal/analysis` | Run dashboard analysis (plan 06): counts, deltas, hypothesis tests; `stats.go` has the t distribution, Welch, paired and one-sample t, Hedges g, two-proportion z and Spearman without dependencies |
 | `internal/sweep` | Sweep logic used by `cmd/sweeper` |
 | `internal/secrets` | Secret Manager reader with the 5 minute refresh |
 | `pkg/studyconfig` | Go types of the config schema, loader with JSON Schema validation, audio manifest type, scene pack builder |
@@ -74,6 +75,8 @@ Other targets: `make test` (all tests; the Firestore store test is skipped witho
 | `GET, POST /api/admin/runs`; `PATCH, DELETE /api/admin/runs/{id}` | Runs |
 | `GET /api/admin/participants`, `GET /api/admin/participants/{id}` | List with filters `runId, status, group, flagged, updatedSince, limit, cursor`; detail with events, ratings, answers |
 | `GET /api/admin/export?format=csv\|json&runId=&includeInvalid=&includeIp=` | Export (8.4) |
+| `GET /api/admin/runs/{id}/analysis?include=finished\|consented&exclude=&group=both\|checker\|neutral` | Run dashboard document (`06 - Analysis Dashboard Plan.md`, section 6): counts, per-participant rows, rating statistics, hypothesis tests, actions, background, countries, quality. `include` defaults to `finished`; `exclude` is a comma-separated flag list, default `honeypot,audio_check_wrong,many_invalid_events`, `exclude=` (empty) excludes no flag; `forced_allocation` is always excluded; `group` filters the participant rows only. `404` for an unknown run, `503` when its config version is not loaded |
+| `DELETE /api/admin/sessions/{id}` | Delete one participant's data on request. Body `{ "confirm": "<session id>", "reason": "<1 to 500 characters>" }`. Removes the session with its events, ratings and answers and writes the tombstone `deleted/{id}` (`runId`, `group`, `deletedAt`, `reason`; no address, agent or answers). The run's counters stay as they are. `204`; `400` when `confirm` differs from the id or the reason is empty or too long; `404` when unknown. Logged at info level with the admin's address |
 | `GET, POST /api/admin/configs`; `GET /api/admin/configs/{version}` | Config list, upload, full config |
 
 Request and response shapes follow section 8 of the architecture. Additions, each marked `DECISION` in the code:
