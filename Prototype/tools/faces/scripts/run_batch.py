@@ -33,7 +33,7 @@ TALKING = {
     "opening.chair": ("chair", "opening_chair.mp3"), "opening.ciso": ("ciso", "opening_ciso.mp3"),
     "setup.exampleScene": ("chair", "setup_exampleScene.mp3"),
 }
-IDLE = ["chair", "member2", "member3", "member4", "member5", "member6"]
+IDLE = ["ciso", "chair", "member2", "member3", "member4", "member5", "member6"]  # every face gets a listening loop
 
 def audio_ms(path):
     out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", path], capture_output=True, text=True).stdout.strip()

@@ -5,7 +5,9 @@
 // follows its clock, so a video that fails to load or stalls changes nothing in the study flow. A muted
 // video may start without a user gesture in every browser.
 //
-// `IdleVideo` is a silent loop for a seat that never speaks.
+// `IdleVideo` is a silent loop for a seat that never speaks, or for a speaker outside the time of their
+// own clip (before it starts, after it ends, and while another speaker's segment plays). The portrait
+// keeps the synced video mounted but hidden meanwhile, so it stays loaded and keeps following the clock.
 
 import { useEffect, useRef } from "react";
 import { player } from "../audio/player";
@@ -17,6 +19,8 @@ export function SyncedVideo({
   src,
   startMs = 0,
   endMs,
+  hidden = false,
+  onActive,
   onFailed,
 }: {
   src: string;
@@ -24,9 +28,14 @@ export function SyncedVideo({
   startMs?: number;
   /** Where the segment ends in the audio clip; undefined = the end of the audio. */
   endMs?: number;
+  /** Kept mounted and following the clock, but not shown (the portrait shows its idle loop instead). */
+  hidden?: boolean;
+  /** Reports whether the audio clock is inside this video's segment and running. */
+  onActive?: (active: boolean) => void;
   onFailed: () => void;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const activeRef = useRef<boolean | null>(null);
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
@@ -35,7 +44,12 @@ export function SyncedVideo({
     const follow = () => {
       const at = audio.currentTime * 1000;
       const inSegment = at >= startMs && (endMs === undefined || at < endMs);
-      if (audio.paused || audio.ended || !inSegment) {
+      const active = inSegment && !audio.paused && !audio.ended;
+      if (activeRef.current !== active) {
+        activeRef.current = active;
+        onActive?.(active);
+      }
+      if (!active) {
         if (!v.paused) v.pause();
         if (at < startMs && v.currentTime !== 0) v.currentTime = 0; // before the segment: its first frame
         return;
@@ -51,9 +65,26 @@ export function SyncedVideo({
       unsubscribe();
       clearInterval(id);
       v.pause();
+      if (activeRef.current) {
+        activeRef.current = false;
+        onActive?.(false);
+      }
     };
+    // onActive is a state setter of the portrait and stable.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src, startMs, endMs]);
-  return <video ref={ref} src={src} muted playsInline preload="auto" onError={onFailed} data-testid="speaker-video" />;
+  return (
+    <video
+      ref={ref}
+      src={src}
+      muted
+      playsInline
+      preload="auto"
+      onError={onFailed}
+      style={hidden ? { display: "none" } : undefined}
+      data-testid="speaker-video"
+    />
+  );
 }
 
 export function IdleVideo({ src, onFailed }: { src: string; onFailed: () => void }) {

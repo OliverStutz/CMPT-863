@@ -281,8 +281,9 @@ async function runSession(browser: Browser, request: APIRequestContext, runCode:
           handled.add(`v:${step.stepId}`);
           // A two-speaker step (the opening) renders one video per segment; the later speaker's video waits paused
           // on its first frame until its line starts, so the check follows whichever speaker video is playing.
+          // A speaker outside their own segment keeps the video mounted but hidden behind the idle loop.
           const vids = page.getByTestId("speaker-video");
-          await expect(vids.first(), `${label}: speaker video on ${step.stepId}`).toBeVisible({ timeout: 10_000 });
+          await expect(vids.locator("visible=true").first(), `${label}: speaker video on ${step.stepId}`).toBeVisible({ timeout: 15_000 });
           const playing = () =>
             vids.evaluateAll((els) => {
               const v = (els as HTMLVideoElement[]).filter((e) => !e.paused).sort((a, b) => b.currentTime - a.currentTime)[0];

@@ -173,6 +173,7 @@ export function BoardroomScene(p: Props) {
           speaking={p.speaking === "ciso"}
           className={styles.ciso}
           video={videoFor("ciso")}
+          idle={seats.ciso}
         />
         <div className={styles.table} />
         <Portrait
@@ -314,14 +315,21 @@ function Portrait({
   tone?: number;
   /** Talking-head video of the current clip for this role (muted, follows the audio element). */
   video?: SegmentVideo;
-  /** Silent idle loop for a seat that never speaks. */
+  /** Silent idle loop: for a seat that never speaks, or for a speaker outside the time of their own clip. */
   idle?: string;
 }) {
   const hasPhoto = useImage(IMAGE_URLS[role]);
   const t = TONES[tone % TONES.length];
   const [videoFailed, setVideoFailed] = useState<string | null>(null);
-  const showVideo = !!video && videoFailed !== video.url;
-  const showIdle = !showVideo && !!idle && videoFailed !== idle;
+  // Whether the audio clock is inside this role's segment; a new clip starts outside it.
+  const [segmentActive, setSegmentActive] = useState(false);
+  useEffect(() => setSegmentActive(false), [video?.url, video?.startMs]);
+  const hasVideo = !!video && videoFailed !== video.url;
+  const hasIdle = !!idle && videoFailed !== idle;
+  // With an idle loop the talking video shows only while its segment plays; without one it stays on screen
+  // (its first frame before, its last frame after), as before 2026-10-26.
+  const showVideo = hasVideo && (segmentActive || !hasIdle);
+  const showIdle = hasIdle && !showVideo;
   return (
     <figure
       className={`${styles.portrait} ${className} ${speaking ? styles.speaking : ""} ${you ? styles.you : ""}`}
@@ -329,11 +337,19 @@ function Portrait({
       data-you={you || undefined}
     >
       <div className={styles.portraitImage}>
-        {showVideo ? (
-          <SyncedVideo src={video!.url} startMs={video!.startMs} endMs={video!.endMs} onFailed={() => setVideoFailed(video!.url)} />
-        ) : showIdle ? (
+        {hasVideo && (
+          <SyncedVideo
+            src={video!.url}
+            startMs={video!.startMs}
+            endMs={video!.endMs}
+            hidden={!showVideo}
+            onActive={setSegmentActive}
+            onFailed={() => setVideoFailed(video!.url)}
+          />
+        )}
+        {showIdle ? (
           <IdleVideo src={idle!} onFailed={() => setVideoFailed(idle!)} />
-        ) : hasPhoto ? (
+        ) : showVideo ? null : hasPhoto ? (
           <img src={IMAGE_URLS[role]} alt="" />
         ) : (
           <svg viewBox="0 0 200 200" aria-hidden="true">
