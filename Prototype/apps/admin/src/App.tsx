@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { logout, onAuthChange } from "./api/client";
+import { logout, onAuthChange, onGateLost } from "./api/client";
 import { LoginScreen } from "./login/LoginScreen";
+import { GateLostScreen } from "./login/GateLostScreen";
 import { RunsTab } from "./runs/RunsTab";
 import { ParticipantsTab } from "./participants/ParticipantsTab";
 import { ExportTab } from "./export/ExportTab";
@@ -17,6 +18,7 @@ const TABS: { id: Tab; label: string }[] = [
 
 export function App() {
   const [loginRequired, setLoginRequired] = useState(false);
+  const [gateLost, setGateLost] = useState(false);
   const [tab, setTabState] = useState<Tab>("runs");
   // Leaving the Runs tab drops a `#run=<id>` dashboard address, so the hash always names what is shown.
   const setTab = (t: Tab) => {
@@ -27,6 +29,7 @@ export function App() {
   };
 
   useEffect(() => onAuthChange(setLoginRequired), []);
+  useEffect(() => onGateLost(() => setGateLost(true)), []);
 
   // The tabs stay mounted under the login overlay, so a request that got 401 resumes after login.
   return (
@@ -59,7 +62,8 @@ export function App() {
         {tab === "export" && <ExportTab />}
         {tab === "configs" && <ConfigsTab />}
       </main>
-      {loginRequired && <LoginScreen />}
+      {loginRequired && !gateLost && <LoginScreen />}
+      {gateLost && <GateLostScreen />}
     </div>
   );
 }

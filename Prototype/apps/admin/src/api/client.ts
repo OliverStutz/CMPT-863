@@ -41,6 +41,19 @@ function waitForLogin(): Promise<void> {
   return new Promise((resolve) => waiters.push(resolve));
 }
 
+// ---- gate handling: the access-key gate answers a plain-text 404 (the API's own errors are JSON).
+// It means this browser's gate cookie is gone (30 days without opening the page, or a rotated key):
+// the admin link with the access key must be opened again. The app shows that instead of a dead page. ----
+let gateListener: () => void = () => {};
+
+export function onGateLost(fn: () => void): void {
+  gateListener = fn;
+}
+
+function isGate404(res: Response): boolean {
+  return res.status === 404 && !(res.headers.get("Content-Type") ?? "").includes("application/json");
+}
+
 function loginSucceeded(): void {
   authListener(false);
   const w = waiters;
@@ -68,6 +81,10 @@ export async function raw(path: string, init: RequestInit = {}): Promise<Respons
       await waitForLogin();
       continue;
     }
+    if (isGate404(res)) {
+      gateListener();
+      throw new ApiError(404, "gate_lost", "Open the admin link with the access key again.");
+    }
     if (!res.ok) throw await errorFrom(res);
     return res;
   }
@@ -88,6 +105,10 @@ export async function login(password: string): Promise<void> {
     credentials: "same-origin",
     body: JSON.stringify({ password }),
   });
+  if (isGate404(res)) {
+    gateListener();
+    throw new ApiError(404, "gate_lost", "Open the admin link with the access key again.");
+  }
   if (!res.ok) throw await errorFrom(res);
   loginSucceeded();
 }

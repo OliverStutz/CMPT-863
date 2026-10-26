@@ -31,8 +31,8 @@ const (
 	adminCookie  = "admin"
 	gateCookie   = "admin_gate"
 	adminHeader  = "X-Study-Admin"
-	adminTTL     = 12 * time.Hour
-	gateTTL      = 12 * time.Hour
+	adminTTL     = 12 * time.Hour      // password login; asked again after this
+	gateTTL      = 30 * 24 * time.Hour // access-key gate; renewed by every page load behind it
 	maxConfigLen = 4 << 20
 )
 
@@ -103,6 +103,16 @@ func keyFingerprint(k []byte) string {
 // sets the signed admin_gate cookie and redirects without the query) or a
 // valid admin_gate cookie. The cookie is bound to the current key, so a
 // rotated key invalidates it.
+//
+// The gate cookie lives gateTTL (30 days) and every page load behind the gate
+// renews it, so a browser that opened the key link once keeps rendering the
+// page while it is in use; the password login (adminTTL, 12 hours) is what
+// expires first and is asked again by the admin app. Before, both lived 12
+// hours and expired together, so an open admin tab met the gate's 404 with no
+// way back but the key link. The gate cookie is SameSite=Lax, not Strict, so
+// the redirect after a key link opened from another site or app still carries
+// it: it grants nothing but rendering the page; data and writes need the Strict
+// admin cookie plus the CSRF header.
 func (s *Server) adminGate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
@@ -112,21 +122,21 @@ func (s *Server) adminGate(next http.Handler) http.Handler {
 			return
 		}
 		fp := keyFingerprint(key)
+		isPage := r.URL.Path == "/admin" || strings.HasPrefix(r.URL.Path, "/admin/")
 		if c, err := r.Cookie(gateCookie); err == nil {
 			if parts := s.unexpired(s.verify(ctx, c.Value), "gate"); len(parts) == 3 && parts[1] == fp {
+				if isPage && !strings.HasPrefix(r.URL.Path, "/admin/assets/") {
+					s.setGateCookie(ctx, w, fp)
+				}
 				next.ServeHTTP(w, r)
 				return
 			}
 		}
 		k := r.URL.Query().Get("k")
-		isPage := r.URL.Path == "/admin" || strings.HasPrefix(r.URL.Path, "/admin/")
 		ip := ClientIP(r, s.o.TrustedProxyHops)
 		if k != "" && isPage && s.adminGateFail.Count(ip) < GateFailuresPerHour {
 			if subtle.ConstantTimeCompare([]byte(k), key) == 1 {
-				exp := s.now().Add(gateTTL).Unix()
-				http.SetCookie(w, &http.Cookie{Name: gateCookie, Value: s.sign(ctx, "gate|"+fp+"|"+strconv.FormatInt(exp, 10)),
-					Path: "/", HttpOnly: true, Secure: !s.o.InsecureCookies, SameSite: http.SameSiteStrictMode,
-					MaxAge: int(gateTTL.Seconds())})
+				s.setGateCookie(ctx, w, fp)
 				http.Redirect(w, r, "/admin/", http.StatusFound)
 				return
 			}
@@ -134,6 +144,14 @@ func (s *Server) adminGate(next http.Handler) http.Handler {
 		}
 		http.NotFound(w, r)
 	})
+}
+
+// setGateCookie issues a fresh admin_gate cookie bound to the key fingerprint.
+func (s *Server) setGateCookie(ctx context.Context, w http.ResponseWriter, fp string) {
+	exp := s.now().Add(gateTTL).Unix()
+	http.SetCookie(w, &http.Cookie{Name: gateCookie, Value: s.sign(ctx, "gate|"+fp+"|"+strconv.FormatInt(exp, 10)),
+		Path: "/", HttpOnly: true, Secure: !s.o.InsecureCookies, SameSite: http.SameSiteLaxMode,
+		MaxAge: int(gateTTL.Seconds())})
 }
 
 func (s *Server) adminAPI() http.Handler {

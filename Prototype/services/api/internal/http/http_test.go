@@ -472,7 +472,7 @@ func (e *env) gate() *http.Cookie {
 		e.t.Fatalf("gate: %d %s", w.Code, w.Header().Get("Location"))
 	}
 	c := findCookie(w, gateCookie)
-	if c == nil || !c.HttpOnly || !c.Secure || c.SameSite != http.SameSiteStrictMode {
+	if c == nil || !c.HttpOnly || !c.Secure || c.SameSite != http.SameSiteLaxMode || c.MaxAge != int(gateTTL.Seconds()) {
 		e.t.Fatalf("gate cookie %+v", c)
 	}
 	return c
@@ -521,10 +521,35 @@ func TestAdminGate(t *testing.T) {
 	if w := e.do("GET", "/api/admin/participants", nil, cookie(adm), hdr(adminHeader, "1")); w.Code != 404 {
 		t.Fatalf("login without gate: %d", w.Code)
 	}
-	// After 12 hours both cookies have expired.
+	// After 13 hours the login has expired but the gate holds: the password is
+	// asked again (401), the page does not vanish (404).
 	e.now = e.now.Add(13 * time.Hour)
-	if w := e.do("GET", "/api/admin/participants", nil, cookie(gate), cookie(adm), hdr(adminHeader, "1")); w.Code != 404 {
-		t.Fatalf("expired gate: %d", w.Code)
+	if w := e.do("GET", "/api/admin/participants", nil, cookie(gate), cookie(adm), hdr(adminHeader, "1")); w.Code != 401 {
+		t.Fatalf("expired login behind a live gate: %d", w.Code)
+	}
+	if w := e.do("GET", "/admin/", nil, cookie(gate)); w.Code != 200 {
+		t.Fatalf("admin page after the login expired: %d", w.Code)
+	}
+	// An API call does not renew the gate; a page load does (sliding 30 days).
+	if w := e.do("GET", "/api/admin/participants", nil, cookie(gate), hdr(adminHeader, "1")); findCookie(w, gateCookie) != nil {
+		t.Fatalf("API call renewed the gate")
+	}
+	e.now = e.now.Add(20 * 24 * time.Hour)
+	w := e.do("GET", "/admin/", nil, cookie(gate))
+	renewed := findCookie(w, gateCookie)
+	if w.Code != 200 || renewed == nil || renewed.Value == gate.Value {
+		t.Fatalf("page load renews the gate: %d %+v", w.Code, renewed)
+	}
+	// 31 days after the key link: the original cookie is dead, the renewed one lives on.
+	e.now = e.now.Add(11 * 24 * time.Hour)
+	if w := e.do("GET", "/admin/", nil, cookie(gate)); w.Code != 404 {
+		t.Fatalf("stale gate: %d", w.Code)
+	}
+	if w := e.do("GET", "/admin/", nil, cookie(renewed)); w.Code != 200 {
+		t.Fatalf("renewed gate: %d", w.Code)
+	}
+	if w := e.do("GET", "/api/admin/participants", nil, cookie(renewed), cookie(adm), hdr(adminHeader, "1")); w.Code != 401 {
+		t.Fatalf("renewed gate, expired login: %d", w.Code)
 	}
 }
 
