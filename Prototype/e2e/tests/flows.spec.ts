@@ -189,7 +189,10 @@ async function runSession(browser: Browser, request: APIRequestContext, runCode:
     await route.continue();
   });
 
-  await page.goto(`/s/${runCode}`);
+  // With E2E_EXPECT_VIDEO the run has test overrides and the link pins the group and the denial slide, so slide 2
+  // plays the reasoned answer (the first rendered talking-head clip) in both sessions.
+  const forced = process.env.E2E_EXPECT_VIDEO === "1" ? `?group=${label === "s1" ? "checker" : "neutral"}&denial=s3` : "";
+  await page.goto(`/s/${runCode}${forced}`);
 
   let group = "";
   const actionPlan: Record<string, string[]> = {
@@ -440,7 +443,12 @@ test("checker and neutral sessions, admin view, export, leak check", async ({ br
 
   const runRes = await request.post("/api/admin/runs", {
     headers: AH,
-    data: { name: `e2e ${new Date().toISOString()}`, source: "Other", configVersion: CONFIG_VERSION },
+    data: {
+      name: `e2e ${new Date().toISOString()}`,
+      source: "Other",
+      configVersion: CONFIG_VERSION,
+      testOverrides: process.env.E2E_EXPECT_VIDEO === "1",
+    },
   });
   expect(runRes.status()).toBe(201);
   const run = await runRes.json();
