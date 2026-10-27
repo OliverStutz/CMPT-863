@@ -1,8 +1,9 @@
 // Fixed asset paths the app expects. Content assets named in the config (slide images, audio) come from
 // the server: `assetBaseUrl` + key, or the step's `audioUrl`.
 
-// The consent PDF is served by the Go service at /assets/consent/<consent.pdfAssetKey> (the server's
-// public prefix consent/*.pdf). If the file is missing, the consent page shows a placeholder box.
+// The consent PDF (the SFU form, study 30004094) is served by the Go service at
+// /assets/consent/<consent.pdfAssetKey> (the server's public prefix consent/*.pdf). If the file cannot be
+// loaded, the consent page shows a notice and keeps the accept button disabled.
 export function consentPdfUrl(pdfAssetKey: string | undefined): string {
   return `/assets/consent/${encodeURIComponent(pdfAssetKey || "placeholder.pdf")}`;
 }

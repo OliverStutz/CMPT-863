@@ -48,7 +48,7 @@ Many participants must run at the same time without contention, and the build ru
 ## Still needed from Oliver
 
 - A domain and who runs its DNS (optional for the pilot).
-- The SFU consent PDF and ethics wording (data retention, raw IP, browser string). A one-page placeholder is served as `consent/consent-placeholder.pdf` until then.
+- Ethics wording that the consent form (received 2026-10-26, served since revision 21) does not settle: the debrief's ethics, data-keeping and withdrawal lines and the contact name; whether the debrief may still offer withdrawal by session code when the form says answers cannot be removed after submission (2.14); whether the form's "sole identifier" sentence covers the stored IP address (3.1); the REB line about AI-generated people (1.32); and a yes or no to the checkbox wording "I have read the consent form above and know that I can download a copy for my records."
 - Voice choice from the samples once the TTS tool exists.
 - Real images for the boardroom, chair, CISO and the board members (`member.png` is the participant's seat, `member2.png` to `member6.png` the silent members), or approval of drawn placeholders.
 - The run link code length. Oliver found 6 characters too short (2026-10-25); no length is written in the prompt or the decisions, so the default is now 12 (`RUN_CODE_LENGTH`, 6 to 32). Confirm 12 or name the number.
@@ -58,7 +58,7 @@ Many participants must run at the same time without contention, and the build ru
 
 Running when this was written: the integration agent (edits under `services/`, `apps/`, `packages/`, `e2e/`, `Dockerfile`, `Makefile`) and the load-test agent (edits under `load/`, `reports/concurrency-review.md`, possibly minimal additive changes under `services/api/internal/store/`). The audio agent is finished. If either stopped mid-way, run the checks below first and finish by hand.
 
-1. Verify the pieces: `cd services/api && go test ./... && go vet ./...`; `cd apps/participant && npm ci && npm run typecheck && npm run build && npm test`; same in `apps/admin`; `cd tools/tts && go test ./...`; `cd tools/content-lint && go test ./... && go run . -config ../../content/study-config.v1.4.json -manifest ../../content/audio/1.4.0/manifest.json`.
+1. Verify the pieces: `cd services/api && go test ./... && go vet ./...`; `cd apps/participant && npm ci && npm run typecheck && npm run build && npm test`; same in `apps/admin`; `cd tools/tts && go test ./...`; `cd tools/content-lint && go test ./... && go run . ../../content/study-config.v1.4.json` (the config is a positional argument; the manifest is found from the config's version).
 2. Run locally: `make dev` (Firestore emulator on 8081, API on 8080 with `CONTENT_DIR=content`), then open `http://localhost:8080/admin/?k=dev-gate-key`, password `dev`, create a run on config `1.4.0`, open its link.
 3. Build and push the image (Oliver allowed this on 2026-10-24; done once for d259725, repeat for a new commit):
    `gcloud auth configure-docker northamerica-northeast1-docker.pkg.dev --quiet`

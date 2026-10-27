@@ -1,6 +1,8 @@
-// Consent (section 9.2 `<ConsentPage>`): the PDF inline in an iframe with a download link as fallback,
-// a checkbox, and the accept button, disabled until the box is ticked. The PDF is a placeholder until
-// the SFU ethics form arrives (OPEN M); if it is missing, a placeholder box is shown instead.
+// Consent (section 9.2 `<ConsentPage>`): the SFU consent form (study 30004094, version 4, May 2, 2025,
+// served from content/consent/) inline in an iframe with a download link, a checkbox, and the accept
+// button. The button is disabled until the box is ticked and the form has been confirmed present
+// (HEAD on the PDF). If the form cannot be loaded the page says so and offers "Try again"; nobody can
+// consent to a form they have not been shown.
 
 import { useEffect, useState } from "react";
 import type { Step } from "@study/shared";
@@ -14,10 +16,12 @@ export function Consent({ step: _step }: { step: Step }) {
   const [checked, setChecked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [pdf, setPdf] = useState<"checking" | "ok" | "missing">("checking");
+  const [attempt, setAttempt] = useState(0);
   const CONSENT_PDF_URL = consentPdfUrl(pack.consent.pdfAssetKey);
 
   useEffect(() => {
     let live = true;
+    setPdf("checking");
     fetch(CONSENT_PDF_URL, { method: "HEAD", credentials: "include" })
       .then((r) => {
         const type = r.headers.get("content-type") ?? "";
@@ -27,7 +31,7 @@ export function Consent({ step: _step }: { step: Step }) {
     return () => {
       live = false;
     };
-  }, [CONSENT_PDF_URL]);
+  }, [CONSENT_PDF_URL, attempt]);
 
   const accept = async () => {
     setBusy(true);
@@ -40,7 +44,7 @@ export function Consent({ step: _step }: { step: Step }) {
   };
 
   // Layout: one fixed-height frame area (the same height while the PDF is checked, when it is shown and
-  // when the placeholder is shown), then the checkbox and the controls row. Nothing above the checkbox
+  // when the notice is shown), then the checkbox and the controls row. Nothing above the checkbox
   // changes size when the PDF check finishes, so a click is never moved onto the PDF viewer, and the
   // frame height leaves the checkbox and the button inside the window. The PDF scrolls inside its frame.
   return (
@@ -49,8 +53,18 @@ export function Consent({ step: _step }: { step: Step }) {
         {pdf === "ok" ? (
           <iframe className={styles.pdfFrame} src={CONSENT_PDF_URL} title="Consent form" data-testid="consent-pdf" />
         ) : (
-          <div className={styles.pdfPlaceholder} data-testid="consent-placeholder">
-            {pdf === "checking" ? "" : "The consent PDF goes here."}
+          <div className={styles.pdfPlaceholder} data-testid="consent-placeholder" role={pdf === "missing" ? "alert" : undefined}>
+            {pdf === "missing" ? (
+              <div>
+                <p>The consent form could not be loaded.</p>
+                <p>Please check your connection and try again. You cannot take part without it.</p>
+                <button type="button" className={styles.secondary} onClick={() => setAttempt((n) => n + 1)}>
+                  Try again
+                </button>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         )}
       </div>
@@ -60,7 +74,7 @@ export function Consent({ step: _step }: { step: Step }) {
           <span>{pack.consent.checkboxLabel}</span>
         </label>
         <div className={styles.actions}>
-          <button type="button" className={styles.primary} disabled={!checked || busy} onClick={accept}>
+          <button type="button" className={styles.primary} disabled={!checked || busy || pdf !== "ok"} onClick={accept}>
             {pack.consent.acceptLabel}
           </button>
           <a

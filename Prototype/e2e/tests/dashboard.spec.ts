@@ -7,11 +7,14 @@
 // and saves full-page screenshots in light and dark mode, plus the table view. Nothing is changed.
 
 import { mkdirSync } from "node:fs";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { expect, test, type Page } from "@playwright/test";
 
+// The package is an ES module: no __dirname (its use here aborted every Playwright run, 2026-10-26).
+const here = dirname(fileURLToPath(import.meta.url));
 const RUN_CODE = process.env.DASH_RUN_CODE ?? "";
-const OUT = resolve(process.env.SHOTS_OUT ?? resolve(__dirname, "..", "..", "reports", "screenshots", "dashboard"));
+const OUT = resolve(process.env.SHOTS_OUT ?? resolve(here, "..", "..", "reports", "screenshots", "dashboard"));
 const GATE_KEY = process.env.E2E_GATE_KEY ?? "";
 const ADMIN_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "";
 const AH = { "X-Study-Admin": "1" };

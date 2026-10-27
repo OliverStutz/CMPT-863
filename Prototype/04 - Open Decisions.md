@@ -385,6 +385,7 @@ Status 2026-10-24: all 53 points answered. Flags selected from the VLM run (see 
 **Recommendation:** the drafts' placeholders until the ethics form arrives.
 **Changes if decided later:** the consent PDF, debrief end text and background options. Blocks launch, not the build.
 **Answer:** Placeholders until the SFU ethics form arrives: placeholder consent PDF, session code on the debrief for withdrawal, "Prefer not to say" on every background item, retention per the ethics approval. (Oliver, 2026-10-24)
+**Update 2026-10-26:** the SFU course consent form arrived (study 30004094, version 4, May 2, 2025) and is served in place of the placeholder on 1.4.0 and the two walk-through configs (architecture 1.35). Checkbox wording chosen by Claude, for Oliver to confirm. Still open for Oliver: the debrief's ethics, data-keeping and withdrawal lines and the contact name; the form says "we will not be able to remove your answers once they have been submitted" (and, in the paragraph above it, "to withdraw please contact the student researcher or course instructor"), so the debrief's "send this code to withdraw" sentence and the session code need a decision; the form promises the identifier is stripped after the study (retention rule to write down).
 
 ### 2.15 Ask participants not to discuss the study [C-11] `CAN WAIT`
 **Question:** Should the debrief ask participants not to tell others what the study is about?
@@ -415,6 +416,7 @@ Status 2026-10-24: all 53 points answered. Flags selected from the VLM run (see 
 **Recommendation:** hash and country, no ASN. It still detects duplicates and keeps less personal data.
 **Changes if decided later:** session creation code written in the first phase, and the ethics text.
 **Answer:** Store the raw IP address. Needs a line in the consent and ethics text. (Oliver, 2026-10-24)
+**Note 2026-10-26:** the consent form in use says "The sole identifier which could identify you is solely used to identify double submissions and will be stripped from the data once the study is performed" and that data is held encrypted; it does not name the IP address. Whether that satisfies this line, or the form needs a version 5, is Oliver's call.
 
 ### 3.2 Admin login [OPEN N] `CAN WAIT`
 **Question:** Google login through Identity-Aware Proxy with a list of allowed accounts, or a shared password?

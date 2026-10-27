@@ -35,7 +35,7 @@ The bundle's own files are written under `static/` (not Vite's default `assets/`
 | `next.scene` | Component | What it does |
 |---|---|---|
 | `deviceGate` | `scenes/DeviceGate.tsx` | Measures width, height and touch, sends `device_checked`; below 1024 px, portrait or phone it goes to `/s/:code/blocked` |
-| `consent` | `scenes/Consent.tsx` | Inline PDF (or a placeholder box if missing), checkbox, accept button disabled until ticked; `consent_accepted` |
+| `consent` | `scenes/Consent.tsx` | The SFU consent form inline (iframe) with a download link, checkbox, accept button disabled until ticked and the PDF's HEAD check passed; a notice with "Try again" if the form cannot be loaded; `consent_accepted` |
 | `audioCheck` | `scenes/AudioCheck.tsx` | Play button, replay as often as wanted (`audio_check_played` each time), four words, one answer (`audio_check_answered`) |
 | `example`, `opening`, `slide`, `question`, `answer` | `scenes/AudioScene.tsx` | Boardroom with one clip: `scene_started`, playback, `audio_ended`; checker markings on slides when `overlay` is present (`marking_shown`) |
 | `preStart` | `scenes/PreStart.tsx` | The `preStartText` lines from the descriptor (the checker sentence only when sent) and the start button; `setup_done` |
@@ -53,7 +53,7 @@ The group is never sent to or inferred by the client. The checker panel renders 
 
 | Path | Source | If missing |
 |---|---|---|
-| `/assets/consent/<consent.pdfAssetKey>` | consent PDF (placeholder until the SFU ethics form) | a box saying "The consent PDF goes here." |
+| `/assets/consent/<consent.pdfAssetKey>` | the SFU consent form (study 30004094, version 4) | a notice "The consent form could not be loaded" with "Try again"; the accept button stays disabled |
 | `/assets/images/boardroom.jpg` | boardroom background | a drawn plain room |
 | `/assets/images/ciso.png` | CISO portrait | a grey silhouette labelled "CISO" |
 | `/assets/images/chair.png` | chair portrait | a grey silhouette labelled "Chair" |

@@ -1,6 +1,6 @@
 # Prototype architecture: browser-based boardroom study
 
-Written 2026-10-23, revised 2026-10-24. Sources: `00 - Original Prompt (2026-10-23).md` (application shape), `01 - Study Flow Brief (Abstract v8 mapping).md` (flow and fixed constraints), `CMPT 863 Project Abstract v8.md` (study design), and `04 - Open Decisions.md`, where Oliver answered every open point on 2026-10-23 and 2026-10-24. Decision numbers such as "(1.6)" refer to that file. Three things are still open and keep a marker: the consent PDF and ethics text (OPEN M, placeholders until the SFU form arrives), the GCP project id and domain (OPEN Q, still to be named; the region is decided), and what the checker panel shows before a flag and when "No issues found" appears (C-3, brief defaults in use). Voice names are chosen by Oliver from generated samples (3.6); they are a pending task, not an open design point. Changes are listed in section 18.
+Written 2026-10-23, revised 2026-10-24. Sources: `00 - Original Prompt (2026-10-23).md` (application shape), `01 - Study Flow Brief (Abstract v8 mapping).md` (flow and fixed constraints), `CMPT 863 Project Abstract v8.md` (study design), and `04 - Open Decisions.md`, where Oliver answered every open point on 2026-10-23 and 2026-10-24. Decision numbers such as "(1.6)" refer to that file. Three things are still open and keep a marker: the ethics text on the debrief (OPEN M; the SFU consent form itself arrived on 2026-10-26 and is served, 1.35), the GCP project id and domain (OPEN Q, still to be named; the region is decided), and what the checker panel shows before a flag and when "No issues found" appears (C-3, brief defaults in use). Voice names are chosen by Oliver from generated samples (3.6); they are a pending task, not an open design point. Changes are listed in section 18.
 
 ## 1. Purpose and scope
 
@@ -91,7 +91,7 @@ The admin is a **separate Vite app** (`apps/admin`), not a route in the particip
 │   ├── schema/                 study-config.schema.json (equivalent of the packages/shared types)
 │   ├── configs/                <version>.json, versioned study configs, pinned per run (2.16)
 │   ├── images/                 slide images, boardroom background, portraits ciso, chair, member (the participant's seat), member2 to member6 (silent board members); all optional
-│   ├── consent/                consent PDF placeholder (OPEN M)
+│   ├── consent/                SFU consent form (study 30004094, version 4, 2026-10-26) and the old placeholder PDF for configs before 1.4.0
 │   ├── vlm-drafts/             flag drafting runs with provenance (section 11.2)
 │   └── audio/<version>/        generated MP3s (git-ignored) + manifest.json (committed)
 ├── tools/
@@ -142,7 +142,7 @@ interface StudyConfig {
   options: StudyOptions;
   labels: Labels;
   colors: Colors;
-  consent: ConsentSpec;      // placeholder PDF until the ethics form arrives (OPEN M)
+  consent: ConsentSpec;      // the SFU consent form since 2026-10-26 (1.35)
   setup: SetupSpec;
   rating: RatingSpec;
   actions: ActionSpec;
@@ -188,9 +188,9 @@ interface Labels {           // shared interface wording, in one place
 }
 interface Colors { flag: Hex; noIssues: Hex }   // markings use colors.flag unless they set their own
 
-interface ConsentSpec {      // placeholder until the SFU ethics form arrives (OPEN M)
-  version: string;           // sent back in consent_accepted
-  pdfAssetKey: string;       // file in content/consent/; must mention that the IP address is stored (3.1)
+interface ConsentSpec {      // SFU course consent form, study 30004094, version 4 of May 2, 2025 (1.35)
+  version: string;           // "30004094-v4-2025-05-02", sent back in consent_accepted and checked by the server
+  pdfAssetKey: string;       // file in content/consent/; the form names the duplicate-check identifier, not the IP address (3.1 open)
   checkboxLabel: string;
   acceptLabel: string;       // "I accept the terms and would like to participate in the study"
 }
@@ -556,7 +556,7 @@ The main defence is structural: a valid record can only be built one event at a 
 | Duration checks | Each audio step's end event must arrive no earlier than `d - tol` after its start (section 5.3). Durations come from the resolved config the server loads, not from the client. |
 | Rate limiting | Per IP address: 5 session creations per hour, then new sessions are created but flagged; 30 per hour hard limit (429). Per session: 60 events per minute, 600 in total. Admin login: 5 attempts per 15 minutes per IP. In-memory token buckets per instance; with `max_instances` small this is close enough. |
 | Client IP | Read from `X-Forwarded-For`. Clients can prepend fake entries, so the server trusts only the entry Google's front end appends in front of Cloud Run, the last element. Configured as `TRUSTED_PROXY_HOPS`; the raw header is logged for the first pilot sessions to confirm the setting. |
-| IP storage | The raw IP address is stored on the session (3.1). The consent text must say so (OPEN M). Request logs keep it too, with a 7-day log bucket retention. No country and no ASN are derived (section 2). |
+| IP storage | The raw IP address is stored on the session (3.1). The consent form of 2026-10-26 speaks of "the sole identifier which could identify you", used for duplicate checks and stripped after the study, without naming the IP address; whether that wording is enough is Oliver's call (3.1). Request logs keep it too, with a 7-day log bucket retention. No country and no ASN are derived (section 2). |
 | User agent | Stored raw, plus parsed browser and OS family. |
 | Honeypot | Hidden text field in the background form (`hp`), off-screen and `aria-hidden`, with `autocomplete="off"`. Filled means flag (2.3). |
 | Audio-word check | Setup plays a word, which the participant may replay as often as they like; they pick it from four options once. A wrong answer is a flag, not a block (2.4). |
@@ -749,7 +749,7 @@ All served by the Go service from the embedded participant bundle; any path unde
 - **`<PreStart>`**: "The meeting is about to start" with the `preStartText` lines from the descriptor and the "Start the meeting" button.
 - **`<RatingPanel>`**: the instruction and four items in fixed order (1.23). Each item is a row of clickable numbers, 0 to 10 for trust and 1 to 7 for the three antonym items with the two antonyms at the ends (1.13). Nothing is preselected; an item not clicked is sent as `null` (2.8). The rows are native radio groups styled as buttons, so they are keyboard accessible. A countdown bar and a submit button. On submit or at `closesInMs` it sends `rating_submitted` or `rating_timeout` with the `point` from the descriptor and what was given.
 - **`<ActionPanel>`** (15 s countdown), **`<BudgetForm>`** (approve or reject, then "How sure are you?" 0 to 10 as clickable numbers, 30 s countdown), **`<BackgroundForm>`** (every answerable item with "Prefer not to say", honeypot field, 30 s countdown), **`<Debrief>`** (paragraphs, the do-not-discuss sentence, the session code).
-- **`<ConsentPage>`**: inline PDF in an `<iframe>` (browser viewer) with a download link as fallback; checkbox; the accept button is disabled until the box is ticked (placeholder PDF, OPEN M).
+- **`<ConsentPage>`**: the SFU consent form inline in an `<iframe>` (browser viewer) with a download link; checkbox; the accept button is disabled until the box is ticked and the form has answered the page's HEAD check. If the form cannot be loaded the page says so, offers "Try again" and never enables the button: nobody consents to a form they were not shown (1.35).
 
 ### 9.3 Audio
 
@@ -1045,6 +1045,7 @@ Oliver answered every remaining point in `04 - Open Decisions.md`. The document 
 - **1.26** (2026-10-25): run link codes default to 12 characters (`RUN_CODE_LENGTH`, 6 to 32); the six characters of the first draft were this document's choice, not a requirement. Existing runs keep their codes.
 - **1.27** (2026-10-25): a config without an audio manifest plays silent placeholder clips (11.1); the admin Configs and Runs tabs now say so ("no audio: silent clips"), and `content/study-config.test-sound.json` (version `test-sound-1.4.0`) is a walk-through copy of v1.4 with the real clips and 2 s views, next to the silent `test-fast-1.4.0` used by the Playwright flows.
 - **1.28** (2026-10-25): background questions untimed (`timing.backgroundWindowMs: 0` in every config; the server sets no deadline and sends no `closesInMs`, the client shows no countdown); the budget vote keeps `formWindowMs`. Revises 2.12.
+- **1.35** (2026-10-26, evening): the SFU course consent form (study 30004094, student investigator Oliver Stutz, course instructor Lawrence Kim, version 4 of May 2, 2025) replaces the placeholder PDF on 1.4.0, test-fast-1.4.0 and test-sound-1.4.0: `content/consent/consent-30004094-v4-2025-05-02.pdf`, `consent.version` "30004094-v4-2025-05-02", checkbox "I have read the consent form above and know that I can download a copy for my records." (wording chosen here, for Oliver to confirm); the accept label was already the form's own sentence. The consent page now refuses to enable the accept button while the PDF's HEAD check fails and shows a notice with "Try again" instead of the old "The consent PDF goes here" box. Still open from the form: the debrief's ethics, data-keeping and withdrawal lines and its contact (OPEN M); the form says answers cannot be removed after submission, which contradicts the debrief's session-code sentence (2.14); the form does not name the IP address (3.1); the REB line about AI-generated people (1.32). Configs 1.1.0 to 1.3.0 keep the placeholder.
 - **1.34** (2026-10-26): admin gate cookie decoupled from the login. Both cookies lived 12 hours and expired together, so an open admin tab met the gate's 404 with no way back but the key link, which the redirect had dropped from the URL on purpose (Oliver, 2026-10-26 morning). Now `admin_gate` lives 30 days, is renewed by every page load behind the gate (not by API calls) and is SameSite=Lax (it only renders the page; data and writes still need the Strict `admin` cookie and the CSRF header); the login keeps 12 hours and is asked again in place. The admin client treats a plain-text 404 (the gate) differently from the API's JSON 404s and shows "Access link needed" (`GateLostScreen`). Tests: `TestAdminGate` covers the expired login behind a live gate, renewal on page load only, and a stale versus renewed gate at day 31.
 - **1.33** (2026-10-26): all talking-head clips live (13 clips, every seat with an idle loop, revision 18 and 19). A seat with both a clip and an idle loop shows the loop outside its own segment (before its line, after it, and while another speaker's segment plays) and the talking video only while the audio clock is inside the segment; the CISO got a loop too, so nobody freezes on a first frame. A single-speaker clip names its seat in the manifest (`role`) and on the step (`videoRole`), so a clip spoken by someone other than the scene's usual speaker lands on the right face and lights that seat: the chair's routine question on each slide is on camera. The render batch orders portraits first. The participant's own questions stay audio only (the "You" seat has no face by design, 2.12/2.13).
 - **1.32** (2026-10-26): talking-head videos as an optional asset class. `content/video/<version>/manifest.json` (`VideoManifest`: `clips` keyed like the audio manifest, `seats` for silent idle loops) is read beside the audio manifest; `video/<version>/*.mp4` joins the public asset prefixes (the manifest stays private); a step with a rendered clip carries `videoUrl` next to `audioUrl` and the previous audio step prefetches it; the public scene pack carries `video.seats`; a clip with several speakers (the opening) carries `segments` in the manifest and `videoSegments` on the step, one video per speaker starting at the recorded line offset, and the speaking glow follows the active segment. The browser keeps the one audio element as the clock and plays the video muted in sync with it (`SceneVideo.tsx`), so a missing or failing video changes nothing in the flow. Rendered offline on Oliver's cards (faces lab, `05`, 2026-10-25); round one ships the CISO's slide 2 reasoned answer and one silent seat loop on 1.4.0 and test-sound-1.4.0 for a browser test. Decision 2.10 (composite visuals, no video) is thereby revised for the stimulus; the REB text and debrief need a line on AI-generated people.

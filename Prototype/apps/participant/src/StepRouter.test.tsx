@@ -21,6 +21,26 @@ beforeEach(() => setWindow(1440, 900));
 
 const step = (s: Partial<Step> & Pick<Step, "stepId" | "scene">): Step => s as Step;
 
+/**
+ * Answers the consent page's HEAD check on the PDF (jsdom cannot fetch a relative URL). `status` is
+ * the current answer and can be changed between attempts; returns the restore function.
+ */
+function mockConsentPdf(status: { code: number }) {
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = (async (url: RequestInfo | URL, init?: RequestInit) => {
+    if (String(url).startsWith("/assets/consent/") && init?.method === "HEAD") {
+      return new Response(null, {
+        status: status.code,
+        headers: status.code === 200 ? { "Content-Type": "application/pdf" } : { "Content-Type": "text/plain" },
+      });
+    }
+    return realFetch(url, init);
+  }) as typeof fetch;
+  return () => {
+    globalThis.fetch = realFetch;
+  };
+}
+
 describe("sceneComponentFor", () => {
   it("maps every step kind of section 8.1 to a component", () => {
     const kinds = [
@@ -59,12 +79,14 @@ describe("StepRouter flow", () => {
       },
     });
     const api = new ApiClient({ fetch: srv.fetch });
+    const restoreFetch = mockConsentPdf({ code: 200 });
     render(<StudyRoute code="RUN1" onBlocked={() => undefined} api={api} />);
 
     // Device gate passes locally and is reported; the server answers with consent.
     const accept = await screen.findByRole("button", { name: pack.consent.acceptLabel });
     expect(srv.events[0]).toMatchObject({ type: "device_checked", clientSeq: 1, payload: { widthPx: 1440, heightPx: 900 } });
-    await waitFor(() => expect(screen.getByTestId("consent-placeholder")).toHaveTextContent("The consent PDF goes here"));
+    await screen.findByTestId("consent-pdf");
+    restoreFetch();
     expect(accept).toBeDisabled();
     fireEvent.click(screen.getByRole("checkbox"));
     expect(accept).toBeEnabled();
@@ -72,7 +94,7 @@ describe("StepRouter flow", () => {
 
     // Audio check: options locked until the clip was played once; one answer.
     const lantern = await screen.findByRole("button", { name: "lantern" });
-    expect(srv.events[1]).toMatchObject({ type: "consent_accepted", clientSeq: 2, payload: { consentVersion: "0-placeholder", checkbox: true } });
+    expect(srv.events[1]).toMatchObject({ type: "consent_accepted", clientSeq: 2, payload: { consentVersion: pack.consent.version, checkbox: true } });
     expect(lantern).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: pack.labels.playTestSound }));
     await waitFor(() => expect(srv.events.at(-1)?.type).toBe("audio_check_played"));
@@ -201,13 +223,7 @@ describe("StepRouter flow", () => {
   });
 
   it("keeps the consent checkbox checkable when the PDF frame is shown, in the same frame area", async () => {
-    const realFetch = globalThis.fetch;
-    globalThis.fetch = (async (url: RequestInfo | URL, init?: RequestInit) => {
-      if (String(url).startsWith("/assets/consent/") && init?.method === "HEAD") {
-        return new Response(null, { status: 200, headers: { "Content-Type": "application/pdf" } });
-      }
-      return realFetch(url, init);
-    }) as typeof fetch;
+    const restoreFetch = mockConsentPdf({ code: 200 });
     try {
       const srv = mockServer({ pack, first: step({ stepId: "p2", scene: "consent" }), onEvent: () => ({ body: {} }) });
       render(<StudyRoute code="RUN1" onBlocked={() => undefined} api={new ApiClient({ fetch: srv.fetch })} />);
@@ -225,7 +241,32 @@ describe("StepRouter flow", () => {
       expect(accept).toBeEnabled();
       expect(screen.getByRole("link", { name: /Download the consent form/ })).toBeVisible();
     } finally {
-      globalThis.fetch = realFetch;
+      restoreFetch();
+    }
+  });
+
+  it("does not let anyone accept while the consent form cannot be loaded, and recovers on Try again", async () => {
+    const status = { code: 404 };
+    const restoreFetch = mockConsentPdf(status);
+    try {
+      const srv = mockServer({ pack, first: step({ stepId: "p2", scene: "consent" }), onEvent: () => ({ body: {} }) });
+      render(<StudyRoute code="RUN1" onBlocked={() => undefined} api={new ApiClient({ fetch: srv.fetch })} />);
+      const notice = await screen.findByRole("alert");
+      expect(notice).toHaveTextContent("The consent form could not be loaded");
+      expect(screen.queryByTestId("consent-pdf")).toBeNull();
+      const accept = screen.getByRole("button", { name: pack.consent.acceptLabel });
+      fireEvent.click(screen.getByRole("checkbox"));
+      // Ticking the box is not enough: the form was never shown.
+      expect(accept).toBeDisabled();
+      expect(srv.events.filter((e) => e.type === "consent_accepted")).toHaveLength(0);
+
+      status.code = 200;
+      fireEvent.click(screen.getByRole("button", { name: "Try again" }));
+      await screen.findByTestId("consent-pdf");
+      expect(screen.queryByRole("alert")).toBeNull();
+      expect(accept).toBeEnabled();
+    } finally {
+      restoreFetch();
     }
   });
 });

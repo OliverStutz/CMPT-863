@@ -380,7 +380,7 @@ The sentence about the drafting is true: see section 5.1 and `content/vlm-drafts
 >
 > [ETHICS, DATA KEEPING AND WITHDRAWAL TEXT, placeholder until the SFU ethics form arrives]
 
-The consent PDF is a placeholder until the SFU ethics form arrives; it must include a line saying that the raw IP address is stored [3.1].
+The consent PDF is the SFU course consent form, study number 30004094, version 4 of May 2, 2025 (`content/consent/consent-30004094-v4-2025-05-02.pdf`, in place since 2026-10-26, config `consent.version` "30004094-v4-2025-05-02"). The form names the duplicate-check identifier but not the IP address [3.1, still open], and it says answers cannot be removed after submission, which the withdrawal sentence above must be reconciled with [2.14].
 
 ## 11. Interface labels
 
@@ -392,7 +392,7 @@ The consent PDF is a placeholder until the SFU ethics form arrives; it must incl
 | Last setup screen button | Start |
 | Audio check play button | Play |
 | Consent accept button | I accept the terms and would like to participate in the study |
-| Consent checkbox label | [PLACEHOLDER: checkbox text from the ethics form] |
+| Consent checkbox label | I have read the consent form above and know that I can download a copy for my records. (chosen 2026-10-26, for Oliver to confirm) |
 | Checker note heading | Slide checker |
 | Checker label on unflagged slides | No issues found |
 | Honeypot field label (never shown to people) | Hidden honeypot field, must stay empty |
@@ -478,7 +478,7 @@ Every point in `04 - Open Decisions.md` (1.1 to 4.6) is answered. The content-re
 4. **Total length.** About 14 minutes with all steps, against "about 10 minutes" in the Abstract. The 110-word narrations [1.7] save about 1 minute; the 10 s views after answers [1.8] and the 30 s screens [2.12] add some back. Either the Abstract's estimate or the recruitment text should say about 14 minutes.
 5. **30 s for seven background items.** About 4 s per item. Expect timeouts; check in the pilot.
 6. **Role information.** With no role screen [4.3], participants learn they sit on the board only from the chair's lines. Check in the pilot that participants understand they vote on the budget.
-7. **Placeholders:** consent PDF and checkbox text, ethics and withdrawal text, contact, raw IP line in the consent [2.14, 3.1].
+7. **Placeholders:** ethics and withdrawal text and contact on the debrief, raw IP line in the consent [2.14, 3.1]. The consent PDF and the checkbox text were filled on 2026-10-26 (section 10).
 8. **Slide 3 diagram and slide images.** Rendered for the VLM run (`content/vlm-drafts/v1.3/`); the same images must be used in the study.
 9. **Configurable deck.** Adding slides or flags needs, per new flagged slide: a flag from the VLM run, a routine question, both board-member questions, a reasoned answer, a denial, and two more ratings. It also lengthens the session and changes the denial rotation [1.24].
 10. **Slide 1 narration and the slide 3 reason.** Resolved in v1.4: slide 1 no longer says the company stops when the network fails, and slide 2 says a serious attack stops shipments when it reaches the warehouses' own systems. A head-office outage (slide 3 reason) only slows the company; an attack on the warehouses' systems is what stops shipments for days. Slide layouts are unchanged, so the VLM run on the slide images stays valid.
