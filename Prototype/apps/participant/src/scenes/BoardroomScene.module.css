@@ -29,6 +29,14 @@
   background: #ffffff;
   overflow: hidden;
 }
+/* Content on the meeting-room screen instead of a slide: the rating form (Oliver, 2026-10-26). */
+.screenContent {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  background: #ffffff;
+  color: #1f2933;
+}
 .panelSlot {
   position: absolute;
   left: 1160px;

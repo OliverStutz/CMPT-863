@@ -64,6 +64,8 @@ export function mockServer(opts: {
   pack: PublicScenePack;
   first: Step;
   onEvent: (ev: SentEvent, ctx: { seq: number }) => Reply;
+  /** Called on GET /next; a returned step becomes the current one (the server moved on, e.g. after a view). */
+  onNext?: () => Step | undefined;
 }) {
   const events: SentEvent[] = [];
   const headers: Record<string, string>[] = [];
@@ -85,7 +87,11 @@ export function mockServer(opts: {
         next: current,
       });
     }
-    if (url.endsWith("/next")) return json(200, { next: current, expectedClientSeq: seq, progress: { index: 1, total: 40 } });
+    if (url.endsWith("/next")) {
+      const moved = opts.onNext?.();
+      if (moved) current = moved;
+      return json(200, { next: current, expectedClientSeq: seq, progress: { index: 1, total: 40 } });
+    }
     if (url.endsWith("/events")) {
       const body = JSON.parse(String(init?.body));
       const ev: SentEvent = { clientSeq: body.clientSeq, type: body.type, payload: body.payload };

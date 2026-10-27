@@ -18,7 +18,7 @@
   "timing": {
     "postAudioViewMs": 2000,
     "postAnswerViewMs": 2000,
-    "ratingWindowMs": 15000,
+    "ratingWindowMs": 20000,
     "actionWindowMs": 15000,
     "formWindowMs": 30000,
     "backgroundWindowMs": 0,

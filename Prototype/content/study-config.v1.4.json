@@ -18,7 +18,7 @@
   "timing": {
     "postAudioViewMs": 10000,
     "postAnswerViewMs": 10000,
-    "ratingWindowMs": 15000,
+    "ratingWindowMs": 20000,
     "actionWindowMs": 15000,
     "formWindowMs": 30000,
     "backgroundWindowMs": 0,
@@ -27,7 +27,7 @@
     "latencyAllowanceMs": 3000,
     "abandonAfterMs": 1800000,
     "msPerWordEstimate": 400,
-    "_note": "1.8: 10 s view after the opening, each slide and each answer; 2.1 action 15 s; 2.12 budget 30 s, background questions untimed (Oliver, 2026-10-25; 30 s was too short to fill in). Tolerances and abandon time are architecture defaults."
+    "_note": "1.8: 10 s view after the opening, each slide and each answer; 2.1 action 15 s; 2.12 budget 30 s, background questions untimed (Oliver, 2026-10-25; 30 s was too short to fill in); 2.17 rating 20 s (Oliver, 2026-10-26: 15 s felt too quick). Tolerances and abandon time are architecture defaults."
   },
   "voices": {
     "ciso": {

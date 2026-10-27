@@ -28,7 +28,9 @@ interface SegmentVideo {
   endMs?: number;
 }
 
-interface Props {
+export interface BoardroomProps {
+  /** The step kind shown, as `data-scene` on the stage (tests and the flow checks). */
+  sceneKind?: string;
   layout?: Block[];
   template?: LayoutTemplate;
   slideNumber?: number;
@@ -42,6 +44,8 @@ interface Props {
   controls?: ReactNode;
   /** A larger card at the bottom of the stage, between the table portraits and the CISO (action choice). */
   dialog?: ReactNode;
+  /** Content shown on the meeting-room screen instead of a slide: the rating form (Oliver, 2026-10-26). */
+  screenContent?: ReactNode;
   /** The rendered talking-head videos of this step's clip, one per speaker, each shown in that speaker's
    *  frame and kept in sync with the audio element (talking heads, 2026-10-25). A whole clip is one
    *  segment starting at 0; the opening has the chair's and then the CISO's. */
@@ -58,7 +62,7 @@ const STAGE_W = 1600;
 const STAGE_H = 900;
 const SCREEN = { x: 40, y: 36, w: 1088, h: 612 };
 
-export function BoardroomScene(p: Props) {
+export function BoardroomScene(p: BoardroomProps) {
   const { pack, assetBaseUrl } = useStudy();
   const outerRef = useRef<HTMLDivElement>(null);
   const slideRef = useRef<HTMLDivElement>(null);
@@ -83,7 +87,7 @@ export function BoardroomScene(p: Props) {
     };
   }, []);
 
-  const hasSlide = !!p.layout && p.layout.length > 0;
+  const hasSlide = !p.screenContent && !!p.layout && p.layout.length > 0;
   const slideScale = SCREEN.w / 1600;
   // Idle loops of the silent seats come with the public scene pack; the speaker's video with the step.
   const seats = pack.video?.seats ?? {};
@@ -105,6 +109,7 @@ export function BoardroomScene(p: Props) {
           transform: `translate(-50%, -50%) scale(${scale})`,
         }}
         data-testid="boardroom"
+        data-scene={p.sceneKind}
       >
         <Room />
         <div
@@ -148,7 +153,12 @@ export function BoardroomScene(p: Props) {
               </SlideRenderer>
             </div>
           )}
-          {p.profileCard && (
+          {p.screenContent && (
+            <div className={styles.screenContent} data-testid="screen-content">
+              {p.screenContent}
+            </div>
+          )}
+          {!p.screenContent && p.profileCard && (
             <ProfileCardView card={p.profileCard} overSlide={hasSlide} />
           )}
         </div>

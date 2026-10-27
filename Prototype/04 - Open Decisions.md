@@ -405,6 +405,17 @@ Status 2026-10-24: all 53 points answered. Flags selected from the VLM run (see 
 **Changes if decided later:** config loading and the admin config tab.
 **Answer:** Yes: each link is pinned to one content version, locked once used. (Oliver, 2026-10-24)
 
+### 2.17 Rating inside the boardroom, 20 s window, no countdown in the pause `DECIDED`
+**Question:** The rating opened as a page of its own, the pause after a clip showed a countdown card, and every step change re-mounted the room, which read as a blip. Keep that?
+**Answer:** No. The rating is drawn on the meeting-room screen inside the boardroom; the room and the seats stay mounted from the clip through the pause to the rating; the pause shows the unchanged room with no countdown (the pause itself is the cue, about 2 s in the walk-through and 10 s in the pilot); the rating window is 20 s, 15 s felt too quick. The action keeps 15 s and the budget vote 30 s unless Oliver says otherwise. (Oliver, 2026-10-26)
+**Changes:** `timing.ratingWindowMs` 20000 in 1.4.0, test-fast-1.4.0 and test-sound-1.4.0; participant app `BoardroomHost` and `Stage` (architecture 1.36); content v1.4 sections 6, 12 and 13 (about 14.5 minutes per session).
+
+### 2.18 Speaking indicator follows a precomputed loudness envelope `DECIDED, NOT BUILT`
+**Question:** The three bars beside the speaking seat bounce on a fixed loop while a clip plays. Oliver wants them to follow the actual voice and sink in the pauses.
+**Options:** live analysis in the browser (a Web Audio analyser on the one audio element, which is the study's clock and would gain a second audio graph with Safari's suspend quirks), or a loudness envelope computed when the clips are published.
+**Answer:** Precomputed envelope. (Oliver, 2026-10-26)
+**Plan:** `tools/tts` writes per clip one loudness value every 50 ms into the audio manifest (about a kilobyte per minute); the server sends it with the step beside `audioUrl`; the client reads the value at the audio clock it already tracks for the marks, with about 50 ms attack and 150 ms release, and keeps the bars at a minimum height while the speaker's segment is active; reduced-motion users keep the static bars. Open: whether the envelope should drive only the glow once the talking heads are final. Needs a content republish of 1.4.0 and test-sound-1.4.0. Not started.
+
 ## 3. Infrastructure decisions
 
 ### 3.1 How the IP address is stored [OPEN J, FO-8] `BLOCKS BUILD`

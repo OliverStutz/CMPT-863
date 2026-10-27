@@ -160,7 +160,7 @@ describe("StepRouter flow", () => {
       stepId: "p20", scene: "slide", sceneRef: "s2", audioUrl: "/a/abc.mp3",
       overlay: { status: "flagged", markings: [{ id: "s2.m1", targetIds: ["s2.num1"], appearAtMs: 0, color: "#E8A33D", shape: "box", label: "Numbers do not add up", detail: "Detail." }] },
     });
-    const post = step({ stepId: "p21", scene: "postView", sceneRef: "s2", opensInMs: 10000 });
+    const post = step({ stepId: "p21", scene: "postView", sceneRef: "s2", opensInMs: 10000, overlay: slide.overlay });
     const srv = mockServer({
       pack,
       first: slide,
@@ -175,6 +175,8 @@ describe("StepRouter flow", () => {
     render(<StudyRoute code="RUN1" onBlocked={() => undefined} api={new ApiClient({ fetch: srv.fetch })} />);
     await waitFor(() => expect(srv.events.some((e) => e.type === "scene_started")).toBe(true));
     expect(srv.events.find((e) => e.type === "scene_started")!.payload).toEqual({ sceneId: "s2" });
+    const boardroomEl = screen.getByTestId("boardroom");
+    expect(boardroomEl).toHaveAttribute("data-scene", "slide");
     // Slide rendered from the layout, with block ids as element ids.
     expect(document.getElementById("s2.num3")).toHaveTextContent("$8 million");
     // Checker panel: marking label and detail at its time; marking_shown reported once.
@@ -188,7 +190,45 @@ describe("StepRouter flow", () => {
     await waitFor(() => expect(srv.events.filter((e) => e.type === "audio_ended")).toHaveLength(2));
     const ended = srv.events.filter((e) => e.type === "audio_ended");
     expect(ended[1].clientSeq).toBe(ended[0].clientSeq + 1);
-    await screen.findByText(/Time left/);
+    // The pause after the clip: the same boardroom element stays mounted (no blip), the slide and the panel
+    // stay, nobody speaks, and there is no countdown card (Oliver, 2026-10-26).
+    await waitFor(() => expect(boardroomEl).toHaveAttribute("data-scene", "postView"));
+    expect(screen.getByTestId("boardroom")).toBe(boardroomEl);
+    expect(document.getElementById("s2.num3")).toHaveTextContent("$8 million");
+    expect(screen.getByTestId("checker-panel")).toHaveTextContent("Numbers do not add up");
+    expect(screen.queryByRole("timer")).toBeNull();
+    expect(document.querySelector("[data-speaking]")).toBeNull();
+  });
+
+  it("keeps one boardroom from the pause to the rating, which takes the meeting-room screen", async () => {
+    const post = step({ stepId: "p21", scene: "postView", sceneRef: "s2", opensInMs: 600 });
+    const rating = step({ stepId: "p22", scene: "rating", sceneRef: "rating.T2a", point: "T2a", closesInMs: 20000 });
+    // The route asks GET /next once at start; only the poll at the end of the pause may move to the rating.
+    let armed = false;
+    const srv = mockServer({
+      pack,
+      first: post,
+      onEvent: () => srv.ok(step({ stepId: "p23", scene: "done" })),
+      onNext: () => (armed ? rating : undefined),
+    });
+    render(<StudyRoute code="RUN1" onBlocked={() => undefined} api={new ApiClient({ fetch: srv.fetch })} />);
+    const boardroomEl = await screen.findByTestId("boardroom");
+    expect(boardroomEl).toHaveAttribute("data-scene", "postView");
+    expect(document.getElementById("s2.num3")).toHaveTextContent("$8 million");
+    // The server moves on to the rating: same boardroom element, the form on the room's screen, slide gone.
+    armed = true;
+    await waitFor(() => expect(boardroomEl).toHaveAttribute("data-scene", "rating"), { timeout: 3000 });
+    expect(screen.getByTestId("boardroom")).toBe(boardroomEl);
+    const screenContent = screen.getByTestId("screen-content");
+    expect(boardroomEl).toContainElement(screenContent);
+    expect(screenContent).toContainElement(screen.getByTestId("scale-trust"));
+    expect(within(screenContent).getByText(pack.rating.instruction)).toBeVisible();
+    expect(document.getElementById("s2.num3")).toBeNull();
+    expect(screen.getByRole("timer")).toHaveAccessibleName(/Time left: 20 seconds/);
+    fireEvent.click(within(screen.getByTestId("scale-trust")).getByRole("radio", { name: "8" }));
+    fireEvent.click(screen.getByRole("button", { name: pack.labels.ratingSubmit }));
+    await waitFor(() => expect(srv.events.some((e) => e.type === "rating_submitted")).toBe(true));
+    expect(srv.events.find((e) => e.type === "rating_submitted")!.payload).toEqual({ point: "T2a", trust: 8, competence: null, benevolence: null, integrity: null });
   });
 
   it("sends rating_timeout with the partial values when the window closes", async () => {

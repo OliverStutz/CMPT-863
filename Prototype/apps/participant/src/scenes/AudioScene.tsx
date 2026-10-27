@@ -3,7 +3,8 @@
 import type { Step } from "@study/shared";
 import { useAudioStep, sceneIdOf } from "../audio/useAudioStep";
 import { useStudy } from "../study";
-import { BoardroomScene, type Speaker, type SpeakerVideo } from "./BoardroomScene";
+import type { Speaker, SpeakerVideo } from "./BoardroomScene";
+import { Stage } from "./stage";
 import { speakerFor, visualForStep } from "./visual";
 import styles from "./scenes.module.css";
 
@@ -71,7 +72,8 @@ export function AudioScene({ step }: { step: Step }) {
 
   return (
     <>
-      <BoardroomScene
+      <Stage
+        sceneKind={step.scene}
         layout={visual.layout}
         template={visual.template}
         slideNumber={visual.slideNumber}

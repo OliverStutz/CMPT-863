@@ -20,6 +20,7 @@ import { Action } from "./scenes/Action";
 import { Budget } from "./scenes/Budget";
 import { Background } from "./scenes/Background";
 import { Debrief, Done } from "./scenes/Debrief";
+import { BoardroomHost } from "./scenes/stage";
 import styles from "./scenes/scenes.module.css";
 
 type SceneComponent = ComponentType<{ step: Step }>;
@@ -48,6 +49,10 @@ export function sceneComponentFor(scene: StepScene | string): SceneComponent | u
 }
 
 const MAX_VISIBILITY_EVENTS = 30;
+
+/** Steps that play in the boardroom: one stage stays mounted across them, so nothing re-mounts between a
+ *  clip, the pause after it and the rating (Oliver, 2026-10-26). */
+const BOARDROOM_SCENES = new Set<string>(["example", "opening", "slide", "postView", "rating", "action", "question", "answer"]);
 
 interface Props {
   api: ApiClient;
@@ -128,7 +133,15 @@ export function StepRouter({ api, pack, assetBaseUrl, code, initialStep, initial
   const Component = sceneComponentFor(step.scene);
   return (
     <StudyContext.Provider value={ctx}>
-      {Component ? <Component key={step.stepId} step={step} /> : <UnknownStep />}
+      {Component && BOARDROOM_SCENES.has(step.scene) ? (
+        <BoardroomHost>
+          <Component key={step.stepId} step={step} />
+        </BoardroomHost>
+      ) : Component ? (
+        <Component key={step.stepId} step={step} />
+      ) : (
+        <UnknownStep />
+      )}
       {error && (
         <div className="error-banner" role="alert">
           <span>{error}</span>

@@ -5,12 +5,13 @@
 // checker's marks and panel still shown (the descriptor carries the slide's overlay), so the participant
 // decides while looking at what was flagged.
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import type { Step } from "@study/shared";
 import { findScene, useStudy } from "../study";
 import { useDeadline } from "../timers/useDeadline";
 import { Countdown } from "../timers/Countdown";
-import { BoardroomScene } from "./BoardroomScene";
+import { AutoFocusHeading } from "../ui/AutoFocusHeading";
+import { Stage } from "./stage";
 import { visualForStep } from "./visual";
 import styles from "./scenes.module.css";
 
@@ -45,14 +46,11 @@ export function Action({ step }: { step: Step }) {
 
   const visual = visualForStep(pack, step);
   const title = step.prompt ?? "Your choice";
-  const heading = useRef<HTMLHeadingElement>(null);
-  useEffect(() => {
-    heading.current?.focus();
-  }, []);
   const options = step.options ?? [];
 
   return (
-    <BoardroomScene
+    <Stage
+      sceneKind="action"
       layout={visual.layout}
       template={visual.template}
       slideNumber={visual.slideNumber}
@@ -61,9 +59,7 @@ export function Action({ step }: { step: Step }) {
       speaking={null}
       dialog={
         <div className={styles.actionCard} data-testid="action-card">
-          <h1 ref={heading} tabIndex={-1} className={step.prompt ? styles.actionTitle : "sr-only"}>
-            {title}
-          </h1>
+          <AutoFocusHeading className={step.prompt ? styles.actionTitle : "sr-only"}>{title}</AutoFocusHeading>
           <Countdown label={pack.labels.timeLeft} leftMs={left} totalMs={step.closesInMs} />
           <div role="group" aria-label={title} className={styles.actionOptions} style={{ gridTemplateColumns: `repeat(${Math.max(1, options.length)}, minmax(0, 1fr))` }}>
             {options.map((o) => (

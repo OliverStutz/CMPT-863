@@ -272,7 +272,7 @@ Shown as a simple cost table, one row per line, total in bold.
 
 ## 6. Rating screen [1.13, 1.23, 2.2, 2.8]
 
-Shown after the opening (T0), after every slide, and after the CISO's answer on every flagged slide: 9 ratings with the default deck (T0, T1, T2a, T2b, T3a, T3b, T4a, T4b, T5). Window 15 s, with a visible countdown. Fixed order, trust first. Every scale is a row of clickable numbers with nothing preselected; an item not clicked is recorded as missing. On timeout, the answers given are kept and the rest are marked timed out.
+Shown after the opening (T0), after every slide, and after the CISO's answer on every flagged slide: 9 ratings with the default deck (T0, T1, T2a, T2b, T3a, T3b, T4a, T4b, T5). Window 20 s (15 s until 2026-10-26 [2.17]), with a visible countdown; drawn on the meeting-room screen inside the boardroom, the room and the seats unchanged. Fixed order, trust first. Every scale is a row of clickable numbers with nothing preselected; an item not clicked is recorded as missing. On timeout, the answers given are kept and the rest are marked timed out.
 
 **Instruction:** Please rate Daniel Hale. Go with your first impression.
 
@@ -434,7 +434,7 @@ Words counted by script; seconds at 150 words per minute. Real durations come fr
 | `s4.answer.denial (short, plus silence)` | CISO | 15 | 6 |
 | `s5.narration` | CISO | 107 | 43 |
 
-**Per participant**, spoken audio: opening about 64 s, five narrations about 225 s (v1.2: 285 s), three questions about 22 s, three answers about 61 s (each denial takes as long as a reason, by words or by silence). About 6.2 minutes of audio. Add a 10 s view after the opening, each slide and each answer (9 views, 90 s), 9 ratings of up to 15 s (135 s) and 3 actions of up to 15 s (45 s): about 10.7 minutes. The budget and background screens add up to 60 s, and setup, consent and the debrief about 2 minutes more: about 14 minutes in total, against the Abstract's "about 10 minutes" (see 13.3).
+**Per participant**, spoken audio: opening about 64 s, five narrations about 225 s (v1.2: 285 s), three questions about 22 s, three answers about 61 s (each denial takes as long as a reason, by words or by silence). About 6.2 minutes of audio. Add a 10 s view after the opening, each slide and each answer (9 views, 90 s), 9 ratings of up to 20 s (180 s; 15 s until 2026-10-26 [2.17]) and 3 actions of up to 15 s (45 s): about 11.5 minutes. The budget and background screens add up to 60 s, and setup, consent and the debrief about 2 minutes more: about 14.5 minutes in total, against the Abstract's "about 10 minutes" (see 13.3).
 
 ## 13. Facts and open points
 
@@ -454,7 +454,7 @@ Words counted by script; seconds at 150 words per minute. Real durations come fr
 | 10 | Chair | Margaret Lin, female | decided [1.11] |
 | 11 | Profile and greeting | Chair reads the profile with a card; CISO greets once before T0 | decided [1.12] |
 | 12 | Voices | US English; CISO, chair, board member; shortlist then Oliver picks | decided [3.6]; voices still to pick |
-| 13 | Ratings | 9 points; trust 0 to 10; three METI pairs 1 to 7; clickable numbers, nothing preselected; fixed order; 15 s | decided [1.3, 1.13, 1.23, 2.8] |
+| 13 | Ratings | 9 points; trust 0 to 10; three METI pairs 1 to 7; clickable numbers, nothing preselected; fixed order; 20 s (15 s until 2026-10-26), on the meeting-room screen | decided [1.3, 1.13, 1.23, 2.8, 2.17] |
 | 14 | Action | 15 s; timeout: chair asks, stored as missing in both groups | decided [2.1] |
 | 15 | View after audio | 10 s after the opening, each slide and each answer | decided [1.8] |
 | 16 | Budget | Approve / Reject plus "How sure are you?" 0 to 10; 30 s | decided [1.5, 2.12] |

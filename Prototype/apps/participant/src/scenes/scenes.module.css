@@ -218,6 +218,30 @@
   font-size: 1.1rem;
   color: var(--text-muted);
 }
+/* Rating on the meeting-room screen (1088 x 612 stage px): countdown, instruction, four rows, Next. */
+.ratingScreen {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 24px 40px 20px;
+  display: flex;
+  flex-direction: column;
+}
+.ratingScreen .lead {
+  font-size: 21px;
+  margin: 0 0 12px;
+}
+.ratingScreen fieldset {
+  margin-bottom: 10px;
+}
+.ratingScreen legend {
+  font-size: 19px;
+  margin-bottom: 6px;
+}
+.ratingFoot {
+  margin-top: auto;
+  padding-top: 8px;
+  justify-content: flex-end;
+}
 .actionTitle {
   font-size: 28px;
   margin: 0 0 8px;
